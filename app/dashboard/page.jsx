@@ -123,7 +123,7 @@ function Dashboard() {
 
   return (
     <section className="h-screen w-screen text-white bg-[#21233A]">
-      <div className="flex h-max bg-[#21233A]">
+      <div className="flex h-max bg-[#191c33]">
         <aside className="hidden h-screen px-8 py-12 w-36 sm:block md:w-1/5">
           <div className="flex flex-col items-center gap-4">
             <Avatar src={avatarURl} className="h-24 w-24" />
@@ -223,7 +223,7 @@ function Dashboard() {
             </Button>
           </div>
         </aside>
-        <div className="flex flex-col w-screen md:w-4/5 bg-[#151A28]">
+        <div className="flex flex-col w-screen md:w-4/5 bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900">
           <div className="py-8 text-center text-white">
             <TypeAnimation
               sequence={[
@@ -314,7 +314,7 @@ function Dashboard() {
                 </button>
               ))}
           </div>
-          <div className="flex items-center justify-center p-4 bg-[#151A28]">
+          <div className="flex items-center justify-center p-4 ">
             <Button
               className="block text-white bg-[#a32054] sm:hidden hover:bg-[#395788] w-80"
               onClick={logout}
@@ -324,7 +324,7 @@ function Dashboard() {
           </div>
           <section className="flex flex-col justify-center px-2 items-center md:flex-row gap-16">
             <div className="hidden md:block">
-              <h1 className="text-center text-3xl justify-center items-center rounded-2xl w-full md:w-[500px] lg:w-[750px] mt-8 mx-0 py-12 bg-[#21233A]">
+              <h1 className="text-center text-3xl justify-center items-center rounded-2xl w-full md:w-[500px] lg:w-[750px] mt-8 mx-0 py-12 bg-transparent border-2">
                 Comercial
               </h1>
             </div>

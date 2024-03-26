@@ -232,18 +232,13 @@ function Dashboard() {
             </Button>
           </div>
         </aside>
-        <div className="flex flex-col px-12 py-4 w-screen md:w-4/5 bg-[#151A28]">
+        <div className="flex flex-col px-12 py-4 w-screen md:w-4/5 bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900">
           <div
             className={
               selectedItem === 0
                 ? "px-6 w-auto  md:w-3/4 py-4"
                 : "px-6 w-auto md:w-[450px] py-4"
             }
-            style={{
-              backgroundImage: selectedItem > 0 ? `url('/card.png')` : "none", // Reemplaza esto con la ruta a tu imagen
-              backgroundSize: "cover", // Esto hace que la imagen cubra todo el div
-              backgroundRepeat: "no-repeat", // Esto evita que la imagen se repita
-            }}
           >
             <h1
               className={
