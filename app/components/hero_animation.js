@@ -8,7 +8,9 @@ function HeroAnimation() {
       className="relative h-screen main_container bg-gradient-to-r from-[#201A48]  to-[#861453]"
       style={{ borderRadius: "0 0 100% 100% / 0 0 10vw 10vw" }}
     >
-        <span className="flex justify-center items-center my-64 text-5xl">Bienvenido a tu dashboard</span>
+      <span className="flex justify-center items-center my-64 text-5xl text-white">
+        Bienvenido a tu dashboard
+      </span>
       <style
         dangerouslySetInnerHTML={{
           __html:

@@ -18,6 +18,8 @@ import {
   TableCell,
 } from "@nextui-org/react";
 import Image from "next/image";
+import Link from "next/link";
+import { Avatar } from "@nextui-org/react";
 
 export default function Page() {
   const generatePDF = () => {
@@ -63,7 +65,7 @@ export default function Page() {
   const [client, setClient] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedUserClient, setSelectedUserClient] = useState(null);
-
+  const [selectedUsername, setSelectedUsername] = useState(null);
   const handleSubmitClient = async (event) => {
     event.preventDefault();
     const formFields = [
@@ -85,7 +87,7 @@ export default function Page() {
     console.log(formValues); // Verifica los datos enviados en la solicitud
     try {
       const res = await axios.put(
-        "https://e-commetrics.com/updateUserInformation",
+        `http://localhost:3001/updateUserInformation`,
         formValues
       );
       console.log(res.data);
@@ -107,7 +109,7 @@ export default function Page() {
     console.log(formValues); // Verifica los datos enviados en la solicitud
     try {
       const res = await axios.put(
-        "https://e-commetrics.com/updateUser",
+        `http://localhost:3001/updateUser`,
         formValues
       );
       console.log(res.data);
@@ -126,10 +128,14 @@ export default function Page() {
     setSelectedUserClient(clientUser);
   };
 
+  const handleEditClickUserPassword = (clientUser) => {
+    setSelectedUsername(clientUser);
+  };
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("https://e-commetrics.com/api/user", {
+        const res = await axios.get(`http://localhost:3001/api/user`, {
           withCredentials: true,
         });
         if (res.data.user) {
@@ -149,7 +155,7 @@ export default function Page() {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const res = await axios.get("https://e-commetrics.com/get/information");
+        const res = await axios.get(`http://localhost:3001/get/information`);
         setClient(res.data);
         console.log(res.data);
       } catch (err) {
@@ -162,7 +168,7 @@ export default function Page() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("https://e-commetrics.com/get/users");
+        const res = await axios.get(`http://localhost:3001/get/users`);
         setClientUser(res.data);
         console.log(res.data);
       } catch (err) {
@@ -175,7 +181,7 @@ export default function Page() {
   const logout = async () => {
     try {
       await axios.post(
-        "https://e-commetrics.com/logout",
+        `http://localhost:3001/logout`,
         {},
         { withCredentials: true }
       );
@@ -262,7 +268,7 @@ export default function Page() {
     };
     try {
       const registerRes = await axios.post(
-        "https://e-commetrics.com/register",
+        `http://localhost:3001/register`,
         registerData,
         {
           withCredentials: true,
@@ -272,7 +278,7 @@ export default function Page() {
       console.log(registerRes.data);
       event.target.reset();
       const informationRes = await axios.post(
-        "https://e-commetrics.com/information",
+        `http://localhost:3001/information`,
         informationData,
         {
           withCredentials: true,
@@ -285,20 +291,30 @@ export default function Page() {
     }
   };
   return (
-    <div className="bg-white">
-      <Container title="Panel Administrativo" />
-      <div className="">
+    <div className="bg-white flex">
+      <aside className="hidden sm:block h-screen w-72 bg-[#21233A] overflow-auto py-4">
+        <Avatar src="/logo_nav.jpg" className="h-24 w-24 mx-auto mb-4" />
+        <hr className="mb-4" />
+        <ul className="flex justify-center items-center flex-col">
+          <Link href="/dashboard">
+            <li className="cursor-pointer hover:bg-gray-100 text-white hover:text-black px-4 py-2 rounded-xl">
+              Return to Dashboard
+            </li>
+          </Link>
+        </ul>
+      </aside>
+      <div className="flex flex-col items-center justify-center h-screen bg-[#151A28] text-white flex-grow">
+        <Container title="Panel Administrativo" />
         <Tabs
           aria-label="Options"
-          className="flex justify-center"
+          className="flex justify-center text-white"
           size="lg"
           variant="bordered"
           color="primary"
           radius="lg"
         >
           <Tab key="add" title="Add Client">
-            <div className="p-8 text-black bg-white">
-              <h1 className="text-4xl">Agregar usuarios al sistema.</h1>
+            <div className="p-8 text-black bg-white rounded-xl ">
               <form
                 onSubmit={handleSubmit}
                 className="grid grid-cols-4 gap-4 mt-4"
@@ -371,14 +387,14 @@ export default function Page() {
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="fechaNacimiento" className="block">
+                  <label htmlFor="fechaNacimiento" className="block ">
                     Fecha de Nacimiento:
                   </label>
                   <Input
                     placeholder="Fecha de Nacimiento"
                     type="date"
                     id="fechaNacimiento"
-                    className="px-4 py-2 border border-gray-300 rounded-md"
+                    className="px-4 py-2 border border-gray-300 rounded-md text-black"
                   />
                 </div>
                 <div className="mb-4">
@@ -409,7 +425,7 @@ export default function Page() {
                   </label>
                   <select
                     id="genero"
-                    className="px-4 py-2 border border-gray-300 rounded-md"
+                    className="px-4 py-2 border border-gray-300 rounded-md text-black"
                   >
                     <option value="masculino">Masculino</option>
                     <option value="femenino">Femenino</option>
@@ -423,7 +439,7 @@ export default function Page() {
                   <select
                     id="rol"
                     defaultValue="usuario"
-                    className="px-4 py-2 border border-gray-300 rounded-md"
+                    className="px-4 py-2 border border-gray-300 rounded-md text-black"
                   >
                     <option value="admin">Administrador</option>
                     <option value="usuario">Usuario</option>
@@ -449,7 +465,7 @@ export default function Page() {
             <Toaster position="bottom-right" reverseOrder={false} />
           </Tab>
           <Tab key="update-client" title="Update Client">
-            <div className="p-8 text-black bg-white">
+            <div className="p-8 text-black">
               <Table isCompact aria-label="Example static collection table">
                 <TableHeader>
                   <TableColumn># ID</TableColumn>
@@ -498,7 +514,7 @@ export default function Page() {
                     />
                   </div>
                   <div className="mb-4">
-                    <label htmlFor="nombre" className="block">
+                    <label htmlFor="nombre" className="block text-white">
                       Nombre:
                     </label>
                     <Input
@@ -516,7 +532,7 @@ export default function Page() {
                     />
                   </div>
                   <div className="mb-4">
-                    <label htmlFor="apellido" className="block">
+                    <label htmlFor="apellido" className="block text-white">
                       Apellido:
                     </label>
                     <Input
@@ -534,7 +550,7 @@ export default function Page() {
                     />
                   </div>
                   <div className="mb-4">
-                    <label htmlFor="telefono" className="block">
+                    <label htmlFor="telefono" className="block text-white">
                       Teléfono:
                     </label>
                     <Input
@@ -553,7 +569,7 @@ export default function Page() {
                     />
                   </div>
                   <div className="mb-4">
-                    <label htmlFor="direccion" className="block">
+                    <label htmlFor="direccion" className="block text-white">
                       Dirección:
                     </label>
                     <Input
@@ -571,7 +587,7 @@ export default function Page() {
                     />
                   </div>
                   <div className="mb-4">
-                    <label htmlFor="ciudad" className="block">
+                    <label htmlFor="ciudad" className="block text-white">
                       Ciudad:
                     </label>
                     <Input
@@ -589,7 +605,7 @@ export default function Page() {
                     />
                   </div>
                   <div className="mb-4">
-                    <label htmlFor="pais" className="block">
+                    <label htmlFor="pais" className="block text-white">
                       País:
                     </label>
                     <Input
@@ -607,19 +623,19 @@ export default function Page() {
                     />
                   </div>
                   <div className="mb-4">
-                    <label htmlFor="genero" className="block">
+                    <label htmlFor="genero" className="block text-white">
                       Género:
                     </label>
                     <select
                       id="genero"
-                      className="w-full px-4 py-4 border border-gray-300 rounded-md"
+                      className="w-full px-4 py-4 border border-gray-300 rounded-md "
                     >
                       <option value="masculino">Masculino</option>
                       <option value="femenino">Femenino</option>
                       <option value="otro">Otro</option>
                     </select>
                   </div>
-                  <div className="gap-4 mt-4 ">
+                  <div className="gap-4 mt-6">
                     <button
                       type="submit"
                       className="w-full h-12 text-white bg-blue-500 rounded-md hover:bg-blue-700"
@@ -633,14 +649,15 @@ export default function Page() {
             <Toaster position="bottom-right" reverseOrder={false} />
           </Tab>
           <Tab key="update-user" title="Update User">
-            <div className="p-8 text-black bg-white">
+            <div className="p-8 text-black bg-white rounded-xl">
               <Table isCompact aria-label="Example static collection table">
                 <TableHeader>
                   <TableColumn># ID</TableColumn>
                   <TableColumn>Email</TableColumn>
                   <TableColumn>Rol</TableColumn>
                   <TableColumn>UserName</TableColumn>
-                  <TableColumn>Action</TableColumn>
+                  <TableColumn>Edit User</TableColumn>
+                  <TableColumn>Update Password</TableColumn>
                 </TableHeader>
                 <TableBody>
                   {clientUser?.map((user) => (
@@ -650,12 +667,22 @@ export default function Page() {
                       <TableCell>{user.rol}</TableCell>
                       <TableCell>{user.username}</TableCell>
                       <TableCell>
+                        {" "}
                         <Button
                           color="primary"
                           key={1}
                           onClick={() => handleEditClickUser(user)}
                         >
                           Edit User
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          color="danger"
+                          onClick={() => handleEditClickUserPassword(user)}
+                          key={2}
+                        >
+                          Update Password
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -670,7 +697,7 @@ export default function Page() {
                   className="grid grid-cols-4 gap-4 px-8 mt-4 text-black"
                 >
                   <div hidden>
-                    <label htmlFor="id" className="block">
+                    <label htmlFor="id" className="block text-white">
                       ID:
                     </label>
                     <Input
@@ -681,7 +708,7 @@ export default function Page() {
                     />
                   </div>
                   <div className="mb-4">
-                    <label htmlFor="nombre" className="block">
+                    <label htmlFor="nombre" className="block text-white">
                       Email:
                     </label>
                     <Input
@@ -699,7 +726,7 @@ export default function Page() {
                     />
                   </div>
                   <div className="mb-4">
-                    <label htmlFor="rol" className="block">
+                    <label htmlFor="rol" className="block text-white">
                       Rol:
                     </label>
                     <select
@@ -711,7 +738,7 @@ export default function Page() {
                     </select>
                   </div>
                   <div className="mb-4">
-                    <label htmlFor="username" className="block">
+                    <label htmlFor="username" className="block text-white">
                       UserName:
                     </label>
                     <Input
@@ -728,7 +755,7 @@ export default function Page() {
                       className="px-4 py-2 border border-gray-300 rounded-md"
                     />
                   </div>
-                  <div className="gap-4 mt-4 ">
+                  <div className="gap-4 mt-6 ">
                     <button
                       type="submit"
                       className="w-full h-12 text-white bg-blue-500 rounded-md hover:bg-blue-700"
@@ -738,6 +765,36 @@ export default function Page() {
                   </div>
                 </form>
               )}
+              <div>
+                {selectedUsername && (
+                  <form className="grid grid-cols-4 gap-4 px-8 mt-4 text-white">
+                    <label>
+                      Username:
+                      <input
+                        type="text"
+                        name="username"
+                        value={selectedUsername.username}
+                        readOnly
+                        className="text-black bg-gray-200 px-4 py-2 border border-gray-300 rounded-md"
+                      />
+                    </label>
+                    <label>
+                      New Password:
+                      <input
+                        type="password"
+                        name="password"
+                        className="text-black bg-gray-200 px-4 py-2 border border-gray-300 rounded-md"
+                      />
+                    </label>
+                    <button
+                      className="w-full h-12 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-700"
+                      type="submit"
+                    >
+                      Update Password
+                    </button>
+                  </form>
+                )}
+              </div>
             </div>
             <Toaster position="bottom-right" reverseOrder={false} />
           </Tab>

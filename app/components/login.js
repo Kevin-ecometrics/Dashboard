@@ -19,7 +19,9 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
 
     try {
       const response = await axios.post(
-        "http://localhost:3001/login",
+        // `https://e-commetrics.com/login `,
+        `http://localhost:3001/login `,
+
         { email, password },
         {
           headers: { "Content-Type": "application/json" },
@@ -38,11 +40,11 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
     }
   };
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-5 h-screen w-screen">
-      <section
-        className="col-span-3 h-screen flex justify-center items-center"
-        style={{ background: "url('/bg-login.png')" }}
-      >
+    <div
+      className="grid grid-cols-1 lg:grid-cols-5 h-screen w-screen"
+      style={{ background: "url('/bg-login.png')" }}
+    >
+      <section className="col-span-3 h-screen flex justify-center items-center text-white">
         <div className={`${inter.className} font-medium`}>
           <div className="flex items-center gap-8">
             <Image
@@ -64,7 +66,10 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
         <div className={`${league.className} font-bold`}>
           <div className="px-2 gap-8 h-screen flex justify-center items-center flex-col">
             <h1 className="text-[#33244c] text-5xl">Lets Get Started</h1>
-            <form onSubmit={handleSubmit} className={`${league.className} font-medium`}>
+            <form
+              onSubmit={handleSubmit}
+              className={`${league.className} font-medium`}
+            >
               <div className="mb-5">
                 <input
                   type="email"

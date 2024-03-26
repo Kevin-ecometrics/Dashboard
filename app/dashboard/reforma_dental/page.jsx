@@ -26,7 +26,10 @@ function Dashboard() {
 
     return () => clearTimeout(timer);
   }, []);
-
+  const isDev = process.env.NEXT_PUBLIC_IS_DEV;
+  const baseURL = isDev
+    ? "http://localhost:3001/"
+    : "https://e-commetrics.com/";
   const [user, setUser] = useState(null);
   const router = useRouter();
   const [selectedItem, setSelectedItem] = useState(0); // Estado para el elemento seleccionado
@@ -76,7 +79,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("https://e-commetrics.com/api/user", {
+        const res = await axios.get(`https://e-commetrics.com/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
@@ -97,7 +100,7 @@ function Dashboard() {
     const fetchProjects = async () => {
       try {
         const res = await fetch(
-          "https://e-commetrics.com/api/projects?userId=" + user.id,
+          `https://e-commetrics.com/api/projects?userId=` + user.id,
           {
             credentials: "include",
           }
@@ -120,7 +123,7 @@ function Dashboard() {
   const logout = async () => {
     try {
       await axios.post(
-        "https://e-commetrics.com/logout",
+        `https://e-commetrics.com/logout`,
         {},
         { withCredentials: true }
       );
@@ -144,20 +147,20 @@ function Dashboard() {
     );
   }
 
-  if (user.email === 'admin@e-commetrics.com') {
-    avatarURl = '/logo_nav.jpg' // Reemplaza esto con la ruta a la imagen del usuario
-    } else if (user.email === 'mydentist@reformadental.com') {
-    avatarURl = '/reforma logo.png' // Reemplaza esto con la ruta a la imagen del usuario
-    } else if (user.email === 'syl@gmail.com') {
-    avatarURl = '/SYL logo.jpeg' // Reemplaza esto con la ruta a la imagen del usuario
-    } else if (user.email === 'draanyimanchola@bitescreadoresdesonrisas.com') {
-    avatarURl = '/bites logo.png' // Reemplaza esto con la ruta a la imagen del usuario
-    } else {
-    avatarURl = '' // Reemplaza esto con la ruta a la imagen del usuario por defecto
-    }
+  if (user.email === "admin@e-commetrics.com") {
+    avatarURl = "/logo_nav.jpg"; // Reemplaza esto con la ruta a la imagen del usuario
+  } else if (user.email === "mydentist@reformadental.com") {
+    avatarURl = "/reforma logo.png"; // Reemplaza esto con la ruta a la imagen del usuario
+  } else if (user.email === "syl@gmail.com") {
+    avatarURl = "/SYL logo.jpeg"; // Reemplaza esto con la ruta a la imagen del usuario
+  } else if (user.email === "draanyimanchola@bitescreadoresdesonrisas.com") {
+    avatarURl = "/bites logo.png"; // Reemplaza esto con la ruta a la imagen del usuario
+  } else {
+    avatarURl = ""; // Reemplaza esto con la ruta a la imagen del usuario por defecto
+  }
 
   return (
-    <section>
+    <section className="text-white">
       <div className="flex bg-[#21233A]">
         <aside className="hidden h-screen px-8 py-12 sm:block md:w-1/5">
           <div className="flex flex-col items-center gap-4">
@@ -266,160 +269,168 @@ function Dashboard() {
                   projectInformation.bco.length > 0 &&
                   projectInformation.bco.map((project, index) => (
                     <div
-                    key={index}
-                    className="w-full animate-fade-left animate-once animate-delay-200"
-                  >
-                    <div className="py-4">
-                      <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
-                        {" "}
-                        <div className="mb-4">
-                          <span className="text-lg font-bold ">
-                            {project.content_1}
-                          </span>
-                        </div>
-                        <div className="mb-4">
-                          <span className="text-base">{project.content_2}</span>
-                        </div>
-                        {project.content_3 && (
+                      key={index}
+                      className="w-full animate-fade-left animate-once animate-delay-200"
+                    >
+                      <div className="py-4">
+                        <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
+                          {" "}
                           <div className="mb-4">
-                            <p className="text-base">{project.content_3}</p>
+                            <span className="text-lg font-bold ">
+                              {project.content_1}
+                            </span>
                           </div>
-                        )}
-                        {project.image && (
                           <div className="mb-4">
-                            <img src={project.image} alt="Project" />
+                            <span className="text-base">
+                              {project.content_2}
+                            </span>
                           </div>
-                        )}
-                        <Link
-                          target="_blank"
-                          className="text-blue-500 underline"
-                          href={project.href}
-                        >
-                          {project.link}
-                        </Link>
+                          {project.content_3 && (
+                            <div className="mb-4">
+                              <p className="text-base">{project.content_3}</p>
+                            </div>
+                          )}
+                          {project.image && (
+                            <div className="mb-4">
+                              <img src={project.image} alt="Project" />
+                            </div>
+                          )}
+                          <Link
+                            target="_blank"
+                            className="text-blue-500 underline"
+                            href={project.href}
+                          >
+                            {project.link}
+                          </Link>
+                        </div>
                       </div>
                     </div>
-                  </div>
                   ))}
                 {projectInformation &&
                   projectInformation.op &&
                   projectInformation.op.length > 0 &&
                   projectInformation.op.map((project, index) => (
                     <div
-                    key={index}
-                    className="w-full animate-fade-left animate-once animate-delay-200"
-                  >
-                    <div className="py-4">
-                      <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
-                        {" "}
-                        <div className="mb-4">
-                          <span className="text-lg font-bold ">
-                            {project.content_1}
-                          </span>
-                        </div>
-                        <div className="mb-4">
-                          <span className="text-base">{project.content_2}</span>
-                        </div>
-                        {project.content_3 && (
+                      key={index}
+                      className="w-full animate-fade-left animate-once animate-delay-200"
+                    >
+                      <div className="py-4">
+                        <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
+                          {" "}
                           <div className="mb-4">
-                            <p className="text-base">{project.content_3}</p>
+                            <span className="text-lg font-bold ">
+                              {project.content_1}
+                            </span>
                           </div>
-                        )}
-                        {project.image && (
                           <div className="mb-4">
-                            <img src={project.image} alt="Project" />
+                            <span className="text-base">
+                              {project.content_2}
+                            </span>
                           </div>
-                        )}
-                        <Link
-                          target="_blank"
-                          className="text-blue-500 underline"
-                          href={project.href}
-                        >
-                          {project.link}
-                        </Link>
+                          {project.content_3 && (
+                            <div className="mb-4">
+                              <p className="text-base">{project.content_3}</p>
+                            </div>
+                          )}
+                          {project.image && (
+                            <div className="mb-4">
+                              <img src={project.image} alt="Project" />
+                            </div>
+                          )}
+                          <Link
+                            target="_blank"
+                            className="text-blue-500 underline"
+                            href={project.href}
+                          >
+                            {project.link}
+                          </Link>
+                        </div>
                       </div>
                     </div>
-                  </div>
                   ))}
                 {projectInformation &&
                   projectInformation.mvp &&
                   projectInformation.mvp.length > 0 &&
                   projectInformation.mvp.map((project, index) => (
                     <div
-                    key={index}
-                    className="w-full animate-fade-left animate-once animate-delay-200"
-                  >
-                    <div className="py-4">
-                      <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
-                        {" "}
-                        <div className="mb-4">
-                          <span className="text-lg font-bold ">
-                            {project.content_1}
-                          </span>
-                        </div>
-                        <div className="mb-4">
-                          <span className="text-base">{project.content_2}</span>
-                        </div>
-                        {project.content_3 && (
+                      key={index}
+                      className="w-full animate-fade-left animate-once animate-delay-200"
+                    >
+                      <div className="py-4">
+                        <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
+                          {" "}
                           <div className="mb-4">
-                            <p className="text-base">{project.content_3}</p>
+                            <span className="text-lg font-bold ">
+                              {project.content_1}
+                            </span>
                           </div>
-                        )}
-                        {project.image && (
                           <div className="mb-4">
-                            <img src={project.image} alt="Project" />
+                            <span className="text-base">
+                              {project.content_2}
+                            </span>
                           </div>
-                        )}
-                        <Link
-                          target="_blank"
-                          className="text-blue-500 underline"
-                          href={project.href}
-                        >
-                          {project.link}
-                        </Link>
+                          {project.content_3 && (
+                            <div className="mb-4">
+                              <p className="text-base">{project.content_3}</p>
+                            </div>
+                          )}
+                          {project.image && (
+                            <div className="mb-4">
+                              <img src={project.image} alt="Project" />
+                            </div>
+                          )}
+                          <Link
+                            target="_blank"
+                            className="text-blue-500 underline"
+                            href={project.href}
+                          >
+                            {project.link}
+                          </Link>
+                        </div>
                       </div>
                     </div>
-                  </div>
                   ))}
                 {projectInformation &&
                   projectInformation.strat &&
                   projectInformation.strat.length > 0 &&
                   projectInformation.strat.map((project, index) => (
                     <div
-                    key={index}
-                    className="w-full animate-fade-left animate-once animate-delay-200"
-                  >
-                    <div className="py-4">
-                      <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
-                        {" "}
-                        <div className="mb-4">
-                          <span className="text-lg font-bold ">
-                            {project.content_1}
-                          </span>
-                        </div>
-                        <div className="mb-4">
-                          <span className="text-base">{project.content_2}</span>
-                        </div>
-                        {project.content_3 && (
+                      key={index}
+                      className="w-full animate-fade-left animate-once animate-delay-200"
+                    >
+                      <div className="py-4">
+                        <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
+                          {" "}
                           <div className="mb-4">
-                            <p className="text-base">{project.content_3}</p>
+                            <span className="text-lg font-bold ">
+                              {project.content_1}
+                            </span>
                           </div>
-                        )}
-                        {project.image && (
                           <div className="mb-4">
-                            <img src={project.image} alt="Project" />
+                            <span className="text-base">
+                              {project.content_2}
+                            </span>
                           </div>
-                        )}
-                        <Link
-                          target="_blank"
-                          className="text-blue-500 underline"
-                          href={project.href}
-                        >
-                          {project.link}
-                        </Link>
+                          {project.content_3 && (
+                            <div className="mb-4">
+                              <p className="text-base">{project.content_3}</p>
+                            </div>
+                          )}
+                          {project.image && (
+                            <div className="mb-4">
+                              <img src={project.image} alt="Project" />
+                            </div>
+                          )}
+                          <Link
+                            target="_blank"
+                            className="text-blue-500 underline"
+                            href={project.href}
+                          >
+                            {project.link}
+                          </Link>
+                        </div>
                       </div>
                     </div>
-                  </div>
                   ))}
               </div>
             ) : selectedItem === 1 &&
@@ -594,7 +605,12 @@ function Dashboard() {
               <div className="flex items-center justify-center h-screen">
                 <div class="flex-col gap-4 w-full flex items-center justify-center">
                   <div class="w-28 h-28 border-8 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full">
-                    <Image src="/logo.png" width={100} height={100} alt="logo" />
+                    <Image
+                      src="/logo.png"
+                      width={100}
+                      height={100}
+                      alt="logo"
+                    />
                   </div>
                   <div className="mt-4 text-2xl text-white">Loading...</div>{" "}
                 </div>{" "}
