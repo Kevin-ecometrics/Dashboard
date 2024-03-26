@@ -20,6 +20,8 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { Avatar } from "@nextui-org/react";
+import Drawer from "react-modern-drawer";
+import "react-modern-drawer/dist/index.css";
 
 export default function Page() {
   const generatePDF = () => {
@@ -66,6 +68,12 @@ export default function Page() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedUserClient, setSelectedUserClient] = useState(null);
   const [selectedUsername, setSelectedUsername] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDrawer = () => {
+    setIsOpen((prevState) => !prevState);
+  };
+
   const handleSubmitClient = async (event) => {
     event.preventDefault();
     const formFields = [
@@ -130,6 +138,7 @@ export default function Page() {
 
   const handleEditClickUserPassword = (clientUser) => {
     setSelectedUsername(clientUser);
+    toggleDrawer();
   };
 
   useEffect(() => {
@@ -177,6 +186,28 @@ export default function Page() {
     };
     fetchUsers();
   }, []);
+
+  const handlePasswordChange = async (event) => {
+    event.preventDefault();
+    const formFields = ["id", "username", "password"];
+    const formValues = {};
+    formFields.forEach((field) => {
+      formValues[field] = document.querySelector(`[name=${field}]`).value;
+    });
+    console.log(formValues);
+    try {
+      const res = await axios.put(
+        `http://localhost:3001/updatePassword`,
+        formValues
+      );
+      console.log(res.data);
+      toast.success("Contraseña actualizada exitosamente", { duration: 3000 });
+      toggleDrawer();
+    } catch (err) {
+      console.error(err);
+      toast.error("Error al actualizar contraseña", { duration: 3000 });
+    }
+  };
 
   const logout = async () => {
     try {
@@ -765,38 +796,68 @@ export default function Page() {
                   </div>
                 </form>
               )}
-              <div>
-                {selectedUsername && (
-                  <form className="grid grid-cols-4 gap-4 px-8 mt-4 text-white">
-                    <label>
-                      Username:
-                      <input
-                        type="text"
-                        name="username"
-                        value={selectedUsername.username}
-                        readOnly
-                        className="text-black bg-gray-200 px-4 py-2 border border-gray-300 rounded-md"
-                      />
-                    </label>
-                    <label>
-                      New Password:
-                      <input
-                        type="password"
-                        name="password"
-                        className="text-black bg-gray-200 px-4 py-2 border border-gray-300 rounded-md"
-                      />
-                    </label>
-                    <button
-                      className="w-full h-12 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-700"
-                      type="submit"
+              <>
+                <Drawer
+                  open={isOpen}
+                  onClose={toggleDrawer}
+                  direction="right"
+                  duration={300}
+                >
+                  <div className="p-4">
+                    <form
+                      className="text-black mt-4"
+                      onSubmit={handlePasswordChange}
                     >
-                      Update Password
+                      <label>
+                        ID:
+                        <input
+                          type="text"
+                          name="id"
+                          value={selectedUsername ? selectedUsername.id : ""}
+                          readOnly
+                          className="border border-gray-300 rounded-md px-2 py-1 w-full mt-2 focus:outline-none"
+                        />
+                      </label>
+                      <label>
+                        Username:
+                        <input
+                          type="text"
+                          name="username"
+                          value={
+                            selectedUsername ? selectedUsername.username : ""
+                          }
+                          readOnly
+                          className="border border-gray-300 rounded-md px-2 py-1 w-full mt-2 focus:outline-none"
+                        />
+                      </label>
+                      <label className="block mt-2">
+                        New Password:
+                        <input
+                          type="password"
+                          name="password"
+                          required
+                          className="border border-gray-300 rounded-md px-2 py-1 w-full mt-2 focus:outline-none"
+                        />
+                      </label>
+                      <button
+                        type="submit"
+                        className="mt-4 bg-blue-500 text-white px-4 py-2 w-full rounded-md"
+                      >
+                        Update Password
+                      </button>
+                    </form>
+                    <hr className="border border-gray-400 mb-4 mt-2" />
+                    <button
+                      className="bg-blue-500 w-full text-white px-4 py-2 rounded-md"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Close
                     </button>
-                  </form>
-                )}
-              </div>
+                  </div>
+                </Drawer>
+              </>
             </div>
-            <Toaster position="bottom-right" reverseOrder={false} />
+            <Toaster position="top-right" reverseOrder={false} />
           </Tab>
         </Tabs>
       </div>

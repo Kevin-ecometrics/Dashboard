@@ -26,10 +26,7 @@ function Dashboard() {
 
     return () => clearTimeout(timer);
   }, []);
-  const isDev = process.env.NEXT_PUBLIC_IS_DEV;
-  const baseURL = isDev
-    ? "http://localhost:3001/"
-    : "https://e-commetrics.com/";
+
   const [user, setUser] = useState(null);
   const router = useRouter();
   const [selectedItem, setSelectedItem] = useState(0); // Estado para el elemento seleccionado
@@ -43,16 +40,16 @@ function Dashboard() {
       if (projectName) {
         try {
           const res1 = await axios.get(
-            `https://e-commetrics.com/api/businessAndClientObjectives?projectName=${projectName}`
+            `http://localhost:3001/api/businessAndClientObjectives?projectName=${projectName}`
           );
           const res2 = await axios.get(
-            `https://e-commetrics.com/api/onboardingPackage?projectName=${projectName}`
+            `http://localhost:3001/api/onboardingPackage?projectName=${projectName}`
           );
           const res3 = await axios.get(
-            `https://e-commetrics.com/api/mvpAndIdea?projectName=${projectName}`
+            `http://localhost:3001/api/mvpAndIdea?projectName=${projectName}`
           );
           const res4 = await axios.get(
-            `https://e-commetrics.com/api/naStrategyGrowthhacking?projectName=${projectName}`
+            `http://localhost:3001/api/naStrategyGrowthhacking?projectName=${projectName}`
           );
           setProjectInformation({
             bco: res1.data,
@@ -79,7 +76,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`https://e-commetrics.com/api/user`, {
+        const res = await axios.get(`http://localhost:3001/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
@@ -100,7 +97,7 @@ function Dashboard() {
     const fetchProjects = async () => {
       try {
         const res = await fetch(
-          `https://e-commetrics.com/api/projects?userId=` + user.id,
+          `http://localhost:3001/api/projects?userId=` + user.id,
           {
             credentials: "include",
           }
@@ -123,7 +120,7 @@ function Dashboard() {
   const logout = async () => {
     try {
       await axios.post(
-        `https://e-commetrics.com/logout`,
+        `http://localhost:3001/logout`,
         {},
         { withCredentials: true }
       );
@@ -220,9 +217,14 @@ function Dashboard() {
               </li>
             </ul>
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-4">
+            <Link href="/dashboard" className="text-white">
+              <Button className="text-white bg-blue-500 text-center hover:bg-blue-700 uppercase">
+                Dashboard
+              </Button>
+            </Link>
             <Button
-              className="text-white bg-blue-500 w-96 hover:bg-blue-700"
+              className="text-white bg-blue-500  hover:bg-blue-700"
               onClick={logout}
             >
               <FaPowerOff className="mr-2" />
@@ -297,7 +299,7 @@ function Dashboard() {
                           )}
                           <Link
                             target="_blank"
-                            className="text-blue-500 underline"
+                            className="text-blue-500 underline "
                             href={project.href}
                           >
                             {project.link}

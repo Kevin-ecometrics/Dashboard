@@ -218,8 +218,10 @@ export default function CreateProject() {
         formValues
       );
       console.log("Respuesta:", response.data);
+      toast.success("Contenido creado exitosamente", { duration: 3000 }); // Mostrar notificación de éxito
     } catch (error) {
       console.error("Error:", error);
+      toast.error("Error al crear el contenido", { duration: 3000 }); // Mostrar notificación de error
     }
   };
 
@@ -236,7 +238,26 @@ export default function CreateProject() {
         `http://localhost:3001/update/${table}`,
         dataInfo
       );
+      toast.success("Contenido actualizado exitosamente", { duration: 3000 }); // Mostrar notificación de éxito
+      // console.log("Respuesta:", response.data);
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error al actualizar el contenido", { duration: 3000 }); // Mostrar notificación de error
+    }
+  };
+
+  const handleDeleteClick = async () => {
+    const table = selectedContent.table;
+    const dataInfo = data[currentIndex];
+    // console.log("table:", table);
+    // console.log("Datos a guardar:", dataInfo);
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:3001/delete/${table}/${dataInfo.id}`
+      );
       console.log("Respuesta:", response.data);
+      setData([]);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -354,7 +375,7 @@ export default function CreateProject() {
                   Create Project
                 </Button>
               </form>
-              <Toaster position="bottom-right" reverseOrder={false} />
+              {/* <Toaster position="bottom-right" reverseOrder={false} /> */}
             </div>
           </Tab>
           <Tab key="create-content" title="Create content">
@@ -537,40 +558,56 @@ export default function CreateProject() {
               <div className="flex flex-col items-center justify-center">
                 <form onSubmit={handleCheckData}>
                   <div className="[&>label]:px-4 [&>label]:py-2 py-4">
-                    <label htmlFor="projectId">Project ID:</label>
-                    <input
-                      className="p-4 text-black rounded-2xl"
-                      id="projectId"
-                      type="text"
-                      value={selectedProject.id}
-                      readOnly
-                    />
-                    <label htmlFor="title">Title:</label>
-                    <input
-                      className="p-4 text-black rounded-2xl"
-                      id="title"
-                      type="text"
-                      value={selectedProject.title}
-                      onChange={(e) =>
-                        setSelectedProject({
-                          ...selectedProject,
-                          title: e.target.value,
-                        })
-                      }
-                    />
-                    <label htmlFor="percentage">Percentage:</label>
-                    <input
-                      className="p-4 text-black rounded-2xl"
-                      id="percentage"
-                      type="text"
-                      value={selectedProject.percentage}
-                      onChange={(e) =>
-                        setSelectedProject({
-                          ...selectedProject,
-                          percentage: e.target.value,
-                        })
-                      }
-                    />
+                    <div className="grid grid-cols-4 gap-8">
+                      <label htmlFor="projectId">Project ID:</label>
+                      <input
+                        className="p-4 text-black rounded-2xl"
+                        id="projectId"
+                        type="text"
+                        value={selectedProject.id}
+                        readOnly
+                      />
+                      <label htmlFor="title">Title:</label>
+                      <input
+                        className="p-4 text-black rounded-2xl"
+                        id="title"
+                        type="text"
+                        value={selectedProject.title}
+                        onChange={(e) =>
+                          setSelectedProject({
+                            ...selectedProject,
+                            title: e.target.value,
+                          })
+                        }
+                      />
+                      <label htmlFor="project_name">Project Name:</label>
+                      <input
+                        className="p-4 text-black rounded-2xl"
+                        id="project_name"
+                        type="text"
+                        value={selectedProject.project_name}
+                        onChange={(e) =>
+                          setSelectedProject({
+                            ...selectedProject,
+                            project_name: e.target.value,
+                          })
+                        }
+                      />
+                      <label htmlFor="percentage">Percentage:</label>
+                      <input
+                        className="p-4 text-black rounded-2xl"
+                        id="percentage"
+                        type="text"
+                        value={selectedProject.percentage}
+                        onChange={(e) =>
+                          setSelectedProject({
+                            ...selectedProject,
+                            percentage: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+
                     <div className="flex flex-col items-center justify-center py-4 ">
                       <label htmlFor="content">Content:</label>
                       <textarea
@@ -598,7 +635,6 @@ export default function CreateProject() {
                     </Button>
                   </div>
                 </form>
-                <Toaster position="bottom-right" reverseOrder={false} />
               </div>
             )}
           </Tab>
@@ -746,7 +782,7 @@ export default function CreateProject() {
                           }}
                         />
                         <Input
-                          label="Link Name"
+                          label="Link"
                           type="text"
                           className="text-black rounded-2xl"
                           value={content.href || ""}
@@ -762,7 +798,7 @@ export default function CreateProject() {
                           }}
                         />
                         <Input
-                          label="Link"
+                          label="Link Name"
                           type="text"
                           className="text-black rounded-2xl"
                           value={content.link || ""}
@@ -794,12 +830,18 @@ export default function CreateProject() {
                           }}
                         />
                       </div>
-                      <div className="flex items-center justify-center">
+                      <div className="flex items-center justify-center gap-4">
                         <button
                           className="p-4 text-white bg-blue-500 rounded-2xl hover:bg-blue-700"
                           type="submit"
                         >
                           Update content
+                        </button>
+                        <button
+                          className="p-4 text-white bg-red-500 rounded-2xl hover:bg-red-700"
+                          onClick={handleDeleteClick}
+                        >
+                          Delete content
                         </button>
                       </div>
                     </form>
@@ -824,6 +866,7 @@ export default function CreateProject() {
             )}
           </Tab>
         </Tabs>
+        <Toaster position="bottom-right" reverseOrder={false} />
       </div>
     </main>
   );
