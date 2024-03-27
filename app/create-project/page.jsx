@@ -267,6 +267,26 @@ export default function CreateProject() {
     }
   };
 
+  const [currentPage1, setCurrentPage1] = useState(0);
+  const itemsPerPage1 = 3;
+
+  const displayedProjects1 = projects.slice(
+    currentPage1 * itemsPerPage1,
+    (currentPage1 + 1) * itemsPerPage1
+  );
+
+  const totalPages1 = Math.ceil(projects.length / itemsPerPage1);
+
+  const [currentPage2, setCurrentPage2] = useState(0);
+  const itemsPerPage2 = 4;
+
+  const displayedProjects2 = projects.slice(
+    currentPage2 * itemsPerPage2,
+    (currentPage2 + 1) * itemsPerPage2
+  );
+
+  const totalPages2 = Math.ceil(projects.length / itemsPerPage2);
+
   if (!user) {
     return (
       <div className="flex items-center justify-center h-screen bg-slate-700">
@@ -540,24 +560,38 @@ export default function CreateProject() {
                 <TableColumn className="text-black">Action</TableColumn>
               </TableHeader>
               <TableBody>
-                {projects &&
-                  projects.map((project) => (
-                    <TableRow key={project.id}>
-                      <TableCell>{project.id}</TableCell>
-                      <TableCell>{project.title}</TableCell>
-                      <TableCell>
-                        <Button
-                          color="primary"
-                          className="hover:bg-blue-700"
-                          onClick={() => setSelectedProject(project)}
-                        >
-                          Actions
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                {displayedProjects1.map((project) => (
+                  <TableRow key={project.id}>
+                    <TableCell>{project.id}</TableCell>
+                    <TableCell>{project.title}</TableCell>
+                    <TableCell>
+                      <Button
+                        color="primary"
+                        className="hover:bg-blue-700"
+                        onClick={() => setSelectedProject(project)}
+                      >
+                        Actions
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
+            <nav className="flex justify-end items-center gap-4 py-4">
+              {Array.from({ length: totalPages1 }, (_, index) => (
+                <button
+                  className={`rounded-xl px-4 py-2 ${
+                    currentPage1 === index
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
+                  }`}
+                  key={index}
+                  onClick={() => setCurrentPage1(index)}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </nav>
             {selectedProject && (
               <div className="flex flex-col items-center justify-center">
                 <form onSubmit={handleCheckData}>
@@ -666,71 +700,85 @@ export default function CreateProject() {
                 </TableColumn>
               </TableHeader>
               <TableBody>
-                {projects &&
-                  projects.map((project) => (
-                    <TableRow key={project.id}>
-                      <TableCell>{project.id}</TableCell>
-                      <TableCell>{project.title}</TableCell>
-                      <TableCell>
-                        <Button
-                          color="primary"
-                          className="hover:bg-blue-700"
-                          onClick={() =>
-                            setSelectedContent({
-                              project: project,
-                              table: "business_and_client_objectives",
-                            })
-                          }
-                        >
-                          Business
-                        </Button>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          color="primary"
-                          className="hover:bg-blue-700"
-                          onClick={() =>
-                            setSelectedContent({
-                              project: project,
-                              table: "onboarding_package",
-                            })
-                          }
-                        >
-                          Onboarding
-                        </Button>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          color="primary"
-                          className="hover:bg-blue-700"
-                          onClick={() =>
-                            setSelectedContent({
-                              project: project,
-                              table: "mvp_and_idea",
-                            })
-                          }
-                        >
-                          MVP
-                        </Button>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          color="primary"
-                          className="hover:bg-blue-700"
-                          onClick={() =>
-                            setSelectedContent({
-                              project: project,
-                              table: "na_strategy_growthhacking",
-                            })
-                          }
-                        >
-                          NA Strategy
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                {displayedProjects2.map((project) => (
+                  <TableRow key={project.id}>
+                    <TableCell>{project.id}</TableCell>
+                    <TableCell>{project.title}</TableCell>
+                    <TableCell>
+                      <Button
+                        color="primary"
+                        className="hover:bg-blue-700"
+                        onClick={() =>
+                          setSelectedContent({
+                            project: project,
+                            table: "business_and_client_objectives",
+                          })
+                        }
+                      >
+                        Business
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        color="primary"
+                        className="hover:bg-blue-700"
+                        onClick={() =>
+                          setSelectedContent({
+                            project: project,
+                            table: "onboarding_package",
+                          })
+                        }
+                      >
+                        Onboarding
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        color="primary"
+                        className="hover:bg-blue-700"
+                        onClick={() =>
+                          setSelectedContent({
+                            project: project,
+                            table: "mvp_and_idea",
+                          })
+                        }
+                      >
+                        MVP
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        color="primary"
+                        className="hover:bg-blue-700"
+                        onClick={() =>
+                          setSelectedContent({
+                            project: project,
+                            table: "na_strategy_growthhacking",
+                          })
+                        }
+                      >
+                        NA Strategy
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
+            <nav className="flex justify-end items-center gap-4 py-4">
+              {Array.from({ length: totalPages2 }, (_, index) => (
+                <button
+                  className={`rounded-xl px-4 py-2 ${
+                    currentPage2 === index
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
+                  }`}
+                  key={index}
+                  onClick={() => setCurrentPage2(index)}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </nav>
             {data.length > 0 &&
               data.map(
                 (content, index) =>
