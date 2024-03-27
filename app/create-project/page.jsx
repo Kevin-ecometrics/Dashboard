@@ -50,7 +50,7 @@ export default function CreateProject() {
         try {
           const response = await axios.get(
             // `https://e-commetrics.com/api/${selectedContent.table}/${selectedContent.project.id}`
-            `http://localhost:3001/api/${selectedContent.table}/${selectedContent.project.id}`
+            `https://e-commetrics.com/api/${selectedContent.table}/${selectedContent.project.id}`
           );
           console.log(response.data); // Agrega esta línea para ver los datos en la consola
           setData(response.data);
@@ -69,7 +69,7 @@ export default function CreateProject() {
     const fetchUser = async () => {
       try {
         // const res = await axios.get(`https://e-commetrics.com/api/user`, {
-        const res = await axios.get(`http://localhost:3001/api/user`, {
+        const res = await axios.get(`https://e-commetrics.com/api/user`, {
           withCredentials: true,
         });
         if (res.data.user) {
@@ -107,7 +107,7 @@ export default function CreateProject() {
     event.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:3001/projects/${selectedProject.id}`,
+        `https://e-commetrics.com/projects/${selectedProject.id}`,
         selectedProject
       );
 
@@ -137,7 +137,7 @@ export default function CreateProject() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/create/projects`, {
+      const response = await fetch(`https://e-commetrics.com/create/projects`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -161,7 +161,9 @@ export default function CreateProject() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/get/projects`);
+        const response = await axios.get(
+          `https://e-commetrics.com/get/projects`
+        );
         setProjects(response.data);
         // console.log('Proyectos:', response.data)
       } catch (error) {
@@ -175,7 +177,7 @@ export default function CreateProject() {
   useEffect(() => {
     const fetchNameUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/get/users`);
+        const response = await axios.get(`https://e-commetrics.com/get/users`);
         setUsers(response.data);
         // console.log(response.data) // Aquí están los datos que devuelve tu API
       } catch (error) {
@@ -214,7 +216,7 @@ export default function CreateProject() {
 
     try {
       const response = await axios.post(
-        `http://localhost:3001/create/${formValues.table}`,
+        `https://e-commetrics.com/create/${formValues.table}`,
         formValues
       );
       console.log("Respuesta:", response.data);
@@ -235,7 +237,7 @@ export default function CreateProject() {
 
     try {
       const response = await axios.put(
-        `http://localhost:3001/update/${table}`,
+        `https://e-commetrics.com/update/${table}`,
         dataInfo
       );
       toast.success("Contenido actualizado exitosamente", { duration: 3000 }); // Mostrar notificación de éxito
@@ -254,7 +256,7 @@ export default function CreateProject() {
 
     try {
       const response = await axios.delete(
-        `http://localhost:3001/delete/${table}/${dataInfo.id}`
+        `https://e-commetrics.com/delete/${table}/${dataInfo.id}`
       );
       console.log("Respuesta:", response.data);
       setData([]);
@@ -294,7 +296,7 @@ export default function CreateProject() {
           </Link>
         </ul>
       </aside>
-      <div className="flex flex-col items-center justify-center h-screen bg-[#151A28] text-white flex-grow">
+      <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900 text-white flex-grow">
         <Tabs aria-label="Options" radius="full" color="primary">
           <Tab key="create-project" title="Create project">
             <div className="w-[700px]">
@@ -651,14 +653,14 @@ export default function CreateProject() {
                   {" "}
                   Business and Client Objectives
                 </TableColumn>
+                <TableColumn className="text-black">
+                  {" "}
+                  Onboarding Package
+                </TableColumn>
                 <TableColumn className="text-black"> MVP and Idea</TableColumn>
                 <TableColumn className="text-black">
                   {" "}
                   NA Strategy Growthhacking
-                </TableColumn>
-                <TableColumn className="text-black">
-                  {" "}
-                  Onboarding Package
                 </TableColumn>
               </TableHeader>
               <TableBody>
@@ -688,6 +690,20 @@ export default function CreateProject() {
                           onClick={() =>
                             setSelectedContent({
                               project: project,
+                              table: "onboarding_package",
+                            })
+                          }
+                        >
+                          Onboarding
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          color="primary"
+                          className="hover:bg-blue-700"
+                          onClick={() =>
+                            setSelectedContent({
+                              project: project,
                               table: "mvp_and_idea",
                             })
                           }
@@ -707,20 +723,6 @@ export default function CreateProject() {
                           }
                         >
                           NA Strategy
-                        </Button>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          color="primary"
-                          className="hover:bg-blue-700"
-                          onClick={() =>
-                            setSelectedContent({
-                              project: project,
-                              table: "onboarding_package",
-                            })
-                          }
-                        >
-                          Onboarding
                         </Button>
                       </TableCell>
                     </TableRow>

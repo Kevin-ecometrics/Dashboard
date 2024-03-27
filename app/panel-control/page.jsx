@@ -212,7 +212,7 @@ export default function Page() {
   const logout = async () => {
     try {
       await axios.post(
-        `http://localhost:3001/logout`,
+        `hhttp://localhost:3001/logout`,
         {},
         { withCredentials: true }
       );
@@ -334,7 +334,7 @@ export default function Page() {
           </Link>
         </ul>
       </aside>
-      <div className="flex flex-col items-center justify-center h-screen bg-[#151A28] text-white flex-grow">
+      <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900 text-white flex-grow">
         <Container title="Panel Administrativo" />
         <Tabs
           aria-label="Options"

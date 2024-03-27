@@ -4,15 +4,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 import { Button, Link, Avatar, Divider } from "@nextui-org/react";
-import { Accordion, AccordionItem } from "@nextui-org/react";
-import {
-  FaCheck,
-  FaXmark,
-  FaPowerOff,
-  FaBars,
-  FaComments,
-  FaWhatsapp,
-} from "react-icons/fa6";
+import { FaPowerOff, FaBars, FaComments, FaWhatsapp } from "react-icons/fa6";
 import Image from "next/image";
 
 function Dashboard() {
@@ -26,7 +18,6 @@ function Dashboard() {
 
     return () => clearTimeout(timer);
   }, []);
-
   const [user, setUser] = useState(null);
   const router = useRouter();
   const [selectedItem, setSelectedItem] = useState(0); // Estado para el elemento seleccionado
@@ -217,14 +208,9 @@ function Dashboard() {
               </li>
             </ul>
           </div>
-          <div className="flex justify-center gap-4">
-            <Link href="/dashboard" className="text-white">
-              <Button className="text-white bg-blue-500 text-center hover:bg-blue-700 uppercase">
-                Dashboard
-              </Button>
-            </Link>
+          <div className="flex justify-center">
             <Button
-              className="text-white bg-blue-500  hover:bg-blue-700"
+              className="text-white bg-blue-500 w-96 hover:bg-blue-700"
               onClick={logout}
             >
               <FaPowerOff className="mr-2" />
@@ -232,13 +218,18 @@ function Dashboard() {
             </Button>
           </div>
         </aside>
-        <div className="flex flex-col px-12 py-4 w-screen md:w-4/5 bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900">
+        <div className="flex flex-col px-12 py-4 w-screen md:w-4/5 bg-[#151A28]">
           <div
             className={
               selectedItem === 0
                 ? "px-6 w-auto  md:w-3/4 py-4"
                 : "px-6 w-auto md:w-[450px] py-4"
             }
+            style={{
+              backgroundImage: selectedItem > 0 ? `url('/card.png')` : "none", // Reemplaza esto con la ruta a tu imagen
+              backgroundSize: "cover", // Esto hace que la imagen cubra todo el div
+              backgroundRepeat: "no-repeat", // Esto evita que la imagen se repita
+            }}
           >
             <h1
               className={
@@ -294,7 +285,7 @@ function Dashboard() {
                           )}
                           <Link
                             target="_blank"
-                            className="text-blue-500 underline "
+                            className="text-blue-500 underline"
                             href={project.href}
                           >
                             {project.link}

@@ -5,6 +5,7 @@ const mysql = require("mysql2");
 const cors = require("cors");
 const saltRounds = 10;
 const nodemailer = require("nodemailer");
+const path = require("path");
 
 const app = express();
 
@@ -103,7 +104,7 @@ app.post("/register", (req, res) => {
         }
 
         connection.query(
-          "INSERT INTO users (username, email, password, rol, foto) VALUES (?, ?, ?, ?)",
+          "INSERT INTO users (username, email, password, rol) VALUES (?, ?, ?, ?)",
           [username, email, hashedPassword, rol],
           (err, results) => {
             if (err) {
@@ -121,23 +122,43 @@ app.post("/register", (req, res) => {
               },
             });
 
-            // Configurar las opciones del correo
-            // let mailOptions = {
-            // 	from: 'admin@e-commetrics.com', // remitente
-            // 	to: email, // destinatario
-            // 	cc: 'admin@e-commetrics.com', // copia
-            // 	subject: 'Welcome to Ecommetrica', // Asunto
-            // 	text: `Hello, this will be your UserName on our platform ${username}, to access your dashboard you just have to enter the email: ${email} and password: ${password}`, // cuerpo del correo
-            // }
+            const imagePath = path.join(
+              __dirname,
+              "../public",
+              "email_image.png"
+            );
 
-            // // Enviar el correo
-            // transporter.sendMail(mailOptions, (err, info) => {
-            // 	if (err) {
-            // 		console.error('Error al enviar el correo:', err)
-            // 	} else {
-            // 		console.log('Correo enviado:', info.response)
-            // 	}
-            // })
+            // Configurar las opciones del correo
+            let mailOptions = {
+              from: "admin@e-commetrics.com", // remitente
+              to: email, // destinatario
+              cc: "admin@e-commetrics.com", // copia
+              subject: "Welcome to Ecommetrica", // Asunto
+              html: `
+              <p>Hello! Welcome to Ecommetrica. We are excited to work on your business and transform your vision. It will be a pleasure to collaborate with you.</p>
+              <p>We are sending you your User details to access our platform. In the E-COMMETRICS DASHBOARD, log in with this email we created for you: <strong>${email}</strong> and your password: <strong>${password}</strong></p>
+              <p>Once authenticated access to the <a href="https://e-commetrics.com/">E-COMMETRICS DASHBOARD</a>, you will be able to review your entire project and visualize the status of the work, as well as any upcoming tasks and/or changes that may be needed.</p>
+              <p>Thank you for joining us!</p>
+              <br> <!-- Salto de línea -->
+              <img src="cid:unique@nodemailer.com" alt="Image" width="800" height="600">
+              `,
+              attachments: [
+                {
+                  filename: "email_image.png",
+                  path: imagePath,
+                  cid: "unique@nodemailer.com",
+                },
+              ],
+            };
+
+            // Enviar el correo
+            transporter.sendMail(mailOptions, (err, info) => {
+              if (err) {
+                console.error("Error al enviar el correo:", err);
+              } else {
+                console.log("Correo enviado:", info.response);
+              }
+            });
 
             res.status(201).json({ message: "Usuario registrado con éxito" });
           }

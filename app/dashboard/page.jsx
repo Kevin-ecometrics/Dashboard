@@ -124,7 +124,6 @@ function Dashboard() {
   return (
     <section className="h-screen w-screen text-white bg-[#21233A]">
       <div className="flex h-max bg-[#191c33]">
-        {/*  */}
         <aside className="hidden h-screen px-8 py-12 w-36 sm:block md:w-1/5">
           <div className="flex flex-col items-center gap-4">
             <Avatar src={avatarURl} className="h-24 w-24" />
@@ -331,7 +330,9 @@ function Dashboard() {
             </div>
             <div className="flex justify-center items-center w-full md:w-auto px-4">
               <FaComments className="w-12 h-24" />
-              <FaWhatsapp className="text-green-500 h-12 w-24" />
+              <Link href="https://wa.me/+526646429633" target="_blank">
+                <FaWhatsapp className="text-green-500 h-12 w-24" />
+              </Link>{" "}
             </div>
           </section>
         </div>
