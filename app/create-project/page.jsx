@@ -49,7 +49,6 @@ export default function CreateProject() {
       if (selectedContent) {
         try {
           const response = await axios.get(
-            // `https://e-commetrics.com/api/${selectedContent.table}/${selectedContent.project.id}`
             `https://e-commetrics.com/api/${selectedContent.table}/${selectedContent.project.id}`
           );
           console.log(response.data); // Agrega esta línea para ver los datos en la consola
@@ -68,7 +67,6 @@ export default function CreateProject() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        // const res = await axios.get(`https://e-commetrics.com/api/user`, {
         const res = await axios.get(`https://e-commetrics.com/api/user`, {
           withCredentials: true,
         });
@@ -201,24 +199,28 @@ export default function CreateProject() {
   };
 
   const [formValues, setFormValues] = useState(content);
+  console.log(formValues);
 
   const handleFormChange = (event) => {
     setFormValues({
       ...formValues,
       [event.target.name]: event.target.value,
     });
-
-    console.log(formValues);
   };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-
     try {
       const response = await axios.post(
-        `https://e-commetrics.com/create/${formValues.table}`,
-        formValues
+        `https://e-commetrics.com/create/content/${formValues.table}`,
+        formValues,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
+
       console.log("Respuesta:", response.data);
       toast.success("Contenido creado exitosamente", { duration: 3000 }); // Mostrar notificación de éxito
     } catch (error) {

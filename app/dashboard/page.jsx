@@ -44,14 +44,14 @@ function Dashboard() {
     const fetchUserAndProjects = async () => {
       try {
         // const res = await axios.get(`https://e-commetrics.com/api/user`, {
-        const res = await axios.get(`http://localhost:3001/api/user`, {
+        const res = await axios.get(`https://e-commetrics.com/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
           setUser(res.data.user);
           const resProjects = await axios.get(
             // `https://e-commetrics.com/api/projects?userId=${res.data.user.id}`,
-            `http://localhost:3001/api/projects?userId=${res.data.user.id}`,
+            `https://e-commetrics.com/api/projects?userId=${res.data.user.id}`,
             { withCredentials: true }
           );
           if (resProjects && resProjects.data) {
@@ -72,7 +72,7 @@ function Dashboard() {
     try {
       await axios.post(
         // `https://e-commetrics.com/logout`,
-        `http://localhost:3001/logout`,
+        `https://e-commetrics.com/logout`,
 
         {},
         { withCredentials: true }

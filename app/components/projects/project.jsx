@@ -31,16 +31,16 @@ function Dashboard() {
       if (projectName) {
         try {
           const res1 = await axios.get(
-            `http://localhost:3001/api/businessAndClientObjectives?projectName=${projectName}`
+            `https://e-commetrics.com/api/businessAndClientObjectives?projectName=${projectName}`
           );
           const res2 = await axios.get(
-            `http://localhost:3001/api/onboardingPackage?projectName=${projectName}`
+            `https://e-commetrics.com/api/onboardingPackage?projectName=${projectName}`
           );
           const res3 = await axios.get(
-            `http://localhost:3001/api/mvpAndIdea?projectName=${projectName}`
+            `https://e-commetrics.com/api/mvpAndIdea?projectName=${projectName}`
           );
           const res4 = await axios.get(
-            `http://localhost:3001/api/naStrategyGrowthhacking?projectName=${projectName}`
+            `https://e-commetrics.com/api/naStrategyGrowthhacking?projectName=${projectName}`
           );
           setProjectInformation({
             bco: res1.data,
@@ -67,7 +67,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/api/user`, {
+        const res = await axios.get(`https://e-commetrics.com/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
@@ -88,7 +88,7 @@ function Dashboard() {
     const fetchProjects = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3001/api/projects?userId=` + user.id,
+          `https://e-commetrics.com/api/projects?userId=` + user.id,
           {
             credentials: "include",
           }
@@ -111,7 +111,7 @@ function Dashboard() {
   const logout = async () => {
     try {
       await axios.post(
-        `http://localhost:3001/logout`,
+        `https://e-commetrics.com/logout`,
         {},
         { withCredentials: true }
       );
@@ -162,7 +162,7 @@ function Dashboard() {
             <ul>
               <li className="flex flex-col gap-y-4">
                 <span
-                  className={`flex items-center gap-4 ${
+                  className={`flex items-center cursor-pointer gap-4 ${
                     selectedItem === 0 ? "selected text-pink-500" : ""
                   }`}
                   onClick={() => setSelectedItem(0)}
@@ -171,7 +171,7 @@ function Dashboard() {
                   <span>ALL CONTENT</span>
                 </span>
                 <span
-                  className={`flex items-center gap-4 ${
+                  className={`flex items-center cursor-pointer  gap-4 ${
                     selectedItem === 1 ? "selected text-pink-500" : ""
                   }`}
                   onClick={() => setSelectedItem(1)}
@@ -179,7 +179,7 @@ function Dashboard() {
                   <FaBars /> <span>Name of BUSINESS and Client objectives</span>
                 </span>
                 <span
-                  className={`flex items-center gap-4 ${
+                  className={`flex items-center cursor-pointer  gap-4 ${
                     selectedItem === 2 ? "selected text-pink-500" : ""
                   }`}
                   onClick={() => setSelectedItem(2)}
@@ -188,7 +188,7 @@ function Dashboard() {
                   <span> Onboarding Package</span>
                 </span>
                 <span
-                  className={`flex items-center gap-4 ${
+                  className={`flex items-center cursor-pointer  gap-4 ${
                     selectedItem === 3 ? "selected text-pink-500" : ""
                   }`}
                   onClick={() => setSelectedItem(3)}
@@ -197,7 +197,7 @@ function Dashboard() {
                   <span> MVP + IDEA</span>
                 </span>
                 <span
-                  className={`flex items-center gap-4 ${
+                  className={`flex items-center cursor-pointer  gap-4 ${
                     selectedItem === 4 ? "selected text-pink-500" : ""
                   }`}
                   onClick={() => setSelectedItem(4)}
@@ -208,9 +208,14 @@ function Dashboard() {
               </li>
             </ul>
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-4">
+            <Link href="/dashboard" className="text-white">
+              <Button className="text-white bg-blue-500 text-center hover:bg-blue-700 uppercase">
+                Dashboard
+              </Button>
+            </Link>
             <Button
-              className="text-white bg-blue-500 w-96 hover:bg-blue-700"
+              className="text-white bg-blue-500  hover:bg-blue-700"
               onClick={logout}
             >
               <FaPowerOff className="mr-2" />
@@ -218,18 +223,13 @@ function Dashboard() {
             </Button>
           </div>
         </aside>
-        <div className="flex flex-col px-12 py-4 w-screen md:w-4/5 bg-[#151A28]">
+        <div className="flex flex-col px-12 py-4 w-screen md:w-4/5 bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900">
           <div
             className={
               selectedItem === 0
                 ? "px-6 w-auto  md:w-3/4 py-4"
                 : "px-6 w-auto md:w-[450px] py-4"
             }
-            style={{
-              backgroundImage: selectedItem > 0 ? `url('/card.png')` : "none", // Reemplaza esto con la ruta a tu imagen
-              backgroundSize: "cover", // Esto hace que la imagen cubra todo el div
-              backgroundRepeat: "no-repeat", // Esto evita que la imagen se repita
-            }}
           >
             <h1
               className={
@@ -280,12 +280,16 @@ function Dashboard() {
                           )}
                           {project.image && (
                             <div className="mb-4">
-                              <img src={project.image} alt="Project" />
+                              <img
+                                src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                                height={100}
+                                alt="Project"
+                              />
                             </div>
                           )}
                           <Link
                             target="_blank"
-                            className="text-blue-500 underline"
+                            className="text-blue-500 underline "
                             href={project.href}
                           >
                             {project.link}
@@ -322,7 +326,11 @@ function Dashboard() {
                           )}
                           {project.image && (
                             <div className="mb-4">
-                              <img src={project.image} alt="Project" />
+                              <img
+                                src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                                height={100}
+                                alt="Project"
+                              />
                             </div>
                           )}
                           <Link
@@ -364,7 +372,11 @@ function Dashboard() {
                           )}
                           {project.image && (
                             <div className="mb-4">
-                              <img src={project.image} alt="Project" />
+                              <img
+                                src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                                height={100}
+                                alt="Project"
+                              />
                             </div>
                           )}
                           <Link
@@ -406,7 +418,11 @@ function Dashboard() {
                           )}
                           {project.image && (
                             <div className="mb-4">
-                              <img src={project.image} alt="Project" />
+                              <img
+                                src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                                height={100}
+                                alt="Project"
+                              />
                             </div>
                           )}
                           <Link
@@ -448,7 +464,11 @@ function Dashboard() {
                       )}
                       {project.image && (
                         <div className="mb-4">
-                          <img src={project.image} alt="Project" />
+                          <img
+                            src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                            height={100}
+                            alt="Project"
+                          />
                         </div>
                       )}
                       <Link
@@ -489,7 +509,11 @@ function Dashboard() {
                       )}
                       {project.image && (
                         <div className="mb-4">
-                          <img src={project.image} alt="Project" />
+                          <img
+                            src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                            height={100}
+                            alt="Project"
+                          />
                         </div>
                       )}
                       <Link
@@ -530,7 +554,11 @@ function Dashboard() {
                       )}
                       {project.image && (
                         <div className="mb-4">
-                          <img src={project.image} alt="Project" />
+                          <img
+                            src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                            height={100}
+                            alt="Project"
+                          />
                         </div>
                       )}
                       <Link
@@ -571,7 +599,11 @@ function Dashboard() {
                       )}
                       {project.image && (
                         <div className="mb-4">
-                          <img src={project.image} alt="Project" />
+                          <img
+                            src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                            height={100}
+                            alt="Project"
+                          />
                         </div>
                       )}
                       <Link
@@ -622,7 +654,9 @@ function Dashboard() {
             </div>
             <div className="flex justify-center items-center px-24">
               <FaComments className="w-12 h-24" />
-              <FaWhatsapp className="text-green-500 h-12 w-24" />
+              <Link href="https://wa.me/+526646429633" target="_blank">
+                <FaWhatsapp className="text-green-500 h-12 w-24" />
+              </Link>
             </div>
           </section>
         </div>
