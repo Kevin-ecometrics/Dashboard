@@ -111,6 +111,7 @@ function Page() {
     // is your language rtl or ltr?
     isRtl: false,
   };
+
   const options = { year: "numeric", month: "long", day: "numeric" };
   const [selectedDays, setSelectedDays] = useState(null);
   const [startTime, setStartTime] = useState(null);
@@ -124,14 +125,36 @@ function Page() {
   const [currentWeek, setCurrentWeek] = useState(0); // 0 para la semana actual, -1 para la semana anterior, 1 para la semana siguiente, etc.
   const [animationClass, setAnimationClass] = useState("animate-fade-down");
   const [disabledHours, setDisabledHours] = useState([]);
+  const [name, setName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [phone, setPhone] = useState(null);
+  const [date, setDate] = useState(null);
+  const [time, setTime] = useState(null);
 
   const handleButtonClick = (hour) => {
     setSelectedItem(hour);
+    setName(hour.name);
+    setEmail(hour.email);
+    setPhone(hour.phone);
+    const dateTime = new Date(hour.date);
+    const date = dateTime.toISOString().split("T")[0];
+    const time =
+      dateTime.getHours().toString().padStart(2, "0") +
+      ":" +
+      dateTime.getMinutes().toString().padStart(2, "0");
+    // Ajustar la fecha para mostrarla correctamente
+    const adjustedDate = new Date(
+      dateTime.getTime() - dateTime.getTimezoneOffset() * 60000
+    );
+    setDate(adjustedDate.toISOString().split("T")[0]);
+    setTime(time);
     setIsDrawerOpen(true);
   };
+
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
   };
+
   useEffect(() => {
     axios
       .get("http://localhost:3001/api/citas/agendadas")
@@ -215,12 +238,11 @@ function Page() {
     }
 
     try {
-      const response = await axios.post(
+      await axios.post(
         "http://localhost:3001/api/disponibilidad",
 
         { dates }
       );
-      // console.log(response.data); // Descomenta esta línea si necesitas ver la respuesta para depuración
     } catch (error) {
       console.error("Error al enviar el formulario:", error);
       return;
@@ -232,6 +254,60 @@ function Page() {
       );
       setBookedHours(response.data);
       toast.success("Disponibilidad enviada correctamente.");
+      setDuration("");
+    } catch (error) {
+      console.error("Error al actualizar bookedHours:", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    const confirmation = window.confirm(
+      "¿Estás seguro de que quieres eliminar esta cita?"
+    );
+    if (!confirmation) {
+      return;
+    }
+    try {
+      await axios.delete(
+        `http://localhost:3001/api/citas/delete/${selectedItem.id}`
+      );
+      setBookedHours(bookedHours.filter((hour) => hour.id !== selectedItem.id));
+      toast.success("Cita eliminada correctamente.");
+      setIsDrawerOpen(false);
+    } catch (error) {
+      console.error("Error al eliminar la cita:", error);
+    }
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
+    const dateTime = `${date}T${time}`; // Combinar la fecha y la hora
+
+    {
+      try {
+        await axios.put(
+          `http://localhost:3001/api/citas/update/${selectedItem.id}`,
+          {
+            name,
+            email,
+            phone,
+            date: dateTime,
+          }
+        );
+        toast.success("Cita actualizada correctamente.");
+        setIsDrawerOpen(false);
+      } catch (error) {
+        console.error("Error al actualizar la cita:", error);
+        toast.error("Error al actualizar la cita.");
+      }
+    }
+
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/api/citas/agendadas"
+      );
+      setBookedHours(response.data);
       setDuration("");
     } catch (error) {
       console.error("Error al actualizar bookedHours:", error);
@@ -333,7 +409,7 @@ function Page() {
                                     onClick={() => handleButtonClick(hour)}
                                   >
                                     {" "}
-                                    Abrir drawer
+                                    Actualizar cita
                                   </button>
                                 </div>
                               </div>
@@ -377,7 +453,7 @@ function Page() {
                                     onClick={() => handleButtonClick(hour)}
                                   >
                                     {" "}
-                                    Abrir drawer
+                                    Actualizar cita
                                   </button>
                                 </div>
                               </>
@@ -511,18 +587,23 @@ function Page() {
                   Editar Cita
                 </button>
               )}
-            <button className="w-full bg-pink-400 hover:bg-pink-500 rounded-lg py-2 text-white">
+            <button
+              onClick={handleDelete}
+              className="w-full bg-pink-400 hover:bg-pink-500 rounded-lg py-2 text-white"
+            >
               Eliminar Cita
             </button>
           </div>
           {isEditing ? (
-            <form>
+            <form onSubmit={handleUpdate}>
               <label>
                 Nombre:
                 <input
                   className="border-black border rounded-lg px-2 py-2"
                   type="text"
                   defaultValue={selectedItem.name}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </label>
               <label>
@@ -531,6 +612,8 @@ function Page() {
                   className="border-black border rounded-lg px-2 py-2"
                   type="text"
                   defaultValue={selectedItem.email}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </label>
               <label>
@@ -539,9 +622,50 @@ function Page() {
                   className="border-black border rounded-lg px-2 py-2"
                   type="text"
                   defaultValue={selectedItem.phone}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
               </label>
-
+              <label>
+                Fecha:
+                <input
+                  className="border-black border rounded-lg px-4 w-full py-2"
+                  type="date"
+                  value={date}
+                  onChange={(e) => {
+                    const selectedDate = new Date(e.target.value);
+                    if (selectedDate.getDay() === 6) {
+                      // 0 es domingo
+                      alert(
+                        "Los domingos no están disponibles. Por favor, selecciona otro día."
+                      );
+                      return;
+                    }
+                    setDate(e.target.value);
+                  }}
+                  required
+                />
+              </label>
+              <label>
+                Hora:
+                <select
+                  className="border-black border rounded-lg px-2 py-2 w-full"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  required
+                >
+                  <option value="">Selecciona una hora</option>
+                  <option value="09:00">09:00</option>
+                  <option value="10:00">10:00</option>
+                  <option value="11:00">11:00</option>
+                  <option value="12:00">12:00</option>
+                  <option value="13:00">13:00</option>
+                  <option value="14:00">14:00</option>
+                  <option value="15:00">15:00</option>
+                  <option value="16:00">16:00</option>
+                  <option value="17:00">17:00</option>
+                </select>
+              </label>
               <div className="flex justify-between mt-2">
                 <button
                   className="bg-pink-400 hover:bg-pink-500 text-white rounded-lg py-2 px-2"
@@ -559,9 +683,10 @@ function Page() {
               </div>
             </form>
           ) : null}
+
           <button
             onClick={handleDrawerClose}
-            className="mt-auto mb-5 w-full bg-pink-400 hover:bg-pink-600 text-white p-2 rounded"
+            className="mt-2 mb-5 w-full bg-pink-400 hover:bg-pink-600 text-white p-2 rounded"
           >
             Cerrar
           </button>
@@ -569,6 +694,7 @@ function Page() {
       ) : (
         <div className="fixed top-0 right-0 w-72 h-full bg-white shadow-lg p-5 overflow-y-auto z-50 transform translate-x-full transition-transform duration-1000" />
       )}
+      <Toaster position="top-right" />
     </div>
   );
 }
