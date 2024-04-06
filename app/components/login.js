@@ -20,7 +20,7 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
     try {
       const response = await axios.post(
         // `https://e-commetrics.com/login `,
-        `https://e-commetrics.com/login`,
+        `http://localhost:3001/login`,
 
         { email, password },
         {

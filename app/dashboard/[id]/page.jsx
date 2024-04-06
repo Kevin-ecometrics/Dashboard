@@ -10,10 +10,10 @@ export function generateStaticParams() {
   ];
 }
 
-export default function Page() {
+export default function Page({ id }) {
   return (
     <div className="bg-white h-screen">
-      <Projects />
+      <Projects id={id} />
     </div>
   );
 }

@@ -4,9 +4,14 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 import { Button, Link, Avatar, Divider } from "@nextui-org/react";
-import { FaPowerOff, FaBars, FaComments, FaWhatsapp } from "react-icons/fa6";
+import {
+  FaPowerOff,
+  FaBars,
+  FaComments,
+  FaWhatsapp,
+  FaCalendar,
+} from "react-icons/fa6";
 import Image from "next/image";
-
 function Dashboard() {
   let avatarURl;
   const [titleProject, setTitleProject] = useState("");
@@ -20,27 +25,26 @@ function Dashboard() {
   }, []);
   const [user, setUser] = useState(null);
   const router = useRouter();
-  const [selectedItem, setSelectedItem] = useState(0); // Estado para el elemento seleccionado
+  const [selectedItemDashbord, setSelectedItemDashbord] = useState(0); // Estado para el elemento seleccionado
   const pathname = usePathname();
   const parts = pathname.split("/"); // Esto devuelve ["", "dashboard", "project1"]
   const projectName = parts[2]; // Esto selecciona "project1"
   const [projectInformation, setProjectInformation] = useState(null); // Añade esta línea
-
   useEffect(() => {
     const fetchProjectInformation = async () => {
       if (projectName) {
         try {
           const res1 = await axios.get(
-            `https://e-commetrics.com/api/businessAndClientObjectives?projectName=${projectName}`
+            `http://localhost:3001/api/businessAndClientObjectives?projectName=${projectName}`
           );
           const res2 = await axios.get(
-            `https://e-commetrics.com/api/onboardingPackage?projectName=${projectName}`
+            `http://localhost:3001/api/onboardingPackage?projectName=${projectName}`
           );
           const res3 = await axios.get(
-            `https://e-commetrics.com/api/mvpAndIdea?projectName=${projectName}`
+            `http://localhost:3001/api/mvpAndIdea?projectName=${projectName}`
           );
           const res4 = await axios.get(
-            `https://e-commetrics.com/api/naStrategyGrowthhacking?projectName=${projectName}`
+            `http://localhost:3001/api/naStrategyGrowthhacking?projectName=${projectName}`
           );
           setProjectInformation({
             bco: res1.data,
@@ -62,12 +66,12 @@ function Dashboard() {
     };
 
     fetchProjectInformation();
-  }, []); // Dependencia vacía para que se ejecute el useEffect sólo una vez
+  }, []);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`https://e-commetrics.com/api/user`, {
+        const res = await axios.get(`http://localhost:3001/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
@@ -88,7 +92,7 @@ function Dashboard() {
     const fetchProjects = async () => {
       try {
         const res = await fetch(
-          `https://e-commetrics.com/api/projects?userId=` + user.id,
+          `http://localhost:3001/api/projects?userId=` + user.id,
           {
             credentials: "include",
           }
@@ -111,7 +115,7 @@ function Dashboard() {
   const logout = async () => {
     try {
       await axios.post(
-        `https://e-commetrics.com/logout`,
+        `http://localhost:3001/logout`,
         {},
         { withCredentials: true }
       );
@@ -163,48 +167,63 @@ function Dashboard() {
               <li className="flex flex-col gap-y-4">
                 <span
                   className={`flex items-center cursor-pointer gap-4 ${
-                    selectedItem === 0 ? "selected text-pink-500" : ""
+                    selectedItemDashbord === 0 ? "selected text-pink-500" : ""
                   }`}
-                  onClick={() => setSelectedItem(0)}
+                  onClick={() => setSelectedItemDashbord(0)}
                 >
                   <FaBars />
                   <span>ALL CONTENT</span>
                 </span>
                 <span
                   className={`flex items-center cursor-pointer  gap-4 ${
-                    selectedItem === 1 ? "selected text-pink-500" : ""
+                    selectedItemDashbord === 1 ? "selected text-pink-500" : ""
                   }`}
-                  onClick={() => setSelectedItem(1)}
+                  onClick={() => setSelectedItemDashbord(1)}
                 >
                   <FaBars /> <span>Name of BUSINESS and Client objectives</span>
                 </span>
                 <span
                   className={`flex items-center cursor-pointer  gap-4 ${
-                    selectedItem === 2 ? "selected text-pink-500" : ""
+                    selectedItemDashbord === 2 ? "selected text-pink-500" : ""
                   }`}
-                  onClick={() => setSelectedItem(2)}
+                  onClick={() => setSelectedItemDashbord(2)}
                 >
                   <FaBars />
                   <span> Onboarding Package</span>
                 </span>
                 <span
                   className={`flex items-center cursor-pointer  gap-4 ${
-                    selectedItem === 3 ? "selected text-pink-500" : ""
+                    selectedItemDashbord === 3 ? "selected text-pink-500" : ""
                   }`}
-                  onClick={() => setSelectedItem(3)}
+                  onClick={() => setSelectedItemDashbord(3)}
                 >
                   <FaBars />
                   <span> MVP + IDEA</span>
                 </span>
                 <span
                   className={`flex items-center cursor-pointer  gap-4 ${
-                    selectedItem === 4 ? "selected text-pink-500" : ""
+                    selectedItemDashbord === 4 ? "selected text-pink-500" : ""
                   }`}
-                  onClick={() => setSelectedItem(4)}
+                  onClick={() => setSelectedItemDashbord(4)}
                 >
                   <FaBars />
                   <span>N/A Strategy + GrowthHacking</span>
                 </span>
+                {user.email === "admin@gmail.com" && (
+                  <span
+                    className={`flex items-center cursor-pointer  gap-4 ${
+                      selectedItemDashbord === 5 ? "selected text-pink-500" : ""
+                    }`}
+                    onClick={() => setSelectedItemDashbord(5)}
+                  >
+                    <Link href={`/dashboard/system`}>
+                      <div className="flex gap-4 items-center">
+                        <FaCalendar className="text-white" />
+                        <span className="text-white text-xl">Calendar</span>
+                      </div>
+                    </Link>
+                  </span>
+                )}
               </li>
             </ul>
           </div>
@@ -226,31 +245,31 @@ function Dashboard() {
         <div className="flex flex-col px-12 py-4 w-screen md:w-4/5 bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900">
           <div
             className={
-              selectedItem === 0
+              selectedItemDashbord === 0
                 ? "px-6 w-auto  md:w-3/4 py-4"
                 : "px-6 w-auto md:w-[450px] py-4"
             }
           >
             <h1
               className={
-                selectedItem === 0
+                selectedItemDashbord === 0
                   ? "text-start text-3xl"
                   : "text-center text-3xl"
               }
             >
-              {selectedItem === 0
+              {selectedItemDashbord === 0
                 ? "All content"
-                : selectedItem === 1
+                : selectedItemDashbord === 1
                 ? "Name of BUSINESS and Client objectives"
-                : selectedItem === 2
+                : selectedItemDashbord === 2
                 ? "Onboarding Package"
-                : selectedItem === 3
+                : selectedItemDashbord === 3
                 ? "MVP + IDEA"
-                : selectedItem === 4
+                : selectedItemDashbord === 4
                 ? "N/A Strategy + GrowthHacking"
                 : ""}
             </h1>{" "}
-            {selectedItem === 0 ? (
+            {selectedItemDashbord === 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {projectInformation &&
                   projectInformation.bco &&
@@ -437,7 +456,7 @@ function Dashboard() {
                     </div>
                   ))}
               </div>
-            ) : selectedItem === 1 &&
+            ) : selectedItemDashbord === 1 &&
               projectInformation &&
               projectInformation.bco &&
               projectInformation.bco.length > 0 ? (
@@ -482,7 +501,7 @@ function Dashboard() {
                   </div>
                 </div>
               ))
-            ) : selectedItem === 2 &&
+            ) : selectedItemDashbord === 2 &&
               projectInformation &&
               projectInformation.op &&
               projectInformation.op.length > 0 ? (
@@ -527,7 +546,7 @@ function Dashboard() {
                   </div>
                 </div>
               ))
-            ) : selectedItem === 3 &&
+            ) : selectedItemDashbord === 3 &&
               projectInformation &&
               projectInformation.mvp &&
               projectInformation.mvp.length > 0 ? (
@@ -572,7 +591,7 @@ function Dashboard() {
                   </div>
                 </div>
               ))
-            ) : selectedItem === 4 &&
+            ) : selectedItemDashbord === 4 &&
               projectInformation &&
               projectInformation.strat &&
               projectInformation.strat.length > 0 ? (

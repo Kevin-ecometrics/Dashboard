@@ -11,7 +11,7 @@ function Home() {
     const fetchUser = async () => {
       try {
         // const res = await axios.get(`https://e-commetrics.com/api/user`, {
-        const res = await axios.get(`https://e-commetrics.com/api/user`, {
+        const res = await axios.get(`http://localhost:3001/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
