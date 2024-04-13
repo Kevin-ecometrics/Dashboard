@@ -621,6 +621,100 @@ app.delete("/delete/:table/:id", (req, res) => {
   });
 });
 
+app.delete("/project/delete/:id", async (req, res) => {
+  const projectId = req.params.id;
+
+  connection.beginTransaction((error) => {
+    if (error) {
+      return res.status(500).send({ message: "Error starting transaction" });
+    }
+
+    connection.query(
+      "DELETE FROM business_and_client_objectives WHERE project_id = ?",
+      [projectId],
+      (error, results) => {
+        if (error) {
+          return connection.rollback(() => {
+            res.status(500).send({
+              message: "Error deleting from business_and_client_objectives",
+            });
+          });
+        }
+
+        connection.query(
+          "DELETE FROM mvp_and_idea WHERE project_id = ?",
+          [projectId],
+          (error, results) => {
+            if (error) {
+              return connection.rollback(() => {
+                res
+                  .status(500)
+                  .send({ message: "Error deleting from mvp_and_idea" });
+              });
+            }
+
+            connection.query(
+              "DELETE FROM na_strategy_growthhacking WHERE project_id = ?",
+              [projectId],
+              (error, results) => {
+                if (error) {
+                  return connection.rollback(() => {
+                    res.status(500).send({
+                      message: "Error deleting from na_strategy_growthhacking",
+                    });
+                  });
+                }
+
+                connection.query(
+                  "DELETE FROM onboarding_package WHERE project_id = ?",
+                  [projectId],
+                  (error, results) => {
+                    if (error) {
+                      return connection.rollback(() => {
+                        res.status(500).send({
+                          message: "Error deleting from onboarding_package",
+                        });
+                      });
+                    }
+
+                    connection.query(
+                      "DELETE FROM projects WHERE id = ?",
+                      [projectId],
+                      (error, results) => {
+                        if (error) {
+                          return connection.rollback(() => {
+                            res
+                              .status(500)
+                              .send({ message: "Error deleting from project" });
+                          });
+                        }
+
+                        connection.commit((error) => {
+                          if (error) {
+                            return connection.rollback(() => {
+                              res.status(500).send({
+                                message: "Error committing transaction",
+                              });
+                            });
+                          }
+
+                          res
+                            .status(200)
+                            .send({ message: "Project deleted successfully" });
+                        });
+                      }
+                    );
+                  }
+                );
+              }
+            );
+          }
+        );
+      }
+    );
+  });
+});
+
 app.listen(3001, () => {
   console.log("Servidor escuchando en el puerto 3001");
 });
