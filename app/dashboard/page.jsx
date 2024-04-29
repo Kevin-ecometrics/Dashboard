@@ -10,7 +10,6 @@ import {
   FaHouse,
   FaPlus,
   FaUsers,
-  FaComments,
   FaWhatsapp,
 } from "react-icons/fa6";
 import {
@@ -43,13 +42,13 @@ function Dashboard() {
   useEffect(() => {
     const fetchUserAndProjects = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/api/user`, {
+        const res = await axios.get(`https://e-commetrics.com/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
           setUser(res.data.user);
           const resProjects = await axios.get(
-            `http://localhost:3001/api/projects?userId=${res.data.user.id}`,
+            `https://e-commetrics.com/api/projects?userId=${res.data.user.id}`,
             { withCredentials: true }
           );
           if (resProjects && resProjects.data) {
@@ -69,7 +68,7 @@ function Dashboard() {
   const logout = async () => {
     try {
       await axios.post(
-        `http://localhost:3001/logout`,
+        `https://e-commetrics.com/logout`,
 
         {},
         { withCredentials: true }
@@ -326,7 +325,6 @@ function Dashboard() {
               </h1>
             </div>
             <div className="flex justify-center items-center w-full md:w-auto px-4">
-              <FaComments className="w-12 h-24" />
               <Link href="https://wa.me/+526646429633" target="_blank">
                 <FaWhatsapp className="text-green-500 h-12 w-24" />
               </Link>{" "}

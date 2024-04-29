@@ -7,7 +7,6 @@ import { Button, Link, Avatar, Divider } from "@nextui-org/react";
 import {
   FaPowerOff,
   FaBars,
-  FaComments,
   FaWhatsapp,
   FaCalendar,
 } from "react-icons/fa6";
@@ -35,16 +34,16 @@ function Dashboard() {
       if (projectName) {
         try {
           const res1 = await axios.get(
-            `http://localhost:3001/api/businessAndClientObjectives?projectName=${projectName}`
+            `https://e-commetrics.com/api/businessAndClientObjectives?projectName=${projectName}`
           );
           const res2 = await axios.get(
-            `http://localhost:3001/api/onboardingPackage?projectName=${projectName}`
+            `https://e-commetrics.com/api/onboardingPackage?projectName=${projectName}`
           );
           const res3 = await axios.get(
-            `http://localhost:3001/api/mvpAndIdea?projectName=${projectName}`
+            `https://e-commetrics.com/api/mvpAndIdea?projectName=${projectName}`
           );
           const res4 = await axios.get(
-            `http://localhost:3001/api/naStrategyGrowthhacking?projectName=${projectName}`
+            `https://e-commetrics.com/api/naStrategyGrowthhacking?projectName=${projectName}`
           );
           setProjectInformation({
             bco: res1.data,
@@ -71,7 +70,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/api/user`, {
+        const res = await axios.get(`https://e-commetrics.com/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
@@ -92,7 +91,7 @@ function Dashboard() {
     const fetchProjects = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3001/api/projects?userId=` + user.id,
+          `https://e-commetrics.com/api/projects?userId=` + user.id,
           {
             credentials: "include",
           }
@@ -115,7 +114,7 @@ function Dashboard() {
   const logout = async () => {
     try {
       await axios.post(
-        `http://localhost:3001/logout`,
+        `https://e-commetrics.com/logout`,
         {},
         { withCredentials: true }
       );
@@ -797,7 +796,6 @@ function Dashboard() {
               </h1>
             </div>
             <div className="flex justify-center items-center px-24">
-              <FaComments className="w-12 h-24" />
               <Link href="https://wa.me/+526646429633" target="_blank">
                 <FaWhatsapp className="text-green-500 h-12 w-24" />
               </Link>
