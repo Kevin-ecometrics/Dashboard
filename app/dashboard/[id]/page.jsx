@@ -7,6 +7,8 @@ export function generateStaticParams() {
     { id: "reforma_dental" },
     { id: "syl_talento" },
     { id: "Wislin_Farm" },
+    { id: "doctor_ricardo_monge" },
+    { id: "test" },
   ];
 }
 

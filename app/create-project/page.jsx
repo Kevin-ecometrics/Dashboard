@@ -20,6 +20,7 @@ import {
 import { toast, Toaster } from "react-hot-toast";
 import { Avatar } from "@nextui-org/react";
 import Link from "next/link";
+import { FaPray } from "react-icons/fa";
 
 export default function CreateProject() {
   const [user, setUser] = useState(null);
@@ -43,13 +44,14 @@ export default function CreateProject() {
   const [selectedContent, setSelectedContent] = useState(null);
   const [data, setData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [trigger, setTrigger] = useState(0); // Nuevo estado para disparar useEffect
 
   useEffect(() => {
     const fetchTableData = async () => {
       if (selectedContent) {
         try {
           const response = await axios.get(
-            `https://e-commetrics.com/api/${selectedContent.table}/${selectedContent.project.id}`
+            `http://localhost:3001/api/${selectedContent.table}/${selectedContent.project.id}`
           );
           console.log(response.data); // Agrega esta línea para ver los datos en la consola
           setData(response.data);
@@ -67,7 +69,7 @@ export default function CreateProject() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`https://e-commetrics.com/api/user`, {
+        const res = await axios.get(`http://localhost:3001/api/user`, {
           withCredentials: true,
         });
         if (res.data.user) {
@@ -105,7 +107,7 @@ export default function CreateProject() {
     event.preventDefault();
     try {
       const response = await axios.put(
-        `https://e-commetrics.com/projects/${selectedProject.id}`,
+        `http://localhost:3001/projects/${selectedProject.id}`,
         selectedProject
       );
 
@@ -135,7 +137,7 @@ export default function CreateProject() {
     }
 
     try {
-      const response = await fetch(`https://e-commetrics.com/create/projects`, {
+      const response = await fetch(`http://localhost:3001/create/projects`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -159,9 +161,7 @@ export default function CreateProject() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get(
-          `https://e-commetrics.com/get/projects`
-        );
+        const response = await axios.get(`http://localhost:3001/get/projects`);
         setProjects(response.data);
         // console.log('Proyectos:', response.data)
       } catch (error) {
@@ -170,12 +170,12 @@ export default function CreateProject() {
     };
 
     fetchProjects();
-  }, []);
+  }, [trigger]);
 
   useEffect(() => {
     const fetchNameUser = async () => {
       try {
-        const response = await axios.get(`https://e-commetrics.com/get/users`);
+        const response = await axios.get(`http://localhost:3001/get/users`);
         setUsers(response.data);
         // console.log(response.data) // Aquí están los datos que devuelve tu API
       } catch (error) {
@@ -199,7 +199,6 @@ export default function CreateProject() {
   };
 
   const [formValues, setFormValues] = useState(content);
-  console.log(formValues);
 
   const handleFormChange = (event) => {
     setFormValues({
@@ -208,15 +207,31 @@ export default function CreateProject() {
     });
   };
 
+  const handleFileChange = (event) => {
+    setFormValues({
+      ...formValues,
+      imageFile: event.target.files[0], // Guardar el archivo seleccionado en el estado
+    });
+  };
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     try {
+      const formData = new FormData();
+      formData.append("imageFile", formValues.imageFile); // Agregar el archivo al FormData
+
+      // Agregar otros datos del formulario al FormData
+      Object.keys(formValues).forEach((key) => {
+        if (key !== "imageFile") {
+          formData.append(key, formValues[key]);
+        }
+      });
       const response = await axios.post(
-        `https://e-commetrics.com/create/content/${formValues.table}`,
+        `http://localhost:3001/create/content/${formValues.table}`,
         formValues,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -239,7 +254,7 @@ export default function CreateProject() {
 
     try {
       const response = await axios.put(
-        `https://e-commetrics.com/update/${table}`,
+        `http://localhost:3001/update/${table}`,
         dataInfo
       );
       toast.success("Contenido actualizado exitosamente", { duration: 3000 }); // Mostrar notificación de éxito
@@ -258,7 +273,7 @@ export default function CreateProject() {
 
     try {
       const response = await axios.delete(
-        `https://e-commetrics.com/delete/${table}/${dataInfo.id}`
+        `http://localhost:3001/delete/${table}/${dataInfo.id}`
       );
       console.log("Respuesta:", response.data);
       setData([]);
@@ -286,6 +301,28 @@ export default function CreateProject() {
   );
 
   const totalPages2 = Math.ceil(projects.length / itemsPerPage2);
+
+  async function deleteProject(id) {
+    const confirmDelete = window.confirm(
+      "¿Estás seguro de que quieres eliminar este proyecto?"
+    );
+
+    if (confirmDelete) {
+      try {
+        const response = await axios.delete(
+          `http://localhost:3001/project/delete/${id}`
+        );
+
+        setTrigger(trigger + 1); // Incrementa trigger para disparar useEffect
+
+        console.log(response.data.message);
+
+        // Aquí puedes hacer algo después de que el proyecto se haya eliminado con éxito, como actualizar la lista de proyectos
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  }
 
   if (!user) {
     return (
@@ -407,6 +444,7 @@ export default function CreateProject() {
               <h1 className="py-4 text-2xl">Create Content</h1>
               <form
                 onSubmit={handleFormSubmit}
+                encType="multipart/form-data"
                 className="flex flex-col w-full gap-4 md:flex-nowrap"
               >
                 <div className="flex flex-col gap-4">
@@ -450,13 +488,10 @@ export default function CreateProject() {
                     value={formValues.href}
                     onChange={handleFormChange}
                   />
-                  <Input
-                    className="text-black"
-                    type="text"
-                    label="Preview Image"
-                    name="image"
-                    value={formValues.image}
-                    onChange={handleFormChange}
+                  <input
+                    type="file"
+                    name="imageFile"
+                    onChange={handleFileChange}
                   />
                 </div>
                 <div className="flex flex-row justify-between gap-4">
@@ -558,6 +593,7 @@ export default function CreateProject() {
                 <TableColumn className="text-black">ID</TableColumn>
                 <TableColumn className="text-black">Title</TableColumn>
                 <TableColumn className="text-black">Action</TableColumn>
+                <TableColumn className="text-black">Delete</TableColumn>
               </TableHeader>
               <TableBody>
                 {displayedProjects1.map((project) => (
@@ -571,6 +607,15 @@ export default function CreateProject() {
                         onClick={() => setSelectedProject(project)}
                       >
                         Actions
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        color="danger"
+                        className="hover:bg-red-700"
+                        onClick={() => deleteProject(project.id)}
+                      >
+                        Delete
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -859,22 +904,6 @@ export default function CreateProject() {
                               data.map((item, i) => {
                                 if (i === currentIndex) {
                                   item.link = e.target.value;
-                                }
-                                return item;
-                              })
-                            );
-                          }}
-                        />
-                        <Input
-                          label="Preview Image"
-                          type="text"
-                          className="text-black rounded-2xl"
-                          value={content.image || ""}
-                          onChange={(e) => {
-                            setData(
-                              data.map((item, i) => {
-                                if (i === currentIndex) {
-                                  item.image = e.target.value;
                                 }
                                 return item;
                               })

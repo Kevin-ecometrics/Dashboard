@@ -95,7 +95,7 @@ export default function Page() {
     console.log(formValues); // Verifica los datos enviados en la solicitud
     try {
       const res = await axios.put(
-        `https://e-commetrics.com/updateUserInformation`,
+        `http://localhost:3001/updateUserInformation`,
         formValues
       );
       console.log(res.data);
@@ -117,7 +117,7 @@ export default function Page() {
     console.log(formValues); // Verifica los datos enviados en la solicitud
     try {
       const res = await axios.put(
-        `https://e-commetrics.com/updateUser`,
+        `http://localhost:3001/updateUser`,
         formValues
       );
       console.log(res.data);
@@ -144,7 +144,7 @@ export default function Page() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`https://e-commetrics.com/api/user`, {
+        const res = await axios.get(`http://localhost:3001/api/user`, {
           withCredentials: true,
         });
         if (res.data.user) {
@@ -164,7 +164,7 @@ export default function Page() {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const res = await axios.get(`https://e-commetrics.com/get/information`);
+        const res = await axios.get(`http://localhost:3001/get/information`);
         setClient(res.data);
         console.log(res.data);
       } catch (err) {
@@ -177,7 +177,7 @@ export default function Page() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get(`https://e-commetrics.com/get/users`);
+        const res = await axios.get(`http://localhost:3001/get/users`);
         setClientUser(res.data);
         console.log(res.data);
       } catch (err) {
@@ -197,7 +197,7 @@ export default function Page() {
     console.log(formValues);
     try {
       const res = await axios.put(
-        `https://e-commetrics.com/updatePassword`,
+        `http://localhost:3001/updatePassword`,
         formValues
       );
       console.log(res.data);
@@ -212,7 +212,7 @@ export default function Page() {
   const logout = async () => {
     try {
       await axios.post(
-        `https://e-commetrics.com/logout`,
+        `http://localhost:3001/logout`,
         {},
         { withCredentials: true }
       );
@@ -299,7 +299,7 @@ export default function Page() {
     };
     try {
       const registerRes = await axios.post(
-        `https://e-commetrics.com/register`,
+        `http://localhost:3001/register`,
         registerData,
         {
           withCredentials: true,
@@ -309,7 +309,7 @@ export default function Page() {
       console.log(registerRes.data);
       event.target.reset();
       const informationRes = await axios.post(
-        `https://e-commetrics.com/information`,
+        `http://localhost:3001/information`,
         informationData,
         {
           withCredentials: true,

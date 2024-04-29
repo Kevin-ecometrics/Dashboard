@@ -106,7 +106,7 @@ function Dashboard() {
     );
   }
 
-  if (user.email === "admin@e-commetrics.com") {
+  if (user.email === "juanmanuel@e-commetrics.com") {
     avatarURl = "/logo_nav.jpg"; // Reemplaza esto con la ruta a la imagen del usuario
   } else if (user.email === "mydentist@reformadental.com") {
     avatarURl = "/reforma logo.png"; // Reemplaza esto con la ruta a la imagen del usuario

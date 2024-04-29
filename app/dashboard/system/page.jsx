@@ -12,13 +12,13 @@ function Page() {
   useEffect(() => {
     const fetchUserAndProjects = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/api/user`, {
+        const res = await axios.get(`https://e-commetrics.com/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
           setUser(res.data.user);
           const resProjects = await axios.get(
-            `http://localhost:3001/api/projects?userId=${res.data.user.id}`,
+            `https://e-commetrics.com/api/projects?userId=${res.data.user.id}`,
             { withCredentials: true }
           );
           if (resProjects && resProjects.data) {
@@ -38,7 +38,9 @@ function Page() {
   return (
     <div>
       {" "}
-      {user && user.email === "admin@gmail.com" ? (
+      {user &&
+      (user.email === "juanmanuel@e-commetrics.com" ||
+        user.email === "draanyimanchola@bitescreadoresdesonrisas.com") ? (
         <System projects={projects} />
       ) : null}
     </div>

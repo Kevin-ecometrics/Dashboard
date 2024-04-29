@@ -12,7 +12,7 @@ function Page({ projects }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/api/user`, {
+        const res = await axios.get(`https://e-commetrics.com/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
@@ -202,7 +202,7 @@ function Page({ projects }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3002/api/citas/agendadas`)
+      .get(`https://bitescreadoresdesonrisas.com/api/citas/agendadas`)
       .then((response) => {
         setBookedHours(response.data);
         setIsLoading(false);
@@ -284,7 +284,7 @@ function Page({ projects }) {
 
     try {
       await axios.post(
-        "http://localhost:3002/api/disponibilidad",
+        "https://bitescreadoresdesonrisas.com/api/disponibilidad",
 
         { dates }
       );
@@ -295,7 +295,7 @@ function Page({ projects }) {
 
     try {
       const response = await axios.get(
-        "http://localhost:3002/api/citas/agendadas"
+        "https://bitescreadoresdesonrisas.com/api/citas/agendadas"
       );
       setBookedHours(response.data);
       toast.success("Disponibilidad enviada correctamente.");
@@ -314,7 +314,7 @@ function Page({ projects }) {
     }
     try {
       await axios.delete(
-        `http://localhost:3002/api/citas/delete/${selectedItem.id}`
+        `https://bitescreadoresdesonrisas.com/api/citas/delete/${selectedItem.id}`
       );
       setBookedHours(bookedHours.filter((hour) => hour.id !== selectedItem.id));
       toast.success("Cita eliminada correctamente.");
@@ -332,7 +332,7 @@ function Page({ projects }) {
     {
       try {
         await axios.put(
-          `http://localhost:3002/api/citas/update/${selectedItem.id}`,
+          `https://bitescreadoresdesonrisas.com/api/citas/update/${selectedItem.id}`,
           {
             name,
             email,
@@ -351,7 +351,7 @@ function Page({ projects }) {
 
     try {
       const response = await axios.get(
-        "http://localhost:3002/api/citas/agendadas"
+        "https://bitescreadoresdesonrisas.com/api/citas/agendadas"
       );
       setBookedHours(response.data);
       setDuration("");

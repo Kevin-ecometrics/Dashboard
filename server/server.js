@@ -6,6 +6,8 @@ const cors = require("cors");
 const saltRounds = 10;
 const nodemailer = require("nodemailer");
 const path = require("path");
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
 
 const app = express();
 
@@ -502,7 +504,7 @@ app.get("/api/:table/:id", (req, res) => {
 app.put("/update/:table", (req, res) => {
   const table = req.params.table;
   const data = req.body;
-  const query = `UPDATE ${table} SET project_id = ?, content_1 = ?, content_2 = ?, content_3 = ?, link = ?, href = ?, id_user = ?, image = ? WHERE id = ?`;
+  const query = `UPDATE ${table} SET project_id = ?, content_1 = ?, content_2 = ?, content_3 = ?, link = ?, href = ?, id_user = ? WHERE id = ?`;
   const values = [
     data.project_id,
     data.content_1,
@@ -511,7 +513,6 @@ app.put("/update/:table", (req, res) => {
     data.link,
     data.href,
     data.id_user,
-    data.image,
     data.id,
   ];
 
@@ -713,6 +714,44 @@ app.delete("/project/delete/:id", async (req, res) => {
       }
     );
   });
+});
+
+app.post("/create/content/:table", upload.single("imageFile"), (req, res) => {
+  const table = req.params.table;
+  const { project_id, content_1, content_2, content_3, link, href, id_user } =
+    req.body;
+
+  const source = req.file.buffer;
+
+  const validTables = [
+    "business_and_client_objectives",
+    "mvp_and_idea",
+    "na_strategy_growthhacking",
+    "onboarding_package",
+  ];
+  if (!validTables.includes(table)) {
+    return res.status(400).send("Tabla no válida");
+  }
+
+  const query = `
+    INSERT INTO ${table} (project_id, content_1, content_2, content_3, link, href, id_user, source)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  connection.query(
+    query,
+    [project_id, content_1, content_2, content_3, link, href, id_user, source],
+    (err, results) => {
+      if (err) {
+        console.error("Error al realizar la consulta INSERT:", err);
+        return res
+          .status(500)
+          .json({ error: `Error interno del servidor: ${err.message}` });
+      }
+
+      res.status(201).json({ message: "Datos insertados exitosamente" });
+    }
+  );
 });
 
 app.listen(3001, () => {

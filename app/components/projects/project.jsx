@@ -139,7 +139,7 @@ function Dashboard() {
     );
   }
 
-  if (user.email === "admin@e-commetrics.com") {
+  if (user.email === "juanmanuel@e-commetrics.com") {
     avatarURl = "/logo_nav.jpg"; // Reemplaza esto con la ruta a la imagen del usuario
   } else if (user.email === "mydentist@reformadental.com") {
     avatarURl = "/reforma logo.png"; // Reemplaza esto con la ruta a la imagen del usuario
@@ -209,21 +209,26 @@ function Dashboard() {
                   <FaBars />
                   <span>N/A Strategy + GrowthHacking</span>
                 </span>
-                {user.email === "admin@gmail.com" && (
-                  <span
-                    className={`flex items-center cursor-pointer  gap-4 ${
-                      selectedItemDashbord === 5 ? "selected text-pink-500" : ""
-                    }`}
-                    onClick={() => setSelectedItemDashbord(5)}
-                  >
-                    <Link href={`/dashboard/system`}>
-                      <div className="flex gap-4 items-center">
-                        <FaCalendar className="text-white" />
-                        <span className="text-white text-xl">Calendar</span>
-                      </div>
-                    </Link>
-                  </span>
-                )}
+                {user &&
+                  (user.email === "juanmanuel@e-commetrics.com" ||
+                    user.email ===
+                      "draanyimanchola@bitescreadoresdesonrisas.com") && (
+                    <span
+                      className={`flex items-center cursor-pointer  gap-4 ${
+                        selectedItemDashbord === 5
+                          ? "selected text-pink-500"
+                          : ""
+                      }`}
+                      onClick={() => setSelectedItemDashbord(5)}
+                    >
+                      <Link href={`/dashboard/system`}>
+                        <div className="flex gap-4 items-center">
+                          <FaCalendar className="text-white" />
+                          <span className="text-white text-xl">Calendar</span>
+                        </div>
+                      </Link>
+                    </span>
+                  )}
               </li>
             </ul>
           </div>
@@ -302,9 +307,24 @@ function Dashboard() {
                               <img
                                 src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
                                 height={100}
-                                alt="Project"
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = "";
+                                }}
                               />
                             </div>
+                          )}
+                          {project.source && (
+                            <img
+                              src={`data:image/png;base64,${Buffer.from(
+                                project.source
+                              ).toString("base64")}`}
+                              height={100}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = "";
+                              }}
+                            />
                           )}
                           <Link
                             target="_blank"
@@ -348,9 +368,24 @@ function Dashboard() {
                               <img
                                 src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
                                 height={100}
-                                alt="Project"
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = "";
+                                }}
                               />
                             </div>
+                          )}
+                          {project.source && (
+                            <img
+                              src={`data:image/png;base64,${Buffer.from(
+                                project.source
+                              ).toString("base64")}`}
+                              height={100}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = "";
+                              }}
+                            />
                           )}
                           <Link
                             target="_blank"
@@ -394,9 +429,24 @@ function Dashboard() {
                               <img
                                 src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
                                 height={100}
-                                alt="Project"
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = "";
+                                }}
                               />
                             </div>
+                          )}
+                          {project.source && (
+                            <img
+                              src={`data:image/png;base64,${Buffer.from(
+                                project.source
+                              ).toString("base64")}`}
+                              height={100}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = "";
+                              }}
+                            />
                           )}
                           <Link
                             target="_blank"
@@ -440,9 +490,24 @@ function Dashboard() {
                               <img
                                 src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
                                 height={100}
-                                alt="Project"
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = "";
+                                }}
                               />
                             </div>
+                          )}
+                          {project.source && (
+                            <img
+                              src={`data:image/png;base64,${Buffer.from(
+                                project.source
+                              ).toString("base64")}`}
+                              height={100}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = "";
+                              }}
+                            />
                           )}
                           <Link
                             target="_blank"
@@ -486,9 +551,24 @@ function Dashboard() {
                           <img
                             src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
                             height={100}
-                            alt="Project"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = "";
+                            }}
                           />
                         </div>
+                      )}
+                      {project.source && (
+                        <img
+                          src={`data:image/png;base64,${Buffer.from(
+                            project.source
+                          ).toString("base64")}`}
+                          height={100}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "";
+                          }}
+                        />
                       )}
                       <Link
                         target="_blank"
@@ -531,9 +611,24 @@ function Dashboard() {
                           <img
                             src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
                             height={100}
-                            alt="Project"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = "";
+                            }}
                           />
                         </div>
+                      )}
+                      {project.source && (
+                        <img
+                          src={`data:image/png;base64,${Buffer.from(
+                            project.source
+                          ).toString("base64")}`}
+                          height={100}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "";
+                          }}
+                        />
                       )}
                       <Link
                         target="_blank"
@@ -576,9 +671,24 @@ function Dashboard() {
                           <img
                             src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
                             height={100}
-                            alt="Project"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = "";
+                            }}
                           />
                         </div>
+                      )}
+                      {project.source && (
+                        <img
+                          src={`data:image/png;base64,${Buffer.from(
+                            project.source
+                          ).toString("base64")}`}
+                          height={100}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "";
+                          }}
+                        />
                       )}
                       <Link
                         target="_blank"
@@ -621,9 +731,24 @@ function Dashboard() {
                           <img
                             src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
                             height={100}
-                            alt="Project"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = "";
+                            }}
                           />
                         </div>
+                      )}
+                      {project.source && (
+                        <img
+                          src={`data:image/png;base64,${Buffer.from(
+                            project.source
+                          ).toString("base64")}`}
+                          height={100}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "";
+                          }}
+                        />
                       )}
                       <Link
                         target="_blank"
