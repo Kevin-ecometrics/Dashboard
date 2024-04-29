@@ -20,7 +20,6 @@ import {
 import { toast, Toaster } from "react-hot-toast";
 import { Avatar } from "@nextui-org/react";
 import Link from "next/link";
-import { FaPray } from "react-icons/fa";
 
 export default function CreateProject() {
   const [user, setUser] = useState(null);
@@ -910,6 +909,7 @@ export default function CreateProject() {
                             );
                           }}
                         />
+                        
                       </div>
                       <div className="flex items-center justify-center gap-4">
                         <button

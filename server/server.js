@@ -721,7 +721,7 @@ app.post("/create/content/:table", upload.single("imageFile"), (req, res) => {
   const { project_id, content_1, content_2, content_3, link, href, id_user } =
     req.body;
 
-  const source = req.file.buffer;
+    const source = req.file ? req.file.buffer : null;
 
   const validTables = [
     "business_and_client_objectives",
