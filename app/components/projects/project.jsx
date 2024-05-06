@@ -142,12 +142,12 @@ function Dashboard() {
     avatarURl = "/logo_nav.jpg"; // Reemplaza esto con la ruta a la imagen del usuario
   } else if (user.email === "mydentist@reformadental.com") {
     avatarURl = "/reforma logo.png"; // Reemplaza esto con la ruta a la imagen del usuario
-  } else if (user.email === "syl@gmail.com") {
+  } else if (user.email === "dsolis@syltalento.com") {
     avatarURl = "/SYL logo.jpeg"; // Reemplaza esto con la ruta a la imagen del usuario
   } else if (user.email === "draanyimanchola@bitescreadoresdesonrisas.com") {
     avatarURl = "/bites logo.png"; // Reemplaza esto con la ruta a la imagen del usuario
   } else {
-    avatarURl = ""; // Reemplaza esto con la ruta a la imagen del usuario por defecto
+    avatarURl = "/logo_nav.jpg"; // Reemplaza esto con la ruta a la imagen del usuario por defecto
   }
 
   return (
@@ -165,44 +165,39 @@ function Dashboard() {
             <ul>
               <li className="flex flex-col gap-y-4">
                 <span
-                  className={`flex items-center cursor-pointer gap-4 ${
-                    selectedItemDashbord === 0 ? "selected text-pink-500" : ""
-                  }`}
+                  className={`flex items-center cursor-pointer gap-4 ${selectedItemDashbord === 0 ? "selected text-pink-500" : ""
+                    }`}
                   onClick={() => setSelectedItemDashbord(0)}
                 >
                   <FaBars />
                   <span>ALL CONTENT</span>
                 </span>
                 <span
-                  className={`flex items-center cursor-pointer  gap-4 ${
-                    selectedItemDashbord === 1 ? "selected text-pink-500" : ""
-                  }`}
+                  className={`flex items-center cursor-pointer  gap-4 ${selectedItemDashbord === 1 ? "selected text-pink-500" : ""
+                    }`}
                   onClick={() => setSelectedItemDashbord(1)}
                 >
                   <FaBars /> <span>Name of BUSINESS and Client objectives</span>
                 </span>
                 <span
-                  className={`flex items-center cursor-pointer  gap-4 ${
-                    selectedItemDashbord === 2 ? "selected text-pink-500" : ""
-                  }`}
+                  className={`flex items-center cursor-pointer  gap-4 ${selectedItemDashbord === 2 ? "selected text-pink-500" : ""
+                    }`}
                   onClick={() => setSelectedItemDashbord(2)}
                 >
                   <FaBars />
                   <span> Onboarding Package</span>
                 </span>
                 <span
-                  className={`flex items-center cursor-pointer  gap-4 ${
-                    selectedItemDashbord === 3 ? "selected text-pink-500" : ""
-                  }`}
+                  className={`flex items-center cursor-pointer  gap-4 ${selectedItemDashbord === 3 ? "selected text-pink-500" : ""
+                    }`}
                   onClick={() => setSelectedItemDashbord(3)}
                 >
                   <FaBars />
                   <span> MVP + IDEA</span>
                 </span>
                 <span
-                  className={`flex items-center cursor-pointer  gap-4 ${
-                    selectedItemDashbord === 4 ? "selected text-pink-500" : ""
-                  }`}
+                  className={`flex items-center cursor-pointer  gap-4 ${selectedItemDashbord === 4 ? "selected text-pink-500" : ""
+                    }`}
                   onClick={() => setSelectedItemDashbord(4)}
                 >
                   <FaBars />
@@ -211,13 +206,12 @@ function Dashboard() {
                 {user &&
                   (user.email === "juanmanuel@e-commetrics.com" ||
                     user.email ===
-                      "draanyimanchola@bitescreadoresdesonrisas.com") && (
+                    "draanyimanchola@bitescreadoresdesonrisas.com") && (
                     <span
-                      className={`flex items-center cursor-pointer  gap-4 ${
-                        selectedItemDashbord === 5
+                      className={`flex items-center cursor-pointer  gap-4 ${selectedItemDashbord === 5
                           ? "selected text-pink-500"
                           : ""
-                      }`}
+                        }`}
                       onClick={() => setSelectedItemDashbord(5)}
                     >
                       <Link href={`/dashboard/system`}>
@@ -264,14 +258,14 @@ function Dashboard() {
               {selectedItemDashbord === 0
                 ? "All content"
                 : selectedItemDashbord === 1
-                ? "Name of BUSINESS and Client objectives"
-                : selectedItemDashbord === 2
-                ? "Onboarding Package"
-                : selectedItemDashbord === 3
-                ? "MVP + IDEA"
-                : selectedItemDashbord === 4
-                ? "N/A Strategy + GrowthHacking"
-                : ""}
+                  ? "Name of BUSINESS and Client objectives"
+                  : selectedItemDashbord === 2
+                    ? "Onboarding Package"
+                    : selectedItemDashbord === 3
+                      ? "MVP + IDEA"
+                      : selectedItemDashbord === 4
+                        ? "N/A Strategy + GrowthHacking"
+                        : ""}
             </h1>{" "}
             {selectedItemDashbord === 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -453,17 +453,17 @@ app.post("/create/:table", (req, res) => {
 
 app.put("/projects/:id", (req, res) => {
   const id = req.params.id;
-  const { title, percentage, content, project_name } = req.body;
+  const { title, percentage, content, project_name, id_user } = req.body;
 
   const query = `
     UPDATE projects
-    SET title = ?, percentage = ?, content = ?, project_name = ?
+    SET title = ?, percentage = ?, content = ?, project_name = ?, id_user = ?
     WHERE id = ?
   `;
 
   connection.query(
     query,
-    [title, percentage, content, project_name, id],
+    [title, percentage, content, project_name, id_user, id],
     (err, results) => {
       if (err) {
         console.error("Error al realizar la consulta UPDATE:", err);

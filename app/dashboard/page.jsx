@@ -109,7 +109,7 @@ function Dashboard() {
     avatarURl = "/logo_nav.jpg"; // Reemplaza esto con la ruta a la imagen del usuario
   } else if (user.email === "mydentist@reformadental.com") {
     avatarURl = "/reforma logo.png"; // Reemplaza esto con la ruta a la imagen del usuario
-  } else if (user.email === "syl@gmail.com") {
+  } else if (user.email === "dsolis@syltalento.com") {
     avatarURl = "/SYL logo.jpeg"; // Reemplaza esto con la ruta a la imagen del usuario
   } else if (user.email === "draanyimanchola@bitescreadoresdesonrisas.com") {
     avatarURl = "/bites logo.png"; // Reemplaza esto con la ruta a la imagen del usuario
