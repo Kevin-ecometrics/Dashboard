@@ -4,12 +4,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 import { Button, Link, Avatar, Divider } from "@nextui-org/react";
-import {
-  FaPowerOff,
-  FaBars,
-  FaWhatsapp,
-  FaCalendar,
-} from "react-icons/fa6";
+import { FaPowerOff, FaBars, FaWhatsapp, FaCalendar } from "react-icons/fa6";
 import Image from "next/image";
 function Dashboard() {
   let avatarURl;
@@ -34,16 +29,16 @@ function Dashboard() {
       if (projectName) {
         try {
           const res1 = await axios.get(
-            `https://e-commetrics.com/api/businessAndClientObjectives?projectName=${projectName}`
+            `http://localhost:3001/api/businessAndClientObjectives?projectName=${projectName}`
           );
           const res2 = await axios.get(
-            `https://e-commetrics.com/api/onboardingPackage?projectName=${projectName}`
+            `http://localhost:3001/api/onboardingPackage?projectName=${projectName}`
           );
           const res3 = await axios.get(
-            `https://e-commetrics.com/api/mvpAndIdea?projectName=${projectName}`
+            `http://localhost:3001/api/mvpAndIdea?projectName=${projectName}`
           );
           const res4 = await axios.get(
-            `https://e-commetrics.com/api/naStrategyGrowthhacking?projectName=${projectName}`
+            `http://localhost:3001/api/naStrategyGrowthhacking?projectName=${projectName}`
           );
           setProjectInformation({
             bco: res1.data,
@@ -70,7 +65,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`https://e-commetrics.com/api/user`, {
+        const res = await axios.get(`http://localhost:3001/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
@@ -91,7 +86,7 @@ function Dashboard() {
     const fetchProjects = async () => {
       try {
         const res = await fetch(
-          `https://e-commetrics.com/api/projects?userId=` + user.id,
+          `http://localhost:3001/api/projects?userId=` + user.id,
           {
             credentials: "include",
           }
@@ -114,7 +109,7 @@ function Dashboard() {
   const logout = async () => {
     try {
       await axios.post(
-        `https://e-commetrics.com/logout`,
+        `http://localhost:3001/logout`,
         {},
         { withCredentials: true }
       );
@@ -165,39 +160,44 @@ function Dashboard() {
             <ul>
               <li className="flex flex-col gap-y-4">
                 <span
-                  className={`flex items-center cursor-pointer gap-4 ${selectedItemDashbord === 0 ? "selected text-pink-500" : ""
-                    }`}
+                  className={`flex items-center cursor-pointer gap-4 ${
+                    selectedItemDashbord === 0 ? "selected text-pink-500" : ""
+                  }`}
                   onClick={() => setSelectedItemDashbord(0)}
                 >
                   <FaBars />
                   <span>ALL CONTENT</span>
                 </span>
                 <span
-                  className={`flex items-center cursor-pointer  gap-4 ${selectedItemDashbord === 1 ? "selected text-pink-500" : ""
-                    }`}
+                  className={`flex items-center cursor-pointer  gap-4 ${
+                    selectedItemDashbord === 1 ? "selected text-pink-500" : ""
+                  }`}
                   onClick={() => setSelectedItemDashbord(1)}
                 >
                   <FaBars /> <span>Name of BUSINESS and Client objectives</span>
                 </span>
                 <span
-                  className={`flex items-center cursor-pointer  gap-4 ${selectedItemDashbord === 2 ? "selected text-pink-500" : ""
-                    }`}
+                  className={`flex items-center cursor-pointer  gap-4 ${
+                    selectedItemDashbord === 2 ? "selected text-pink-500" : ""
+                  }`}
                   onClick={() => setSelectedItemDashbord(2)}
                 >
                   <FaBars />
                   <span> Onboarding Package</span>
                 </span>
                 <span
-                  className={`flex items-center cursor-pointer  gap-4 ${selectedItemDashbord === 3 ? "selected text-pink-500" : ""
-                    }`}
+                  className={`flex items-center cursor-pointer  gap-4 ${
+                    selectedItemDashbord === 3 ? "selected text-pink-500" : ""
+                  }`}
                   onClick={() => setSelectedItemDashbord(3)}
                 >
                   <FaBars />
                   <span> MVP + IDEA</span>
                 </span>
                 <span
-                  className={`flex items-center cursor-pointer  gap-4 ${selectedItemDashbord === 4 ? "selected text-pink-500" : ""
-                    }`}
+                  className={`flex items-center cursor-pointer  gap-4 ${
+                    selectedItemDashbord === 4 ? "selected text-pink-500" : ""
+                  }`}
                   onClick={() => setSelectedItemDashbord(4)}
                 >
                   <FaBars />
@@ -205,13 +205,15 @@ function Dashboard() {
                 </span>
                 {user &&
                   (user.email === "juanmanuel@e-commetrics.com" ||
+                    user.email === "yazmin@e-commetrics.com" ||
                     user.email ===
-                    "draanyimanchola@bitescreadoresdesonrisas.com") && (
+                      "draanyimanchola@bitescreadoresdesonrisas.com") && (
                     <span
-                      className={`flex items-center cursor-pointer  gap-4 ${selectedItemDashbord === 5
+                      className={`flex items-center cursor-pointer  gap-4 ${
+                        selectedItemDashbord === 5
                           ? "selected text-pink-500"
                           : ""
-                        }`}
+                      }`}
                       onClick={() => setSelectedItemDashbord(5)}
                     >
                       <Link href={`/dashboard/system`}>
@@ -258,14 +260,14 @@ function Dashboard() {
               {selectedItemDashbord === 0
                 ? "All content"
                 : selectedItemDashbord === 1
-                  ? "Name of BUSINESS and Client objectives"
-                  : selectedItemDashbord === 2
-                    ? "Onboarding Package"
-                    : selectedItemDashbord === 3
-                      ? "MVP + IDEA"
-                      : selectedItemDashbord === 4
-                        ? "N/A Strategy + GrowthHacking"
-                        : ""}
+                ? "Name of BUSINESS and Client objectives"
+                : selectedItemDashbord === 2
+                ? "Onboarding Package"
+                : selectedItemDashbord === 3
+                ? "MVP + IDEA"
+                : selectedItemDashbord === 4
+                ? "N/A Strategy + GrowthHacking"
+                : ""}
             </h1>{" "}
             {selectedItemDashbord === 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
