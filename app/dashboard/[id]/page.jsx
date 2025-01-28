@@ -9,6 +9,8 @@ export function generateStaticParams() {
     { id: "Wislin_Farm" },
     { id: "doctor_ricardo_monge" },
     { id: "test" },
+    { id: "The_Condor_Vision" },
+    { id: "gpe_consultores" },
   ];
 }
 

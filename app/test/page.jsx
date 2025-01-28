@@ -1,64 +1,29 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-
+import React from "react";
+import Image from "next/image";
+import { montse } from "../fonts";
 function Page() {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [imageId, setImageId] = useState(null);
-  const [images, setImages] = useState([]);
-
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
-
-  const handleFileUpload = async () => {
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setImageId(response.data.id);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const response = await axios.get("http://localhost:3001/images");
-        setImages(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchImages();
-  }, [imageId]);
-
   return (
-    <div>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleFileUpload}>Upload</button>
-      {/* Mapear las imágenes y renderizarlas */}
-      {images.map((image, index) => (
-        <img
-          key={index}
-          src={`data:image/png;base64,${Buffer.from(image.image).toString(
-            "base64"
-          )}`}
-          alt={`Image ${index}`}
-        />
-      ))}
+    <div className="flex">
+      <aside className="w-[320px] bg-[#2F1945] h-screen transform transition-transform duration-500 ease-in-out translate-x-0">
+        <div className="flex justify-center items-center flex-col">
+          <div class="relative inline-flex items-center justify-center mt-8 size-28 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+            <img src="/reforma logo.png" alt="" />
+          </div>
+          <h1 className={`${montse.className} py-4 text-[23px] font-bold`}>
+            Administrador
+          </h1>
+          <hr className="border border-white w-full" />
+        </div>
+      </aside>
+      <section
+        className="w-full h-screen"
+        style={{
+          background: "linear-gradient(to top, #301846, #847EFC, #3A228B)",
+        }}
+      >
+        2
+      </section>
     </div>
   );
 }

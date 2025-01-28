@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import System from "../../components/projects/calendar";
+import System from "../../components/projects/comment";
 
 function Page() {
   const [user, setUser] = useState(null);
@@ -41,8 +41,8 @@ function Page() {
       {user &&
       (user.email === "juanmanuel@e-commetrics.com" ||
         user.email === "kevin@e-commetrics.com" ||
-        user.email === "draanyimanchola@bitescreadoresdesonrisas.com") ? (
-        <System projects={projects} />
+        user.email === "doctor@mongeortopedista.com") ? (
+        <System projects={projects} user={user} />
       ) : null}
     </div>
   );

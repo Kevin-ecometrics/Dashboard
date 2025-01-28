@@ -4,7 +4,7 @@ import { Providers } from "@/app/providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Ecommetrica - Dashboard  ",
+  title: "E-commetrics - Dashboard  ",
   description:
     "E-commerce consulting with a team of digital experts in marketing and tech dev-ops, assembled, especially for B2B and B2C",
 };

@@ -25,6 +25,8 @@ import {
 import { motion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
 import { titillium, montse } from "../fonts";
+import SideBar from "../components/SideBar";
+import MainContent from "../components/MainContent";
 function Dashboard() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -42,13 +44,13 @@ function Dashboard() {
   useEffect(() => {
     const fetchUserAndProjects = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/api/user`, {
+        const res = await axios.get(`https://e-commetrics.com/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
           setUser(res.data.user);
           const resProjects = await axios.get(
-            `http://localhost:3001/api/projects?userId=${res.data.user.id}`,
+            `https://e-commetrics.com/api/projects?userId=${res.data.user.id}`,
             { withCredentials: true }
           );
           if (resProjects && resProjects.data) {
@@ -68,7 +70,7 @@ function Dashboard() {
   const logout = async () => {
     try {
       await axios.post(
-        `http://localhost:3001/logout`,
+        `https://e-commetrics.com/logout`,
 
         {},
         { withCredentials: true }
@@ -105,21 +107,24 @@ function Dashboard() {
     );
   }
 
-  if (user.email === "juanmanuel@e-commetrics.com") {
-    avatarURl = "/logo_nav.jpg"; // Reemplaza esto con la ruta a la imagen del usuario
+  if (
+    user.email === "juanmanuel@e-commetrics.com" ||
+    user.email === "kevin@e-commetrics.com"
+  ) {
+    avatarURl = "/logo_nav.jpg";
   } else if (user.email === "mydentist@reformadental.com") {
-    avatarURl = "/reforma logo.png"; // Reemplaza esto con la ruta a la imagen del usuario
+    avatarURl = "/reforma logo.png";
   } else if (user.email === "dsolis@syltalento.com") {
-    avatarURl = "/SYL logo.jpeg"; // Reemplaza esto con la ruta a la imagen del usuario
+    avatarURl = "/SYL logo.jpeg";
   } else if (user.email === "draanyimanchola@bitescreadoresdesonrisas.com") {
-    avatarURl = "/bites logo.png"; // Reemplaza esto con la ruta a la imagen del usuario
+    avatarURl = "/bites logo.png";
   } else {
-    avatarURl = "/logo_nav.jpg"; // Reemplaza esto con la ruta a la imagen del usuario por defecto
+    avatarURl = "/logo_nav.jpg";
   }
 
   return (
-    <section className="h-screen w-screen text-white bg-[#21233A]">
-      <div className="flex h-max bg-[#191c33]">
+    <section className="h-screen w-screen text-white bg-[#21233A] overflow-x-hidden">
+      <div className="flex bg-[#191c33]">
         <aside className="hidden h-screen px-8 py-12 w-36 sm:block md:w-1/5">
           <div className="flex flex-col items-center gap-4">
             <Avatar src={avatarURl} className="h-24 w-24" />
@@ -219,7 +224,7 @@ function Dashboard() {
             </Button>
           </div>
         </aside>
-        <div className="flex flex-col w-screen md:w-4/5 bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900">
+        <div className="flex flex-col w-screen bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900">
           <div className="py-8 text-center text-white">
             <TypeAnimation
               sequence={[
@@ -239,7 +244,7 @@ function Dashboard() {
             {projects.slice(currentIndex, currentIndex + 3).map((project) => (
               <motion.div
                 key={project.id}
-                className="flex [&>div]:text-white [&>h2]:text-white [&>p]:text-white flex-col w-[300px] h-full rounded-2xl  shadow-2xl"
+                className="flex [&>div]:text-white [&>h2]:text-white [&>p]:text-white flex-col w-[300px] h-full rounded-2xl shadow-2xl"
                 style={{
                   backgroundImage: `url('/bg-card.png')`, // Reemplaza esto con la ruta a tu imagen
                   backgroundSize: "cover", // Esto hace que la imagen cubra todo el div
@@ -269,15 +274,20 @@ function Dashboard() {
                   />
                   <div className="mt-auto">
                     {user.rol === "admin" ? (
-                      <Chip
-                        startContent={<FaCheck size={18} />}
-                        variant="faded"
-                        color="primary"
+                      <Link
+                        className="text-white"
+                        href={`/dashboard/${project.project_name}`}
                       >
-                        {project.percentage === 100
-                          ? "Project completed"
-                          : "Project in progress"}
-                      </Chip>
+                        <Chip
+                          startContent={<FaCheck size={18} />}
+                          variant="faded"
+                          color="primary"
+                        >
+                          {project.percentage === 100
+                            ? "Project completed"
+                            : "Project in progress"}
+                        </Chip>
+                      </Link>
                     ) : (
                       <Button className="bg-[#a32054] hover:bg-[#395788]">
                         <Link
@@ -293,7 +303,7 @@ function Dashboard() {
               </motion.div>
             ))}
           </div>
-          <div className="flex justify-center md:justify-end py-4 items-center gap-4 md:w-[87%]">
+          <div className="flex justify-center md:justify-end py-4 items-center gap-4 md:w-[89%]">
             {numberOfButtons > 1 &&
               Array.from({ length: numberOfButtons }, (_, index) => (
                 <button
@@ -318,19 +328,13 @@ function Dashboard() {
               LOG OUT
             </Button>
           </div>
-          <section className="flex flex-col justify-center px-2 items-center md:flex-row gap-16">
-            <div className="hidden md:block">
-              <h1 className="text-center text-3xl justify-center items-center rounded-2xl w-full md:w-[500px] lg:w-[750px] mt-8 mx-0 py-12 bg-transparent border-2">
-                Comercial
-              </h1>
-            </div>
-            <div className="flex justify-center items-center w-full md:w-auto px-4">
-              <Link href="https://wa.me/+526646429633" target="_blank">
-                <FaWhatsapp className="text-green-500 h-12 w-24" />
-              </Link>{" "}
-            </div>
-          </section>
+          <div className="absolute top-0 right-0 p-8">
+            <Link href="https://wa.me/+526646429633" target="_blank">
+              <FaWhatsapp className="text-green-500 h-12 w-24" />
+            </Link>{" "}
+          </div>
         </div>
+        {/* <MainContent /> */}
       </div>
     </section>
   );

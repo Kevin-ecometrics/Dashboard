@@ -29,16 +29,16 @@ function Dashboard() {
       if (projectName) {
         try {
           const res1 = await axios.get(
-            `http://localhost:3001/api/businessAndClientObjectives?projectName=${projectName}`
+            `https://e-commetrics.com/api/businessAndClientObjectives?projectName=${projectName}`
           );
           const res2 = await axios.get(
-            `http://localhost:3001/api/onboardingPackage?projectName=${projectName}`
+            `https://e-commetrics.com/api/onboardingPackage?projectName=${projectName}`
           );
           const res3 = await axios.get(
-            `http://localhost:3001/api/mvpAndIdea?projectName=${projectName}`
+            `https://e-commetrics.com/api/mvpAndIdea?projectName=${projectName}`
           );
           const res4 = await axios.get(
-            `http://localhost:3001/api/naStrategyGrowthhacking?projectName=${projectName}`
+            `https://e-commetrics.com/api/naStrategyGrowthhacking?projectName=${projectName}`
           );
           setProjectInformation({
             bco: res1.data,
@@ -65,7 +65,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/api/user`, {
+        const res = await axios.get(`https://e-commetrics.com/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
@@ -86,7 +86,7 @@ function Dashboard() {
     const fetchProjects = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3001/api/projects?userId=` + user.id,
+          `https://e-commetrics.com/api/projects?userId=` + user.id,
           {
             credentials: "include",
           }
@@ -109,7 +109,7 @@ function Dashboard() {
   const logout = async () => {
     try {
       await axios.post(
-        `http://localhost:3001/logout`,
+        `https://e-commetrics.com/logout`,
         {},
         { withCredentials: true }
       );
@@ -224,6 +224,27 @@ function Dashboard() {
                       </Link>
                     </span>
                   )}
+                {user &&
+                  (user.email === "juanmanuel@e-commetrics.com" ||
+                    user.email === "admin@gmail.com") && (
+                    <span
+                      className={`flex items-center cursor-pointer  gap-4 ${
+                        selectedItemDashbord === 6
+                          ? "selected text-pink-500"
+                          : ""
+                      }`}
+                      onClick={() => setSelectedItemDashbord(6)}
+                    >
+                      <Link href={`/dashboard/comments`}>
+                        <div className="flex gap-4 items-center">
+                          <FaCalendar className="text-white" />
+                          <span className="text-white text-xl">
+                            Blogs System
+                          </span>
+                        </div>
+                      </Link>
+                    </span>
+                  )}
               </li>
             </ul>
           </div>
@@ -247,14 +268,14 @@ function Dashboard() {
             className={
               selectedItemDashbord === 0
                 ? "px-6 w-auto  md:w-3/4 py-4"
-                : "px-6 w-auto md:w-[450px] py-4"
+                : "px-6 w-auto  md:w-3/4 py-4"
             }
           >
             <h1
               className={
                 selectedItemDashbord === 0
                   ? "text-start text-3xl"
-                  : "text-center text-3xl"
+                  : "text-start text-3xl"
               }
             >
               {selectedItemDashbord === 0
@@ -303,8 +324,10 @@ function Dashboard() {
                                 src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
                                 height={100}
                                 onError={(e) => {
-                                  e.target.onerror = null;
-                                  e.target.src = "";
+                                  if (e.target.src !== "") {
+                                    e.target.onerror = null;
+                                    e.target.src = "";
+                                  }
                                 }}
                               />
                             </div>
@@ -316,8 +339,10 @@ function Dashboard() {
                               ).toString("base64")}`}
                               height={100}
                               onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = "";
+                                if (e.target.src !== "") {
+                                  e.target.onerror = null;
+                                  e.target.src = "";
+                                }
                               }}
                             />
                           )}
@@ -364,8 +389,10 @@ function Dashboard() {
                                 src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
                                 height={100}
                                 onError={(e) => {
-                                  e.target.onerror = null;
-                                  e.target.src = "";
+                                  if (e.target.src !== "") {
+                                    e.target.onerror = null;
+                                    e.target.src = "";
+                                  }
                                 }}
                               />
                             </div>
@@ -377,8 +404,10 @@ function Dashboard() {
                               ).toString("base64")}`}
                               height={100}
                               onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = "";
+                                if (e.target.src !== "") {
+                                  e.target.onerror = null;
+                                  e.target.src = "";
+                                }
                               }}
                             />
                           )}
@@ -425,8 +454,10 @@ function Dashboard() {
                                 src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
                                 height={100}
                                 onError={(e) => {
-                                  e.target.onerror = null;
-                                  e.target.src = "";
+                                  if (e.target.src !== "") {
+                                    e.target.onerror = null;
+                                    e.target.src = "";
+                                  }
                                 }}
                               />
                             </div>
@@ -438,8 +469,10 @@ function Dashboard() {
                               ).toString("base64")}`}
                               height={100}
                               onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = "";
+                                if (e.target.src !== "") {
+                                  e.target.onerror = null;
+                                  e.target.src = "";
+                                }
                               }}
                             />
                           )}
@@ -486,8 +519,10 @@ function Dashboard() {
                                 src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
                                 height={100}
                                 onError={(e) => {
-                                  e.target.onerror = null;
-                                  e.target.src = "";
+                                  if (e.target.src !== "") {
+                                    e.target.onerror = null;
+                                    e.target.src = "";
+                                  }
                                 }}
                               />
                             </div>
@@ -499,8 +534,10 @@ function Dashboard() {
                               ).toString("base64")}`}
                               height={100}
                               onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = "";
+                                if (e.target.src !== "") {
+                                  e.target.onerror = null;
+                                  e.target.src = "";
+                                }
                               }}
                             />
                           )}
@@ -520,242 +557,266 @@ function Dashboard() {
               projectInformation &&
               projectInformation.bco &&
               projectInformation.bco.length > 0 ? (
-              projectInformation.bco.map((project, index) => (
-                <div
-                  key={index}
-                  className="w-full md:w-[400px] animate-fade-left animate-once animate-delay-200"
-                >
-                  <div className="p-4">
-                    <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
-                      {" "}
-                      <div className="mb-4">
-                        <span className="text-lg font-bold ">
-                          {project.content_1}
-                        </span>
-                      </div>
-                      <div className="mb-4">
-                        <span className="text-base">{project.content_2}</span>
-                      </div>
-                      {project.content_3 && (
+              <div className="grid grid-cols-2 gap-4">
+                {projectInformation.bco.map((project, index) => (
+                  <div
+                    key={index}
+                    className="w-full animate-fade-left animate-once animate-delay-200"
+                  >
+                    <div className="py-4">
+                      <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
+                        {" "}
                         <div className="mb-4">
-                          <p className="text-base">{project.content_3}</p>
+                          <span className="text-lg font-bold ">
+                            {project.content_1}
+                          </span>
                         </div>
-                      )}
-                      {project.image && (
                         <div className="mb-4">
+                          <span className="text-base">{project.content_2}</span>
+                        </div>
+                        {project.content_3 && (
+                          <div className="mb-4">
+                            <p className="text-base">{project.content_3}</p>
+                          </div>
+                        )}
+                        {project.image && (
+                          <div className="mb-4">
+                            <img
+                              src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                              height={100}
+                              onError={(e) => {
+                                if (e.target.src !== "") {
+                                  e.target.onerror = null;
+                                  e.target.src = "";
+                                }
+                              }}
+                            />
+                          </div>
+                        )}
+                        {project.source && (
                           <img
-                            src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                            src={`data:image/png;base64,${Buffer.from(
+                              project.source
+                            ).toString("base64")}`}
                             height={100}
                             onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = "";
+                              if (e.target.src !== "") {
+                                e.target.onerror = null;
+                                e.target.src = "";
+                              }
                             }}
                           />
-                        </div>
-                      )}
-                      {project.source && (
-                        <img
-                          src={`data:image/png;base64,${Buffer.from(
-                            project.source
-                          ).toString("base64")}`}
-                          height={100}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "";
-                          }}
-                        />
-                      )}
-                      <Link
-                        target="_blank"
-                        className="text-blue-500 underline"
-                        href={project.href}
-                      >
-                        {project.link}
-                      </Link>
+                        )}
+                        <Link
+                          target="_blank"
+                          className="text-blue-500 underline"
+                          href={project.href}
+                        >
+                          {project.link}
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                ))}
+              </div>
             ) : selectedItemDashbord === 2 &&
               projectInformation &&
               projectInformation.op &&
               projectInformation.op.length > 0 ? (
-              projectInformation.op.map((project, index) => (
-                <div
-                  key={index}
-                  className="w-full md:w-[400px] rounded-xl animate-fade-left animate-once animate-delay-200"
-                >
-                  <div className="p-4 rounded-3xl">
-                    <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
-                      {" "}
-                      <div className="mb-4">
-                        <span className="text-lg font-bold ">
-                          {project.content_1}
-                        </span>
-                      </div>
-                      <div className="mb-4">
-                        <span className="text-base">{project.content_2}</span>
-                      </div>
-                      {project.content_3 && (
+              <div className="grid grid-cols-2 gap-4">
+                {projectInformation.op.map((project, index) => (
+                  <div
+                    key={index}
+                    className="w-full md:w-[400px] rounded-xl animate-fade-left animate-once animate-delay-200"
+                  >
+                    <div className="p-4 rounded-3xl">
+                      <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
+                        {" "}
                         <div className="mb-4">
-                          <p className="text-base">{project.content_3}</p>
+                          <span className="text-lg font-bold ">
+                            {project.content_1}
+                          </span>
                         </div>
-                      )}
-                      {project.image && (
                         <div className="mb-4">
+                          <span className="text-base">{project.content_2}</span>
+                        </div>
+                        {project.content_3 && (
+                          <div className="mb-4">
+                            <p className="text-base">{project.content_3}</p>
+                          </div>
+                        )}
+                        {project.image && (
+                          <div className="mb-4">
+                            <img
+                              src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                              height={100}
+                              onError={(e) => {
+                                if (e.target.src !== "") {
+                                  e.target.onerror = null;
+                                  e.target.src = "";
+                                }
+                              }}
+                            />
+                          </div>
+                        )}
+                        {project.source && (
                           <img
-                            src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                            src={`data:image/png;base64,${Buffer.from(
+                              project.source
+                            ).toString("base64")}`}
                             height={100}
                             onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = "";
+                              if (e.target.src !== "") {
+                                e.target.onerror = null;
+                                e.target.src = "";
+                              }
                             }}
                           />
-                        </div>
-                      )}
-                      {project.source && (
-                        <img
-                          src={`data:image/png;base64,${Buffer.from(
-                            project.source
-                          ).toString("base64")}`}
-                          height={100}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "";
-                          }}
-                        />
-                      )}
-                      <Link
-                        target="_blank"
-                        className="text-blue-500 underline"
-                        href={project.href}
-                      >
-                        {project.link}
-                      </Link>
+                        )}
+                        <Link
+                          target="_blank"
+                          className="text-blue-500 underline"
+                          href={project.href}
+                        >
+                          {project.link}
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                ))}
+              </div>
             ) : selectedItemDashbord === 3 &&
               projectInformation &&
               projectInformation.mvp &&
               projectInformation.mvp.length > 0 ? (
-              projectInformation.mvp.map((project, index) => (
-                <div
-                  key={index}
-                  className="w-full md:w-[400px] rounded-xl animate-fade-left animate-once animate-delay-200"
-                >
-                  <div className="p-4 rounded-3xl">
-                    <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
-                      {" "}
-                      <div className="mb-4">
-                        <span className="text-lg font-bold ">
-                          {project.content_1}
-                        </span>
-                      </div>
-                      <div className="mb-4">
-                        <span className="text-base">{project.content_2}</span>
-                      </div>
-                      {project.content_3 && (
+              <div className="grid grid-cols-2 gap-4">
+                {projectInformation.mvp.map((project, index) => (
+                  <div
+                    key={index}
+                    className="w-full md:w-[400px] rounded-xl animate-fade-left animate-once animate-delay-200"
+                  >
+                    <div className="p-4 rounded-3xl">
+                      <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
+                        {" "}
                         <div className="mb-4">
-                          <p className="text-base">{project.content_3}</p>
+                          <span className="text-lg font-bold ">
+                            {project.content_1}
+                          </span>
                         </div>
-                      )}
-                      {project.image && (
                         <div className="mb-4">
+                          <span className="text-base">{project.content_2}</span>
+                        </div>
+                        {project.content_3 && (
+                          <div className="mb-4">
+                            <p className="text-base">{project.content_3}</p>
+                          </div>
+                        )}
+                        {project.image && (
+                          <div className="mb-4">
+                            <img
+                              src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                              height={100}
+                              onError={(e) => {
+                                if (e.target.src !== "") {
+                                  e.target.onerror = null;
+                                  e.target.src = "";
+                                }
+                              }}
+                            />
+                          </div>
+                        )}
+                        {project.source && (
                           <img
-                            src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                            src={`data:image/png;base64,${Buffer.from(
+                              project.source
+                            ).toString("base64")}`}
                             height={100}
                             onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = "";
+                              if (e.target.src !== "") {
+                                e.target.onerror = null;
+                                e.target.src = "";
+                              }
                             }}
                           />
-                        </div>
-                      )}
-                      {project.source && (
-                        <img
-                          src={`data:image/png;base64,${Buffer.from(
-                            project.source
-                          ).toString("base64")}`}
-                          height={100}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "";
-                          }}
-                        />
-                      )}
-                      <Link
-                        target="_blank"
-                        className="text-blue-500 underline"
-                        href={project.href}
-                      >
-                        {project.link}
-                      </Link>
+                        )}
+                        <Link
+                          target="_blank"
+                          className="text-blue-500 underline"
+                          href={project.href}
+                        >
+                          {project.link}
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                ))}
+              </div>
             ) : selectedItemDashbord === 4 &&
               projectInformation &&
               projectInformation.strat &&
               projectInformation.strat.length > 0 ? (
-              projectInformation.strat.map((project, index) => (
-                <div
-                  key={index}
-                  className="w-full md:w-[400px] rounded-xl animate-fade-left animate-once animate-delay-200"
-                >
-                  <div className="p-4 rounded-3xl">
-                    <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
-                      {" "}
-                      <div className="mb-4">
-                        <span className="text-lg font-bold ">
-                          {project.content_1}
-                        </span>
-                      </div>
-                      <div className="mb-4">
-                        <span className="text-base">{project.content_2}</span>
-                      </div>
-                      {project.content_3 && (
+              <div className="grid grid-cols-2 gap-4">
+                {projectInformation.strat.map((project, index) => (
+                  <div
+                    key={index}
+                    className="w-full md:w-[400px] rounded-xl animate-fade-left animate-once animate-delay-200"
+                  >
+                    <div className="p-4 rounded-3xl">
+                      <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
+                        {" "}
                         <div className="mb-4">
-                          <p className="text-base">{project.content_3}</p>
+                          <span className="text-lg font-bold ">
+                            {project.content_1}
+                          </span>
                         </div>
-                      )}
-                      {project.image && (
                         <div className="mb-4">
+                          <span className="text-base">{project.content_2}</span>
+                        </div>
+                        {project.content_3 && (
+                          <div className="mb-4">
+                            <p className="text-base">{project.content_3}</p>
+                          </div>
+                        )}
+                        {project.image && (
+                          <div className="mb-4">
+                            <img
+                              src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                              height={100}
+                              onError={(e) => {
+                                if (e.target.src !== "") {
+                                  e.target.onerror = null;
+                                  e.target.src = "";
+                                }
+                              }}
+                            />
+                          </div>
+                        )}
+                        {project.source && (
                           <img
-                            src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                            src={`data:image/png;base64,${Buffer.from(
+                              project.source
+                            ).toString("base64")}`}
                             height={100}
                             onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = "";
+                              if (e.target.src !== "") {
+                                e.target.onerror = null;
+                                e.target.src = "";
+                              }
                             }}
                           />
-                        </div>
-                      )}
-                      {project.source && (
-                        <img
-                          src={`data:image/png;base64,${Buffer.from(
-                            project.source
-                          ).toString("base64")}`}
-                          height={100}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "";
-                          }}
-                        />
-                      )}
-                      <Link
-                        target="_blank"
-                        className="text-blue-500 underline"
-                        href={project.href}
-                      >
-                        {project.link}
-                      </Link>
+                        )}
+                        <Link
+                          target="_blank"
+                          className="text-blue-500 underline"
+                          href={project.href}
+                        >
+                          {project.link}
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                ))}
+              </div>
             ) : timeout ? (
               <div className="flex items-center justify-center h-screen text-2xl">
                 No hay información por mostrar.
@@ -784,19 +845,11 @@ function Dashboard() {
               </Button>
             </div>
           </div>
-          <section className="flex flex-col justify-between my-6 sm:flex-row">
-            <div className="hidden md:block ">
-              {" "}
-              <h1 className="text-center text-3xl justify-center items-center rounded-2xl w-[600px] mt-8 py-12 bg-[#21233A]">
-                Comercial
-              </h1>
-            </div>
-            <div className="flex justify-center items-center px-24">
-              <Link href="https://wa.me/+526646429633" target="_blank">
-                <FaWhatsapp className="text-green-500 h-12 w-24" />
-              </Link>
-            </div>
-          </section>
+          <div className="absolute top-0 right-0 p-6 md:p-8">
+            <Link href="https://wa.me/+526646429633" target="_blank">
+              <FaWhatsapp className="text-green-500 h-12 w-24" />
+            </Link>{" "}
+          </div>
         </div>
       </div>
       <footer>

@@ -19,7 +19,7 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 
 app.use(
   session({
@@ -76,7 +76,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  const { username, email, password, rol } = req.body;
+  const { username, email, password, rol, additionalEmails } = req.body;
 
   if (!username || !email || !password || !rol) {
     return res
@@ -132,8 +132,8 @@ app.post("/register", (req, res) => {
 
             // Configurar las opciones del correo
             let mailOptions = {
-              from: "admin@e-commetrics.com", // remitente
-              to: email, // destinatario
+              from: "admin@e-commetrics.com",
+              to: [email, ...(additionalEmails || [])].join(","), // destinatarios
               cc: "admin@e-commetrics.com", // copia
               subject: "Welcome to Ecommetrica", // Asunto
               html: `
@@ -170,53 +170,53 @@ app.post("/register", (req, res) => {
   );
 });
 
-app.post("/information", (req, res) => {
-  const {
-    nombre,
-    apellido,
-    telefono,
-    direccion,
-    ciudad,
-    pais,
-    fechaNacimiento,
-    genero,
-  } = req.body;
+// app.post("/information", (req, res) => {
+//   const {
+//     nombre,
+//     apellido,
+//     telefono,
+//     direccion,
+//     ciudad,
+//     pais,
+//     fechaNacimiento,
+//     genero,
+//   } = req.body;
 
-  if (
-    !nombre ||
-    !apellido ||
-    !telefono ||
-    !direccion ||
-    !ciudad ||
-    !pais ||
-    !fechaNacimiento ||
-    !genero
-  ) {
-    return res.status(400).json({ error: "Todos los campos son requeridos." });
-  }
+//   if (
+//     !nombre ||
+//     !apellido ||
+//     !telefono ||
+//     !direccion ||
+//     !ciudad ||
+//     !pais ||
+//     !fechaNacimiento ||
+//     !genero
+//   ) {
+//     return res.status(400).json({ error: "Todos los campos son requeridos." });
+//   }
 
-  connection.query(
-    "INSERT INTO information (nombre, apellido, telefono, direccion, ciudad, pais, fechaNacimiento, genero) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-    [
-      nombre,
-      apellido,
-      telefono,
-      direccion,
-      ciudad,
-      pais,
-      fechaNacimiento,
-      genero,
-    ],
-    (err, results) => {
-      if (err) {
-        console.error("Error al realizar la consulta INSERT:", err);
-        return res.status(500).send("Error interno del servidor");
-      }
+//   connection.query(
+//     "INSERT INTO information (nombre, apellido, telefono, direccion, ciudad, pais, fechaNacimiento, genero) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+//     [
+//       nombre,
+//       apellido,
+//       telefono,
+//       direccion,
+//       ciudad,
+//       pais,
+//       fechaNacimiento,
+//       genero,
+//     ],
+//     (err, results) => {
+//       if (err) {
+//         console.error("Error al realizar la consulta INSERT:", err);
+//         return res.status(500).send("Error interno del servidor");
+//       }
 
-      res.status(201).json({ message: "Información guardada con éxito" });
-    }
-  );
-});
+//       res.status(201).json({ message: "Información guardada con éxito" });
+//     }
+//   );
+// });
 
 app.get("/api/user", (req, res) => {
   if (req.session.user) {
@@ -501,11 +501,14 @@ app.get("/api/:table/:id", (req, res) => {
   });
 });
 
-app.put("/update/:table", (req, res) => {
+app.put("/update/:table", upload.single("imageFile"), (req, res) => {
   const table = req.params.table;
-  const data = req.body;
-  const query = `UPDATE ${table} SET project_id = ?, content_1 = ?, content_2 = ?, content_3 = ?, link = ?, href = ?, id_user = ? WHERE id = ?`;
-  const values = [
+  const data = JSON.parse(req.body.data); // Datos JSON
+  const file = req.file; // Archivo de imagen
+
+  // Crear query de actualización solo para los campos proporcionados
+  let query = `UPDATE ${table} SET project_id = ?, content_1 = ?, content_2 = ?, content_3 = ?, link = ?, href = ?, id_user = ?`;
+  let values = [
     data.project_id,
     data.content_1,
     data.content_2,
@@ -513,14 +516,25 @@ app.put("/update/:table", (req, res) => {
     data.link,
     data.href,
     data.id_user,
-    data.id,
   ];
 
-  connection.query(query, values, (error, results, fields) => {
+  // Solo incluir la imagen si existe una nueva imagen en la solicitud
+  if (file) {
+    query += `, source = ?`; // Solo agregar el campo 'image' si se sube una nueva imagen
+    values.push(file.buffer); // Guardar la imagen como buffer
+  }
+
+  // Agregar la condición para el WHERE
+  query += ` WHERE id = ?`;
+  values.push(data.id); // El ID del contenido a actualizar
+
+  // Ejecutar la consulta
+  connection.query(query, values, (error, results) => {
     if (error) {
-      return console.error(error.message);
+      console.error("Error al actualizar el contenido:", error);
+      return res.status(500).send("Error al actualizar el contenido.");
     }
-    res.send(`Datos actualizados en la tabla ${table}`);
+    res.send(`Contenido actualizado exitosamente en la tabla ${table}`);
   });
 });
 
@@ -721,7 +735,7 @@ app.post("/create/content/:table", upload.single("imageFile"), (req, res) => {
   const { project_id, content_1, content_2, content_3, link, href, id_user } =
     req.body;
 
-    const source = req.file ? req.file.buffer : null;
+  const source = req.file ? req.file.buffer : null;
 
   const validTables = [
     "business_and_client_objectives",

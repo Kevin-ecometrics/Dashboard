@@ -13,16 +13,19 @@ import Image from "next/image";
 const pompiere = Pompiere({
   display: "swap",
   weight: "400",
+  subsets: ["latin"],
 });
 
 const poppins = Poppins({
   display: "swap",
   weight: "700",
+  subsets: ["latin"],
 });
 
 const montserrat = Montserrat({
   display: "swap",
   weight: "800",
+  subsets: ["latin"],
 });
 function Page({ projects }) {
   let avatarURl;
@@ -33,7 +36,7 @@ function Page({ projects }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/api/user`, {
+        const res = await axios.get(`https://e-commetrics.com/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
@@ -385,7 +388,7 @@ function Page({ projects }) {
           <h1
             className={`flex items-center justify-start text-2xl animate-jump-in ${montserrat.className}`}
           >
-            {user.rol === "usuario" ? titleProject : "Admin"}
+            {/* {user.rol === "usuario" ? titleProject : "Admin"} */}
           </h1>
         </div>
         <Divider className="my-4 bg-white" />
@@ -408,14 +411,14 @@ function Page({ projects }) {
               Dashboard
             </Button>
           </Link>
-          <Button className="text-white bg-blue-500 text-center hover:bg-blue-700 uppercase">
+          {/* <Button className="text-white bg-blue-500 text-center hover:bg-blue-700 uppercase">
             LOG OUT
-          </Button>
+          </Button> */}
         </div>
         <div
           className={`bottom-10 absolute flex-col flex text-center text-[14px] ${montserrat.className}`}
         >
-          <span> ©2023 Bites Creadores de sonrisas.</span>
+          <span> ©2023 Ecommetrica.</span>
           <span>Todos los derechos reservados.</span>
         </div>
       </aside>
@@ -427,14 +430,12 @@ function Page({ projects }) {
               "linear-gradient(0deg, #3A228B 0%, #847EFC 50%, #4C39A7 88%, #3A228B 100%)",
           }}
         >
-          <h1 className="text-white text-3xl">Calendar</h1>
+          <h1 className="text-white text-3xl">CalendarApp</h1>
           <Image src="/logo_calendar.webp" alt="Logo" width={200} height={50} />
         </section>
         <h1
           className={`mt-32 mb-8 px-16 text-[#3B238C] font-bold text-[31px] ${poppins.className}`}
-        >
-          Panel de Control
-        </h1>
+        ></h1>
         <div className="grid grid-cols-1 md:grid-cols-2 px-16 gap-32">
           <div>
             <h1
@@ -482,7 +483,7 @@ function Page({ projects }) {
                     } bg-cover border border-white font-bold`}
                   >
                     {" "}
-                    <div className="bg-[#6BBAE9] px-4 text-white text-sm flex items-center justify-center p-4">
+                    <div className="bg-[#6BBAE9] px-4 text-white text-sm flex items-center justify-center p-5">
                       {hoursForDay.length}
                     </div>
                     <div className="w-28">{day}</div>{" "}
@@ -512,7 +513,7 @@ function Page({ projects }) {
                       className="mx-auto cursor-pointer"
                     />
                     {selectedDay === day && (
-                      <div className="absolute left-2 z-10 mt-2 overflow-x-hidden rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 overflow-y-auto max-h-80">
+                      <div className="absolute left-2 z-10 mt-2 overflow-x-hidden rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 overflow-y-auto max-h-96">
                         {hoursForDay.length > 0 ? (
                           hoursForDay
                             .sort(
