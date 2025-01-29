@@ -6,6 +6,7 @@ import Image from "next/image";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { inter, league, poppins } from "@/app/fonts";
+import api_URL from "../utils/api";
 function Login({ emailPlaceholder, passwordPlaceholder }) {
   const router = useRouter();
   const [user, setUser] = useState(null);
@@ -20,7 +21,7 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
 
     try {
       const response = await axios.post(
-        `https://e-commetrics.com/login`,
+        `${api_URL}/login`,
 
         { email, password },
         {
@@ -43,7 +44,7 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`https://e-commetrics.com/api/user`, {
+        const res = await axios.get(`${api_URL}/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {

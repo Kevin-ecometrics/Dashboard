@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+
 import {
   FaCheck,
   FaXmark,
@@ -25,8 +26,8 @@ import {
 import { motion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
 import { titillium, montse } from "../fonts";
-import SideBar from "../components/SideBar";
-import MainContent from "../components/MainContent";
+import api_URL from "../utils/api";
+
 function Dashboard() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -44,13 +45,13 @@ function Dashboard() {
   useEffect(() => {
     const fetchUserAndProjects = async () => {
       try {
-        const res = await axios.get(`https://e-commetrics.com/api/user`, {
+        const res = await axios.get(`${api_URL}/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
           setUser(res.data.user);
           const resProjects = await axios.get(
-            `https://e-commetrics.com/api/projects?userId=${res.data.user.id}`,
+            `${api_URL}/api/projects?userId=${res.data.user.id}`,
             { withCredentials: true }
           );
           if (resProjects && resProjects.data) {
@@ -70,7 +71,7 @@ function Dashboard() {
   const logout = async () => {
     try {
       await axios.post(
-        `https://e-commetrics.com/logout`,
+        `${api_URL}/logout`,
 
         {},
         { withCredentials: true }

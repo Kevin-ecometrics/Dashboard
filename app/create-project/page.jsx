@@ -19,6 +19,7 @@ import {
 import { toast, Toaster } from "react-hot-toast";
 import { Avatar } from "@nextui-org/react";
 import Link from "next/link";
+import api_URL from "../utils/api";
 
 export default function CreateProject() {
   const [user, setUser] = useState(null);
@@ -56,7 +57,7 @@ export default function CreateProject() {
       if (selectedContent) {
         try {
           const response = await axios.get(
-            `https://e-commetrics.com/api/${selectedContent.table}/${selectedContent.project.id}`
+            `${api_URL}/api/${selectedContent.table}/${selectedContent.project.id}`
           );
           console.log("Data:", response.data); // Verifica la estructura de los datos
           setData(response.data);
@@ -73,7 +74,7 @@ export default function CreateProject() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`https://e-commetrics.com/api/user`, {
+        const res = await axios.get(`${api_URL}/api/user`, {
           withCredentials: true,
         });
         if (res.data.user) {
@@ -111,7 +112,7 @@ export default function CreateProject() {
     event.preventDefault();
     try {
       const response = await axios.put(
-        `https://e-commetrics.com/projects/${selectedProject.id}`,
+        `${api_URL}/projects/${selectedProject.id}`,
         selectedProject
       );
 
@@ -141,7 +142,7 @@ export default function CreateProject() {
     }
 
     try {
-      const response = await fetch(`https://e-commetrics.com/create/projects`, {
+      const response = await fetch(`${api_URL}/create/projects`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -165,9 +166,7 @@ export default function CreateProject() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get(
-          `https://e-commetrics.com/get/projects`
-        );
+        const response = await axios.get(`${api_URL}/get/projects`);
         setProjects(response.data);
         // console.log('Proyectos:', response.data)
       } catch (error) {
@@ -181,7 +180,7 @@ export default function CreateProject() {
   useEffect(() => {
     const fetchNameUser = async () => {
       try {
-        const response = await axios.get(`https://e-commetrics.com/get/users`);
+        const response = await axios.get(`${api_URL}/get/users`);
         setUsers(response.data);
         // console.log(response.data) // Aquí están los datos que devuelve tu API
       } catch (error) {
@@ -233,7 +232,7 @@ export default function CreateProject() {
         }
       });
       const response = await axios.post(
-        `https://e-commetrics.com/create/content/${formValues.table}`,
+        `${api_URL}/create/content/${formValues.table}`,
         formValues,
         {
           headers: {
@@ -263,15 +262,11 @@ export default function CreateProject() {
     }
 
     try {
-      const response = await axios.put(
-        `https://e-commetrics.com/update/${table}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.put(`${api_URL}/update/${table}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       toast.success("Contenido actualizado exitosamente", { duration: 3000 });
     } catch (error) {
       console.error("Error:", error);
@@ -287,7 +282,7 @@ export default function CreateProject() {
 
     try {
       const response = await axios.delete(
-        `https://e-commetrics.com/delete/${table}/${dataInfo.id}`
+        `${api_URL}/delete/${table}/${dataInfo.id}`
       );
       console.log("Respuesta:", response.data);
       setData([]);
@@ -323,9 +318,7 @@ export default function CreateProject() {
 
     if (confirmDelete) {
       try {
-        const response = await axios.delete(
-          `https://e-commetrics.com/project/delete/${id}`
-        );
+        const response = await axios.delete(`${api_URL}/project/delete/${id}`);
 
         setTrigger(trigger + 1); // Incrementa trigger para disparar useEffect
 
@@ -603,10 +596,17 @@ export default function CreateProject() {
                   </SelectItem>
                   <SelectItem
                     className="text-black"
-                    key="na_strategy_growthhacking"
-                    value="na_strategy_growthhacking"
+                    key="strategy"
+                    value="strategy"
                   >
-                    N/A Strategy + GrowthHacking
+                    Strategy
+                  </SelectItem>
+                  <SelectItem
+                    className="text-black"
+                    key="growth_hacking"
+                    value="growth_hacking"
+                  >
+                    Growth Hacking
                   </SelectItem>
                 </Select>
               </div>
@@ -799,9 +799,10 @@ export default function CreateProject() {
                   Onboarding Package
                 </TableColumn>
                 <TableColumn className="text-black"> MVP and Idea</TableColumn>
+                <TableColumn className="text-black"> Strategy</TableColumn>
                 <TableColumn className="text-black">
                   {" "}
-                  NA Strategy Growthhacking
+                  Growth Hacking
                 </TableColumn>
               </TableHeader>
               <TableBody>
@@ -858,11 +859,25 @@ export default function CreateProject() {
                         onClick={() =>
                           setSelectedContent({
                             project: project,
-                            table: "na_strategy_growthhacking",
+                            table: "strategy",
                           })
                         }
                       >
-                        NA Strategy
+                        Strategy
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        color="primary"
+                        className="hover:bg-blue-700"
+                        onClick={() =>
+                          setSelectedContent({
+                            project: project,
+                            table: "growth_hacking",
+                          })
+                        }
+                      >
+                        Growth Hacking
                       </Button>
                     </TableCell>
                   </TableRow>

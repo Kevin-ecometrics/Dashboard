@@ -19,6 +19,7 @@ import Link from "next/link";
 import { Avatar } from "@nextui-org/react";
 import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
+import api_URL from "../utils/api";
 
 export default function Page() {
   const [selected, setSelected] = useState(1);
@@ -63,7 +64,7 @@ export default function Page() {
     console.log(formValues); // Verifica los datos enviados en la solicitud
     try {
       const res = await axios.put(
-        `https://e-commetrics.com/updateUserInformation`,
+        `${api_URL}/updateUserInformation`,
         formValues
       );
       console.log(res.data);
@@ -84,10 +85,7 @@ export default function Page() {
 
     console.log(formValues); // Verifica los datos enviados en la solicitud
     try {
-      const res = await axios.put(
-        `https://e-commetrics.com/updateUser`,
-        formValues
-      );
+      const res = await axios.put(`${api_URL}/updateUser`, formValues);
       console.log(res.data);
       toast.success("Usuario actualizado exitosamente", { duration: 3000 });
     } catch (err) {
@@ -112,7 +110,7 @@ export default function Page() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`https://e-commetrics.com/api/user`, {
+        const res = await axios.get(`${api_URL}/api/user`, {
           withCredentials: true,
         });
         if (res.data.user) {
@@ -132,7 +130,7 @@ export default function Page() {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const res = await axios.get(`https://e-commetrics.com/get/information`);
+        const res = await axios.get(`${api_URL}/get/information`);
         setClient(res.data);
         console.log(res.data);
       } catch (err) {
@@ -145,7 +143,7 @@ export default function Page() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get(`https://e-commetrics.com/get/users`);
+        const res = await axios.get(`${api_URL}/get/users`);
         setClientUser(res.data);
         console.log(res.data);
       } catch (err) {
@@ -164,10 +162,7 @@ export default function Page() {
     });
     console.log(formValues);
     try {
-      const res = await axios.put(
-        `https://e-commetrics.com/updatePassword`,
-        formValues
-      );
+      const res = await axios.put(`${api_URL}/updatePassword`, formValues);
       console.log(res.data);
       toast.success("Contraseña actualizada exitosamente", { duration: 3000 });
       toggleDrawer();
@@ -179,11 +174,7 @@ export default function Page() {
 
   const logout = async () => {
     try {
-      await axios.post(
-        `https://e-commetrics.com/logout`,
-        {},
-        { withCredentials: true }
-      );
+      await axios.post(`${api_URL}/logout`, {}, { withCredentials: true });
       setUser(null);
       router.push("/");
     } catch (err) {
@@ -236,7 +227,7 @@ export default function Page() {
 
     try {
       const registerRes = await axios.post(
-        `https://e-commetrics.com/register`,
+        `${api_URL}/register`,
         registerData,
         {
           withCredentials: true,

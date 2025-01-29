@@ -37,6 +37,7 @@ const connection = mysql.createConnection({
   database: "login",
 });
 
+// Iniciar sesion
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -75,6 +76,7 @@ app.post("/login", (req, res) => {
   );
 });
 
+// Registro
 app.post("/register", (req, res) => {
   const { username, email, password, rol, additionalEmails } = req.body;
 
@@ -170,54 +172,7 @@ app.post("/register", (req, res) => {
   );
 });
 
-// app.post("/information", (req, res) => {
-//   const {
-//     nombre,
-//     apellido,
-//     telefono,
-//     direccion,
-//     ciudad,
-//     pais,
-//     fechaNacimiento,
-//     genero,
-//   } = req.body;
-
-//   if (
-//     !nombre ||
-//     !apellido ||
-//     !telefono ||
-//     !direccion ||
-//     !ciudad ||
-//     !pais ||
-//     !fechaNacimiento ||
-//     !genero
-//   ) {
-//     return res.status(400).json({ error: "Todos los campos son requeridos." });
-//   }
-
-//   connection.query(
-//     "INSERT INTO information (nombre, apellido, telefono, direccion, ciudad, pais, fechaNacimiento, genero) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-//     [
-//       nombre,
-//       apellido,
-//       telefono,
-//       direccion,
-//       ciudad,
-//       pais,
-//       fechaNacimiento,
-//       genero,
-//     ],
-//     (err, results) => {
-//       if (err) {
-//         console.error("Error al realizar la consulta INSERT:", err);
-//         return res.status(500).send("Error interno del servidor");
-//       }
-
-//       res.status(201).json({ message: "Información guardada con éxito" });
-//     }
-//   );
-// });
-
+// Obtener el usuario actual
 app.get("/api/user", (req, res) => {
   if (req.session.user) {
     res.send({ user: req.session.user });
@@ -226,6 +181,7 @@ app.get("/api/user", (req, res) => {
   }
 });
 
+// Cerrar sesión
 app.post("/logout", (req, res) => {
   if (req.session) {
     // destruye la sesión
@@ -243,6 +199,7 @@ app.post("/logout", (req, res) => {
   }
 });
 
+// Obtener todos los proyectos
 app.get("/api/projects", (req, res) => {
   const userId = req.query.userId;
 
@@ -275,6 +232,7 @@ app.get("/api/projects", (req, res) => {
   );
 });
 
+// Obtener un proyecto por su ID
 app.get("/api/businessAndClientObjectives", (req, res) => {
   const { projectName } = req.query;
 
@@ -295,6 +253,7 @@ app.get("/api/businessAndClientObjectives", (req, res) => {
   });
 });
 
+// Obtener un proyecto por su ID
 app.get("/api/onboardingPackage", (req, res) => {
   const { projectName } = req.query;
 
@@ -315,6 +274,7 @@ app.get("/api/onboardingPackage", (req, res) => {
   });
 });
 
+// Obtener un proyecto por su ID
 app.get("/api/mvpAndIdea", (req, res) => {
   const { projectName } = req.query;
 
@@ -335,13 +295,14 @@ app.get("/api/mvpAndIdea", (req, res) => {
   });
 });
 
-app.get("/api/naStrategyGrowthhacking", (req, res) => {
+// Obtener un proyecto por su ID
+app.get("/api/Strategy", (req, res) => {
   const { projectName } = req.query;
 
   const query = `
-    SELECT na_strategy_growthhacking.*
-    FROM na_strategy_growthhacking
-    JOIN projects ON na_strategy_growthhacking.project_id = projects.id
+    SELECT strategy.*
+    FROM strategy
+    JOIN projects ON strategy.project_id = projects.id
     WHERE projects.project_name = ?
   `;
 
@@ -355,6 +316,28 @@ app.get("/api/naStrategyGrowthhacking", (req, res) => {
   });
 });
 
+// Obtener un proyecto por su ID
+app.get("/api/growthHacking", (req, res) => {
+  const { projectName } = req.query;
+
+  const query = `
+    SELECT growth_hacking.*
+    FROM growth_hacking
+    JOIN projects ON growth_hacking.project_id = projects.id
+    WHERE projects.project_name = ?
+  `;
+
+  connection.query(query, [projectName], (err, results) => {
+    if (err) {
+      console.error("Error al realizar la consulta SELECT:", err);
+      return res.status(500).send("Error interno del servidor");
+    }
+
+    res.json(results);
+  });
+});
+
+// obtener la información de todos los usuario
 app.get("/get/users", (req, res) => {
   const query = `
     SELECT *
@@ -371,6 +354,7 @@ app.get("/get/users", (req, res) => {
   });
 });
 
+// obtener la información de todos los proyectos
 app.get("/get/projects", (req, res) => {
   const query = `
     SELECT *
@@ -387,6 +371,7 @@ app.get("/get/projects", (req, res) => {
   });
 });
 
+// crear un nuevo proyecto
 app.post("/create/projects", (req, res) => {
   const { id_user, title, percentage, content, project_name } = req.body;
 
@@ -409,6 +394,7 @@ app.post("/create/projects", (req, res) => {
   );
 });
 
+// crear contenido de un proyecto en especifico
 app.post("/create/:table", (req, res) => {
   const table = req.params.table;
   const {
@@ -425,7 +411,7 @@ app.post("/create/:table", (req, res) => {
   const validTables = [
     "business_and_client_objectives",
     "mvp_and_idea",
-    "na_strategy_growthhacking",
+    "strategy",
     "onboarding_package",
   ];
   if (!validTables.includes(table)) {
@@ -451,6 +437,7 @@ app.post("/create/:table", (req, res) => {
   );
 });
 
+// Actualizar un proyecto
 app.put("/projects/:id", (req, res) => {
   const id = req.params.id;
   const { title, percentage, content, project_name, id_user } = req.body;
@@ -481,6 +468,7 @@ app.put("/projects/:id", (req, res) => {
   );
 });
 
+// Obtenemos el contenido de un proyecto
 app.get("/api/:table/:id", (req, res) => {
   const { table, id } = req.params;
 
@@ -501,6 +489,7 @@ app.get("/api/:table/:id", (req, res) => {
   });
 });
 
+// Actualizar el contenido de un proyecto
 app.put("/update/:table", upload.single("imageFile"), (req, res) => {
   const table = req.params.table;
   const data = JSON.parse(req.body.data); // Datos JSON
@@ -538,6 +527,7 @@ app.put("/update/:table", upload.single("imageFile"), (req, res) => {
   });
 });
 
+// Obtenermos la informacion en general
 app.get("/get/information", (req, res) => {
   const query = `
 	SELECT *
@@ -557,6 +547,7 @@ app.get("/get/information", (req, res) => {
   });
 });
 
+// Actualizamos la informacion en general
 app.put("/updateUserInformation", (req, res) => {
   const { id, nombre, apellido, telefono, direccion, ciudad, pais, genero } =
     req.body;
@@ -580,6 +571,7 @@ app.put("/updateUserInformation", (req, res) => {
   );
 });
 
+// Actualizamos al usuario
 app.put("/updateUser", (req, res) => {
   const { id, username, email, rol } = req.body;
 
@@ -598,6 +590,7 @@ app.put("/updateUser", (req, res) => {
   });
 });
 
+// Actualizamos la contraseña
 app.put("/updatePassword", (req, res) => {
   const { id, password } = req.body;
 
@@ -619,6 +612,7 @@ app.put("/updatePassword", (req, res) => {
   });
 });
 
+// Eliminamos el contenido de una tabla
 app.delete("/delete/:table/:id", (req, res) => {
   const { table, id } = req.params;
 
@@ -636,6 +630,7 @@ app.delete("/delete/:table/:id", (req, res) => {
   });
 });
 
+// Eliminamos un proyecto
 app.delete("/project/delete/:id", async (req, res) => {
   const projectId = req.params.id;
 
@@ -669,13 +664,13 @@ app.delete("/project/delete/:id", async (req, res) => {
             }
 
             connection.query(
-              "DELETE FROM na_strategy_growthhacking WHERE project_id = ?",
+              "DELETE FROM strategy WHERE project_id = ?",
               [projectId],
               (error, results) => {
                 if (error) {
                   return connection.rollback(() => {
                     res.status(500).send({
-                      message: "Error deleting from na_strategy_growthhacking",
+                      message: "Error deleting from strategy",
                     });
                   });
                 }
@@ -730,6 +725,7 @@ app.delete("/project/delete/:id", async (req, res) => {
   });
 });
 
+// creamos un nuevo contenido en una tabla
 app.post("/create/content/:table", upload.single("imageFile"), (req, res) => {
   const table = req.params.table;
   const { project_id, content_1, content_2, content_3, link, href, id_user } =
@@ -740,8 +736,9 @@ app.post("/create/content/:table", upload.single("imageFile"), (req, res) => {
   const validTables = [
     "business_and_client_objectives",
     "mvp_and_idea",
-    "na_strategy_growthhacking",
+    "strategy",
     "onboarding_package",
+    "growth_hacking",
   ];
   if (!validTables.includes(table)) {
     return res.status(400).send("Tabla no válida");

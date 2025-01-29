@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import { Button, Link, Avatar, Divider } from "@nextui-org/react";
 import { FaPowerOff, FaBars, FaWhatsapp, FaCalendar } from "react-icons/fa6";
 import Image from "next/image";
+import api_URL from "@/app/utils/api";
+
 function Dashboard() {
   let avatarURl;
   const [titleProject, setTitleProject] = useState("");
@@ -29,29 +31,34 @@ function Dashboard() {
       if (projectName) {
         try {
           const res1 = await axios.get(
-            `https://e-commetrics.com/api/businessAndClientObjectives?projectName=${projectName}`
+            `${api_URL}/api/businessAndClientObjectives?projectName=${projectName}`
           );
           const res2 = await axios.get(
-            `https://e-commetrics.com/api/onboardingPackage?projectName=${projectName}`
+            `${api_URL}/api/onboardingPackage?projectName=${projectName}`
           );
           const res3 = await axios.get(
-            `https://e-commetrics.com/api/mvpAndIdea?projectName=${projectName}`
+            `${api_URL}/api/mvpAndIdea?projectName=${projectName}`
           );
           const res4 = await axios.get(
-            `https://e-commetrics.com/api/naStrategyGrowthhacking?projectName=${projectName}`
+            `${api_URL}/api/Strategy?projectName=${projectName}`
+          );
+          const res5 = await axios.get(
+            `${api_URL}/api/growthHacking?projectName=${projectName}`
           );
           setProjectInformation({
             bco: res1.data,
             op: res2.data,
             mvp: res3.data,
             strat: res4.data,
+            growth: res5.data,
           }); // Guarda las respuestas de la API en el estado
           console.log(
             "Información del proyecto:",
             res1.data,
             res2.data,
             res3.data,
-            res4.data
+            res4.data,
+            res5.data
           );
         } catch (error) {
           console.error("Error al obtener la información del proyecto:", error);
@@ -65,7 +72,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`https://e-commetrics.com/api/user`, {
+        const res = await axios.get(`${api_URL}/api/user`, {
           withCredentials: true,
         });
         if (res && res.data.user) {
@@ -85,12 +92,9 @@ function Dashboard() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await fetch(
-          `https://e-commetrics.com/api/projects?userId=` + user.id,
-          {
-            credentials: "include",
-          }
-        );
+        const res = await fetch(`${api_URL}/api/projects?userId=` + user.id, {
+          credentials: "include",
+        });
 
         if (res.ok) {
           const data = await res.json();
@@ -108,11 +112,7 @@ function Dashboard() {
 
   const logout = async () => {
     try {
-      await axios.post(
-        `https://e-commetrics.com/logout`,
-        {},
-        { withCredentials: true }
-      );
+      await axios.post(`${api_URL}/logout`, {}, { withCredentials: true });
       setUser(null);
       router.push("/");
     } catch (err) {
@@ -201,7 +201,16 @@ function Dashboard() {
                   onClick={() => setSelectedItemDashbord(4)}
                 >
                   <FaBars />
-                  <span>N/A Strategy + GrowthHacking</span>
+                  <span>Strategy</span>
+                </span>
+                <span
+                  className={`flex items-center cursor-pointer  gap-4 ${
+                    selectedItemDashbord === 5 ? "selected text-pink-500" : ""
+                  }`}
+                  onClick={() => setSelectedItemDashbord(5)}
+                >
+                  <FaBars />
+                  <span>Growth Hacking</span>
                 </span>
                 {user &&
                   (user.email === "juanmanuel@e-commetrics.com" ||
@@ -210,11 +219,11 @@ function Dashboard() {
                       "draanyimanchola@bitescreadoresdesonrisas.com") && (
                     <span
                       className={`flex items-center cursor-pointer  gap-4 ${
-                        selectedItemDashbord === 5
+                        selectedItemDashbord === 6
                           ? "selected text-pink-500"
                           : ""
                       }`}
-                      onClick={() => setSelectedItemDashbord(5)}
+                      onClick={() => setSelectedItemDashbord(6)}
                     >
                       <Link href={`/dashboard/system`}>
                         <div className="flex gap-4 items-center">
@@ -229,11 +238,11 @@ function Dashboard() {
                     user.email === "admin@gmail.com") && (
                     <span
                       className={`flex items-center cursor-pointer  gap-4 ${
-                        selectedItemDashbord === 6
+                        selectedItemDashbord === 7
                           ? "selected text-pink-500"
                           : ""
                       }`}
-                      onClick={() => setSelectedItemDashbord(6)}
+                      onClick={() => setSelectedItemDashbord(7)}
                     >
                       <Link href={`/dashboard/comments`}>
                         <div className="flex gap-4 items-center">
@@ -287,7 +296,9 @@ function Dashboard() {
                 : selectedItemDashbord === 3
                 ? "MVP + IDEA"
                 : selectedItemDashbord === 4
-                ? "N/A Strategy + GrowthHacking"
+                ? "Strategy"
+                : selectedItemDashbord === 5
+                ? "Growth Hacking"
                 : ""}
             </h1>{" "}
             {selectedItemDashbord === 0 ? (
@@ -491,6 +502,71 @@ function Dashboard() {
                   projectInformation.strat &&
                   projectInformation.strat.length > 0 &&
                   projectInformation.strat.map((project, index) => (
+                    <div
+                      key={index}
+                      className="w-full animate-fade-left animate-once animate-delay-200"
+                    >
+                      <div className="py-4">
+                        <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
+                          {" "}
+                          <div className="mb-4">
+                            <span className="text-lg font-bold ">
+                              {project.content_1}
+                            </span>
+                          </div>
+                          <div className="mb-4">
+                            <span className="text-base">
+                              {project.content_2}
+                            </span>
+                          </div>
+                          {project.content_3 && (
+                            <div className="mb-4">
+                              <p className="text-base">{project.content_3}</p>
+                            </div>
+                          )}
+                          {project.image && (
+                            <div className="mb-4">
+                              <img
+                                src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                                height={100}
+                                onError={(e) => {
+                                  if (e.target.src !== "") {
+                                    e.target.onerror = null;
+                                    e.target.src = "";
+                                  }
+                                }}
+                              />
+                            </div>
+                          )}
+                          {project.source && (
+                            <img
+                              src={`data:image/png;base64,${Buffer.from(
+                                project.source
+                              ).toString("base64")}`}
+                              height={100}
+                              onError={(e) => {
+                                if (e.target.src !== "") {
+                                  e.target.onerror = null;
+                                  e.target.src = "";
+                                }
+                              }}
+                            />
+                          )}
+                          <Link
+                            target="_blank"
+                            className="text-blue-500 underline"
+                            href={project.href}
+                          >
+                            {project.link}
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                {projectInformation &&
+                  projectInformation.growth &&
+                  projectInformation.growth.length > 0 &&
+                  projectInformation.growth.map((project, index) => (
                     <div
                       key={index}
                       className="w-full animate-fade-left animate-once animate-delay-200"
@@ -757,6 +833,72 @@ function Dashboard() {
               projectInformation.strat.length > 0 ? (
               <div className="grid grid-cols-2 gap-4">
                 {projectInformation.strat.map((project, index) => (
+                  <div
+                    key={index}
+                    className="w-full md:w-[400px] rounded-xl animate-fade-left animate-once animate-delay-200"
+                  >
+                    <div className="p-4 rounded-3xl">
+                      <div className="bg-[#191c33] shadow-md rounded-2xl p-6">
+                        {" "}
+                        <div className="mb-4">
+                          <span className="text-lg font-bold ">
+                            {project.content_1}
+                          </span>
+                        </div>
+                        <div className="mb-4">
+                          <span className="text-base">{project.content_2}</span>
+                        </div>
+                        {project.content_3 && (
+                          <div className="mb-4">
+                            <p className="text-base">{project.content_3}</p>
+                          </div>
+                        )}
+                        {project.image && (
+                          <div className="mb-4">
+                            <img
+                              src={`https://drive.google.com/thumbnail?id=${project.image}&sz=w1920`}
+                              height={100}
+                              onError={(e) => {
+                                if (e.target.src !== "") {
+                                  e.target.onerror = null;
+                                  e.target.src = "";
+                                }
+                              }}
+                            />
+                          </div>
+                        )}
+                        {project.source && (
+                          <img
+                            src={`data:image/png;base64,${Buffer.from(
+                              project.source
+                            ).toString("base64")}`}
+                            height={100}
+                            onError={(e) => {
+                              if (e.target.src !== "") {
+                                e.target.onerror = null;
+                                e.target.src = "";
+                              }
+                            }}
+                          />
+                        )}
+                        <Link
+                          target="_blank"
+                          className="text-blue-500 underline"
+                          href={project.href}
+                        >
+                          {project.link}
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : selectedItemDashbord === 5 &&
+              projectInformation &&
+              projectInformation.growth &&
+              projectInformation.growth.length > 0 ? (
+              <div className="grid grid-cols-2 gap-4">
+                {projectInformation.growth.map((project, index) => (
                   <div
                     key={index}
                     className="w-full md:w-[400px] rounded-xl animate-fade-left animate-once animate-delay-200"
