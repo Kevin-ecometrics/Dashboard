@@ -63,7 +63,23 @@ app.post("/login", (req, res) => {
             // Las contraseñas coinciden
             req.session.user = user;
             console.log(req.session.user);
-            res.json({ success: true, message: "Inicio de sesión exitoso" });
+
+            // Registrar el inicio de sesión en la base de datos
+            connection.query(
+              "INSERT INTO login_logs (email, login_count) VALUES (?, 1) ON DUPLICATE KEY UPDATE login_count = login_count + 1, login_time = CURRENT_TIMESTAMP",
+              [email],
+              (err, results) => {
+                if (err) {
+                  console.error("Error al registrar el inicio de sesión:", err);
+                  return res.status(500).send("Error interno del servidor");
+                }
+
+                res.json({
+                  success: true,
+                  message: "Inicio de sesión exitoso",
+                });
+              }
+            );
           } else {
             // Las contraseñas no coinciden
             res.status(401).json({ error: "Credenciales inválidas" });
