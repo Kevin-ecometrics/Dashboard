@@ -646,6 +646,21 @@ app.delete("/delete/:table/:id", (req, res) => {
   });
 });
 
+// VCard
+app.post("/vcard", (req, res) => {
+  const { name, lastname, email, phone, org, address, note } = req.body;
+
+  const query = "INSERT INTO vcard (name, lastname, email, phone, org, address, note) VALUES (?, ?, ?, ?, ?, ?, ?)";
+  connection.query(query, [name, lastname, email, phone, org, address, note], (err, result) => {
+    if (err) {
+      console.error("Error al insertar los datos: ", err);
+      return res.status(500).send("Error al guardar los datos");
+    }
+    return res.status(200).send("Datos guardados correctamente");
+  });
+});
+
+
 // Eliminamos un proyecto
 app.delete("/project/delete/:id", async (req, res) => {
   const projectId = req.params.id;

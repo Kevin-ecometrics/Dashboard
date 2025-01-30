@@ -212,6 +212,30 @@ function Dashboard() {
                     </ul>
                   </Link>
                 </AccordionItem>
+                <AccordionItem
+                  key="6"
+                  aria-label="Information"
+                  indicator={({ isOpen }) =>
+                    isOpen ? <FaXmark /> : <FaCheck />
+                  }
+                  title={<span style={{ color: "white" }}>VCard</span>}
+                >
+                  <Link
+                    href="/vcard"
+                    className="text-white hover:text-gray-300"
+                  >
+                    <ul>
+                      <li>
+                        <div className="flex items-center gap-x-2">
+                          <FaUsers />
+                          <span className="text-white uppercase hover:underline">
+                            Generar VCard
+                          </span>
+                        </div>
+                      </li>
+                    </ul>
+                  </Link>
+                </AccordionItem>
               </Accordion>
             )}
           </div>
