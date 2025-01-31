@@ -12,6 +12,7 @@ import {
   FaPlus,
   FaUsers,
   FaWhatsapp,
+  FaX,
 } from "react-icons/fa6";
 import {
   Progress,
@@ -27,10 +28,11 @@ import { motion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
 import { titillium, montse } from "../fonts";
 import api_URL from "../utils/api";
+import { FaBars } from "react-icons/fa";
 
 function Dashboard() {
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const [isAsideOpen, setIsAsideOpen] = useState(false);
   const handleButtonClick = (index) => {
     setCurrentIndex(index * 3);
   };
@@ -39,7 +41,9 @@ function Dashboard() {
   const router = useRouter();
   const [projects, setProjects] = useState([]);
   const numberOfButtons = Math.ceil(projects.length / 3);
-
+  const openAside = () => {
+    setIsAsideOpen(!isAsideOpen);
+  };
   let avatarURl;
 
   useEffect(() => {
@@ -126,7 +130,11 @@ function Dashboard() {
   return (
     <section className="h-screen w-screen text-white bg-[#21233A] overflow-x-hidden">
       <div className="flex bg-[#191c33]">
-        <aside className="hidden h-screen px-8 py-12 w-36 sm:block md:w-1/5">
+        <aside
+          className={`md:h-screen px-8 py-12 ${
+            isAsideOpen ? "w-screen" : "hidden"
+          } md:w-1/5 md:block `}
+        >
           <div className="flex flex-col items-center gap-4">
             <Avatar src={avatarURl} className="h-24 w-24" />
           </div>
@@ -358,6 +366,21 @@ function Dashboard() {
               <FaWhatsapp className="text-green-500 h-12 w-24" />
             </Link>{" "}
           </div>
+          {isAsideOpen === true ? (
+            <div
+              className="absolute left-0 text-2xl right-0 p-8 md:hidden block"
+              onClick={openAside}
+            >
+              <FaX />
+            </div>
+          ) : (
+            <div
+              className="absolute left-0 text-2xl right-0 p-8 md:hidden block"
+              onClick={openAside}
+            >
+              <FaBars />
+            </div>
+          )}
         </div>
         {/* <MainContent /> */}
       </div>
