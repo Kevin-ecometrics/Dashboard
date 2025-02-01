@@ -1,10 +1,10 @@
 "use client";
-
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
 import { QRCodeCanvas } from "qrcode.react";
+import { FaDownload, FaTrash } from "react-icons/fa6";
 
 import {
   FaCheck,
@@ -208,132 +208,292 @@ function Page() {
 
   return (
     <section className="h-screen w-screen text-white bg-[#21233A] overflow-x-hidden">
-      <div className="flex bg-[#191c33]">
-        <div className="container mx-auto p-6 bg-white rounded-lg shadow-lg max-w-md mt-8 text-black space-y-4">
-          {/* Mostrar el avatar del usuario */}
-          <div className="flex justify-center">
-            <Image
-              src={avatarURl}
-              alt="User Avatar"
-              width={100}
-              height={100}
-              className="rounded-full"
-            />
+      <div className="flex">
+        {/* Menú lateral */}
+        <aside className="hidden h-screen px-8 py-12 w-36 sm:block md:w-1/5 bg-[#191c33]">
+          <div className="flex flex-col items-center gap-4">
+            <Avatar src={avatarURl} className="h-24 w-24" />
           </div>
-          <h1 className="text-2xl font-bold mb-4">VCF y QR</h1>
-          <input
-            type="text"
-            name="name"
-            placeholder="Nombre"
-            value={formData.name}
-            onChange={(e) =>
-              setFormData({ ...formData, [e.target.name]: e.target.value })
-            }
-            className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
-          />
-          <input
-            type="text"
-            name="lastname"
-            placeholder="Apellido"
-            value={formData.lastname}
-            onChange={(e) =>
-              setFormData({ ...formData, [e.target.name]: e.target.value })
-            }
-            className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Correo Electrónico"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, [e.target.name]: e.target.value })
-            }
-            className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
-          />
-          <input
-            type="tel"
-            name="phone"
-            placeholder="Teléfono"
-            value={formData.phone}
-            onChange={(e) =>
-              setFormData({ ...formData, [e.target.name]: e.target.value })
-            }
-            maxLength="10"
-            className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
-          />
-          <input
-            type="text"
-            name="org"
-            placeholder="Empresa"
-            value={formData.org}
-            onChange={(e) =>
-              setFormData({ ...formData, [e.target.name]: e.target.value })
-            }
-            className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
-          />
-          <input
-            type="text"
-            name="address"
-            placeholder="Dirección"
-            value={formData.address}
-            onChange={(e) =>
-              setFormData({ ...formData, [e.target.name]: e.target.value })
-            }
-            className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
-          />
-          <input
-            type="text"
-            name="note"
-            placeholder="Nota"
-            value={formData.note}
-            onChange={(e) =>
-              setFormData({ ...formData, [e.target.name]: e.target.value })
-            }
-            className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
-          />
+          <Divider className="my-4 bg-white" />
+          <div className="relative py-8">
+            <Accordion>
+              <AccordionItem
+                key="1"
+                aria-label="Projects"
+                indicator={({ isOpen }) => (isOpen ? <FaXmark /> : <FaCheck />)}
+                title={<span style={{ color: "white" }}>Projects</span>}
+              >
+                <ul>
+                  {projects.map((project) => (
+                    <li key={project.id} className="py-4">
+                      <Link
+                        href={`/dashboard/${project.project_name}`}
+                        className="text-white hover:text-gray-300"
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <FaHouse />
+                          <span className="text-white uppercase hover:underline">
+                            {project.project_name}
+                          </span>
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </AccordionItem>
+            </Accordion>
+            {user.rol === "admin" && (
+              <Accordion>
+                <AccordionItem
+                  key="4"
+                  aria-label="Information"
+                  indicator={({ isOpen }) =>
+                    isOpen ? <FaXmark /> : <FaCheck />
+                  }
+                  title={
+                    <span style={{ color: "white" }}>
+                      Update Client Project
+                    </span>
+                  }
+                >
+                  <Link
+                    href="/create-project"
+                    className="text-white hover:text-gray-300"
+                  >
+                    <ul>
+                      <li>
+                        <div className="flex items-center gap-x-2">
+                          <FaPlus />
+                          <span className="text-white uppercase hover:underline">
+                            UPDATE CLIENT PROJECT
+                          </span>
+                        </div>
+                      </li>
+                    </ul>
+                  </Link>
+                </AccordionItem>
+                <AccordionItem
+                  key="5"
+                  aria-label="Information"
+                  indicator={({ isOpen }) =>
+                    isOpen ? <FaXmark /> : <FaCheck />
+                  }
+                  title={<span style={{ color: "white" }}>Create Client</span>}
+                >
+                  <Link
+                    href="/panel-control"
+                    className="text-white hover:text-gray-300"
+                  >
+                    <ul>
+                      <li>
+                        <div className="flex items-center gap-x-2">
+                          <FaUsers />
+                          <span className="text-white uppercase hover:underline">
+                            CREATE CLIENT
+                          </span>
+                        </div>
+                      </li>
+                    </ul>
+                  </Link>
+                </AccordionItem>
+                <AccordionItem
+                  key="6"
+                  aria-label="Information"
+                  indicator={({ isOpen }) =>
+                    isOpen ? <FaXmark /> : <FaCheck />
+                  }
+                  title={<span style={{ color: "white" }}>VCard</span>}
+                >
+                  <Link
+                    href="/vcard"
+                    className="text-white hover:text-gray-300"
+                  >
+                    <ul>
+                      <li>
+                        <div className="flex items-center gap-x-2">
+                          <FaUsers />
+                          <span className="text-white uppercase hover:underline">
+                            Generar VCard
+                          </span>
+                        </div>
+                      </li>
+                    </ul>
+                  </Link>
+                </AccordionItem>
+              </Accordion>
+            )}
+          </div>
 
-          {showQR && (
-            <button
-              onClick={downloadQRCode}
-              className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all w-full"
+          <div className="flex items-end justify-start">
+            <Button
+              className="text-white bg-[#a32054] hover:bg-[#395788] w-96"
+              onClick={logout}
             >
-              Descargar QR
-            </button>
-          )}
+              <FaPowerOff />
+              LOG OUT
+            </Button>
+          </div>
+        </aside>
 
-          {showButton && (
-            <button
-              onClick={handleShowQR}
-              className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all w-full"
-            >
-              Mostrar Datos
-            </button>
-          )}
-
-          {showQR && (
-            <div ref={qrRef} className="flex flex-col items-center space-y-4">
-              <QRCodeCanvas
-                id="qrCode"
-                value={`BEGIN:VCARD\nVERSION:3.0\nFN:${formData.name}\nN:${formData.lastname}\nORG:${formData.org}\nTEL;TYPE=WORK,VOICE:${formData.phone}\nEMAIL;INTERNET;WORK:${formData.email}\nADR;TYPE=WORK:;;${formData.address}\nNOTE:${formData.note}\nEND:VCARD`}
-                size={256}
-                level="H"
-                includeMargin={true}
+        <div className="flex-1 bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900 p-8">
+          <motion.div
+            className="container mx-auto bg-white rounded-lg shadow-lg p-8 max-w-md text-black space-y-6"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="flex justify-center">
+              <Image
+                src={avatarURl}
+                alt="User Avatar"
+                width={100}
+                height={100}
+                className="rounded-full"
               />
-              <button
-                onClick={generateVCard}
-                className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all w-full"
-              >
-                Descargar VCF
-              </button>
-              <button
-                onClick={handleReset}
-                className="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition-all w-full"
-              >
-                Limpiar Formulario
-              </button>
             </div>
-          )}
+            <h1 className="text-2xl font-bold mb-6 text-center">VCF y QR</h1>
+            <motion.div
+              className="space-y-4"
+              initial={{ x: -50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <input
+                type="text"
+                name="name"
+                placeholder="Nombre"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, [e.target.name]: e.target.value })
+                }
+                className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+              />
+              <input
+                type="text"
+                name="lastname"
+                placeholder="Apellido"
+                value={formData.lastname}
+                onChange={(e) =>
+                  setFormData({ ...formData, [e.target.name]: e.target.value })
+                }
+                className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Correo Electrónico"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, [e.target.name]: e.target.value })
+                }
+                className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+              />
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Teléfono"
+                value={formData.phone}
+                onChange={(e) =>
+                  setFormData({ ...formData, [e.target.name]: e.target.value })
+                }
+                maxLength="10"
+                className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+              />
+              <input
+                type="text"
+                name="org"
+                placeholder="Empresa"
+                value={formData.org}
+                onChange={(e) =>
+                  setFormData({ ...formData, [e.target.name]: e.target.value })
+                }
+                className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+              />
+              <input
+                type="text"
+                name="address"
+                placeholder="Dirección"
+                value={formData.address}
+                onChange={(e) =>
+                  setFormData({ ...formData, [e.target.name]: e.target.value })
+                }
+                className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+              />
+              <input
+                type="text"
+                name="note"
+                placeholder="Nota"
+                value={formData.note}
+                onChange={(e) =>
+                  setFormData({ ...formData, [e.target.name]: e.target.value })
+                }
+                className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+              />
+            </motion.div>
+
+            {showQR && (
+              <motion.button
+                onClick={downloadQRCode}
+                className="bg-white border border-[#a32054] text-black px-6 py-3 rounded-lg hover:bg-[#f5e1e8] transition-all w-full flex items-center justify-center gap-2"
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <FaDownload /> {/* Icono de descarga */}
+                Descargar QR
+              </motion.button>
+            )}
+
+            {showButton && (
+              <motion.button
+                onClick={handleShowQR}
+                className="bg-white border border-[#a32054] text-black px-6 py-3 rounded-lg hover:bg-[#f5e1e8] transition-all w-full"
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                Mostrar Datos
+              </motion.button>
+            )}
+
+            {showQR && (
+              <motion.div
+                ref={qrRef}
+                className="flex flex-col items-center space-y-4"
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <QRCodeCanvas
+                  id="qrCode"
+                  value={`BEGIN:VCARD\nVERSION:3.0\nFN:${formData.name}\nN:${formData.lastname}\nORG:${formData.org}\nTEL;TYPE=WORK,VOICE:${formData.phone}\nEMAIL;INTERNET;WORK:${formData.email}\nADR;TYPE=WORK:;;${formData.address}\nNOTE:${formData.note}\nEND:VCARD`}
+                  size={256}
+                  level="H"
+                  includeMargin={true}
+                  imageSettings={{
+                    src: "/logo.png", // Ruta del logo
+                    height: 50,
+                    width: 50,
+                    excavate: true,
+                  }}
+                />
+                <button
+                  onClick={generateVCard}
+                  className="bg-white border border-[#a32054] text-black px-6 py-3 rounded-lg hover:bg-[#f5e1e8] transition-all w-full flex items-center justify-center gap-2"
+                >
+                  <FaDownload /> {/* Icono de descarga */}
+                  Descargar VCF
+                </button>
+                <button
+                  onClick={handleReset}
+                  className="bg-white border border-[#a32054] text-black px-6 py-3 rounded-lg hover:bg-[#f5e1e8] transition-all w-full flex items-center justify-center gap-2"
+                >
+                  <FaTrash /> {/* Icono de bote de basura */}
+                  Limpiar Formulario
+                </button>
+              </motion.div>
+            )}
+          </motion.div>
         </div>
       </div>
     </section>
