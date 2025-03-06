@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
 import { QRCodeCanvas } from "qrcode.react";
-import { FaDownload, FaTrash } from "react-icons/fa6";
+import { FaDownload, FaTrash } from "react-icons/fa6"; // Importación de iconos
 
 import {
   FaCheck,
@@ -352,6 +352,54 @@ function Page() {
               />
             </div>
             <h1 className="text-2xl font-bold mb-6 text-center">VCF y QR</h1>
+
+            {/* Mostrar el QR arriba del formulario */}
+            {showQR && (
+              <motion.div
+                ref={qrRef}
+                className="flex flex-col  items-center space-y-4"
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <QRCodeCanvas
+                  id="qrCode"
+                  value={`BEGIN:VCARD\nVERSION:3.0\nFN:${formData.name}\nN:${formData.lastname}\nORG:${formData.org}\nTEL;TYPE=WORK,VOICE:${formData.phone}\nEMAIL;INTERNET;WORK:${formData.email}\nADR;TYPE=WORK:;;${formData.address}\nNOTE:${formData.note}\nEND:VCARD`}
+                  size={256}
+                  level="H"
+                  includeMargin={true}
+                  imageSettings={{
+                    src: "/logo.png", // Ruta del logo
+                    height: 50,
+                    width: 50,
+                    excavate: true,
+                  }}
+                />
+                <button
+                  onClick={downloadQRCode}
+                  className="bg-white border border-[#a32054] text-black px-6 py-3 rounded-lg hover:bg-[#f5e1e8] transition-all w-full flex items-center justify-center gap-2"
+                >
+                  <FaDownload /> {/* Icono de descarga */}
+                  Descargar QR
+                </button>
+                <button
+                  onClick={generateVCard}
+                  className="bg-white border border-[#a32054] text-black px-6 py-3 rounded-lg hover:bg-[#f5e1e8] transition-all w-full flex items-center justify-center gap-2"
+                >
+                  <FaDownload /> {/* Icono de descarga */}
+                  Descargar VCF
+                </button>
+                <button
+                  onClick={handleReset}
+                  className="bg-white border border-[#a32054] text-black px-6 py-3 rounded-lg hover:bg-[#f5e1e8] transition-all w-full flex items-center justify-center gap-2"
+                >
+                  <FaTrash /> {/* Icono de bote de basura */}
+                  Limpiar Formulario
+                </button>
+              </motion.div>
+            )}
+
+            {/* Formulario */}
             <motion.div
               className="space-y-4"
               initial={{ x: -50, opacity: 0 }}
@@ -431,19 +479,6 @@ function Page() {
               />
             </motion.div>
 
-            {showQR && (
-              <motion.button
-                onClick={downloadQRCode}
-                className="bg-white border border-[#a32054] text-black px-6 py-3 rounded-lg hover:bg-[#f5e1e8] transition-all w-full flex items-center justify-center gap-2"
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                <FaDownload /> {/* Icono de descarga */}
-                Descargar QR
-              </motion.button>
-            )}
-
             {showButton && (
               <motion.button
                 onClick={handleShowQR}
@@ -454,44 +489,6 @@ function Page() {
               >
                 Mostrar Datos
               </motion.button>
-            )}
-
-            {showQR && (
-              <motion.div
-                ref={qrRef}
-                className="flex flex-col items-center space-y-4"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-              >
-                <QRCodeCanvas
-                  id="qrCode"
-                  value={`BEGIN:VCARD\nVERSION:3.0\nFN:${formData.name}\nN:${formData.lastname}\nORG:${formData.org}\nTEL;TYPE=WORK,VOICE:${formData.phone}\nEMAIL;INTERNET;WORK:${formData.email}\nADR;TYPE=WORK:;;${formData.address}\nNOTE:${formData.note}\nEND:VCARD`}
-                  size={256}
-                  level="H"
-                  includeMargin={true}
-                  imageSettings={{
-                    src: "/logo.png", // Ruta del logo
-                    height: 50,
-                    width: 50,
-                    excavate: true,
-                  }}
-                />
-                <button
-                  onClick={generateVCard}
-                  className="bg-white border border-[#a32054] text-black px-6 py-3 rounded-lg hover:bg-[#f5e1e8] transition-all w-full flex items-center justify-center gap-2"
-                >
-                  <FaDownload /> {/* Icono de descarga */}
-                  Descargar VCF
-                </button>
-                <button
-                  onClick={handleReset}
-                  className="bg-white border border-[#a32054] text-black px-6 py-3 rounded-lg hover:bg-[#f5e1e8] transition-all w-full flex items-center justify-center gap-2"
-                >
-                  <FaTrash /> {/* Icono de bote de basura */}
-                  Limpiar Formulario
-                </button>
-              </motion.div>
             )}
           </motion.div>
         </div>
