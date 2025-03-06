@@ -29,10 +29,12 @@ import { TypeAnimation } from "react-type-animation";
 import { titillium, montse } from "../fonts";
 import api_URL from "../utils/api";
 import { FaBars } from "react-icons/fa";
+import { RiMenuFold4Fill, RiMenuFold3Fill } from "react-icons/ri";
 
 function Dashboard() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAsideOpen, setIsAsideOpen] = useState(false);
+
   const handleButtonClick = (index) => {
     setCurrentIndex(index * 3);
   };
@@ -41,6 +43,9 @@ function Dashboard() {
   const router = useRouter();
   const [projects, setProjects] = useState([]);
   const numberOfButtons = Math.ceil(projects.length / 3);
+  const colapseMenu = () => {
+    setIsAsideOpen(!isAsideOpen);
+  };
   const openAside = () => {
     setIsAsideOpen(!isAsideOpen);
   };
@@ -128,15 +133,29 @@ function Dashboard() {
   }
 
   return (
-    <section className="h-screen w-screen text-white bg-[#21233A] overflow-x-hidden">
+    <section className="h-screen w-screen text-white bg-[#21233A] overflow-x-hidden relative">
       <div className="flex bg-[#191c33]">
+        {isAsideOpen === false && (
+          <div
+            className="absolute left-0 text-2xl right-0 p-8  z-50 hidden md:block"
+            onClick={openAside}
+          >
+            <FaBars className="text-2xl hover:text-[#a32054] hover:cursor-pointer" />
+          </div>
+        )}
         <aside
-          className={`md:h-screen px-8 py-12 ${
-            isAsideOpen ? "w-screen" : "hidden"
-          } md:w-1/5 md:block `}
+          className={`fixed inset-y-0 left-0 bg-[#1a1a2e] text-white shadow-lg px-6 w-full md:w-96 z-40 py-8 transform transition-transform duration-300 ${
+            isAsideOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
         >
           <div className="flex flex-col items-center gap-4">
             <Avatar src={avatarURl} className="h-24 w-24" />
+            <button
+              className="absolute top-0 right-0 p-4 md:block hidden"
+              onClick={colapseMenu}
+            >
+              <FaX className="text-2xl hover:text-[#a32054] hover:cursor-pointer" />
+            </button>
           </div>
           <Divider className="my-4 bg-white" />
           <div className="relative py-8">
@@ -368,14 +387,14 @@ function Dashboard() {
           </div>
           {isAsideOpen === true ? (
             <div
-              className="absolute left-0 text-2xl right-0 p-8 md:hidden block"
+              className="absolute left-0 text-2xl right-0 z-50 p-8 md:hidden block"
               onClick={openAside}
             >
               <FaX />
             </div>
           ) : (
             <div
-              className="absolute left-0 text-2xl right-0 p-8 md:hidden block"
+              className="absolute left-0 text-2xl z-50 right-0 p-8 md:hidden block"
               onClick={openAside}
             >
               <FaBars />
