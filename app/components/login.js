@@ -63,27 +63,9 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 h-screen w-screen">
       <section
-        style={{
-          background: "url('/background.webp')",
-          backgroundSize: "cover",
-        }}
-        className="col-span-2 h-screen flex justify-center items-center text-white"
+        className="col-span-2 flex justify-center bg-center bg-cover text-white bg-[url(/hero.webp)] h-screen "
       >
-        <div className={`${inter.className} font-medium`}>
-          <div className="flex items-center gap-8">
-            <Image
-              width={877}
-              height={178}
-              src="/logo_background.webp"
-              alt="logo"
-            />
-          </div>
-          <div className="my-2">
-            <h2 className="text-4xl text-center">
-              Innovate - Elevate - Simplify
-            </h2>
-          </div>
-        </div>
+
       </section>
       <section className=" col-span-1 bg-white">
         <div className={`${league.className} font-bold`}>

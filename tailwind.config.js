@@ -1,8 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 
 import { nextui } from "@nextui-org/react";
+import tailwindcssAnimated from "tailwindcss-animated"; // Usa `import` en lugar de `require`
 
-module.exports = {
+const config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -19,5 +20,7 @@ module.exports = {
     },
   },
   darkMode: "class",
-  plugins: [nextui(), require("tailwindcss-animated")],
+  plugins: [nextui(), tailwindcssAnimated], // Usa el import en la lista de plugins
 };
+
+export default config;
