@@ -7,8 +7,16 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { inter, league, poppins } from "@/app/fonts";
 import api_URL from "../utils/api";
+import useTranslation from "./translation";
+
 function Login({ emailPlaceholder, passwordPlaceholder }) {
   const router = useRouter();
+  const [locale, setLocale] = useState('en'); // idioma por defecto
+  const translations = useTranslation(locale);
+  const year = new Date().getFullYear();
+  const handleChangeLanguage = (lang) => {
+    setLocale(lang);
+  };
   const [user, setUser] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const notify = (message) => toast.error(message);
@@ -70,8 +78,11 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
       <section className=" col-span-1 bg-white">
         <div className={`${league.className} font-bold`}>
           <div className="px-2 gap-4  h-screen flex justify-center items-center flex-col">
+{/* 
+      <button className="text-black" onClick={() => handleChangeLanguage('en')}>English</button>
+      <button className="text-black" onClick={() => handleChangeLanguage('es')}>Español</button> */}
             <h1 className={`${poppins.className} text-[#33244c] text-[30px]`}>
-              ¡Welcome!
+              ¡{translations.welcome}!
             </h1>
             <p className="text-[25px] text-black">Let´s Get Started.</p>
             <form
@@ -119,7 +130,7 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
             </form>
             <div className="fixed bottom-10 text-center hidden md:block text-[#969696]">
               <span className="text-sm">
-                © Ecommetrica 2024 All rights reserved
+                © Ecommetrica {year} All rights reserved
               </span>
             </div>
           </div>
