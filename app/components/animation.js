@@ -1,8 +1,14 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-scroll";
+import useTranslation from "./translation";
 
 function HeroAnimation() {
+  const [locale, setLocale] = useState('en'); // idioma por defecto
+  const translations = useTranslation(locale);
+  const handleChangeLanguage = (lang) => {
+    setLocale(lang);
+  };
   return (
     <div
       id="principal"
@@ -12,20 +18,23 @@ function HeroAnimation() {
       <div className="e_container">
         <div className="e_card">
           <h1 className="text-gray-400">
-            Ecommerce is:
+          {translations.animation_ecommerceIs}:
             {/* Scroller Start */}
             <div className="scroller">
               <span>
-                <span className="word logi">Logistics</span>
+                <span className="word logi">{translations.animation_logistics}                </span>
                 <br />
-                <span className="word tech">Technology</span>
+                <span className="word tech">{translations.animation_technology}
+                </span>
                 <br />
-                <span className="word mark">Marketing</span>
+                <span className="word mark">{translations.animation_marketing}
+                </span>
               </span>
             </div>
             <div className="note" />
             <div>
-              <p className="grow-text">GROW Products &amp; Services</p>
+              <p className="grow-text">{translations.animation_growText}
+              </p>
             </div>
           </h1>
         </div>
@@ -52,7 +61,7 @@ function HeroAnimation() {
           style={{ marginTop: "38rem" }}
         >
           <Link to="services" smooth={true} duration={1000} spy={true}>
-            Try 1st Session
+          {translations.animation_trySession}
           </Link>
         </button>
       </div>

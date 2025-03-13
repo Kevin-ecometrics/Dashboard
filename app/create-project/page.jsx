@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import axios from "axios";
+import useTranslation from "../components/translation";
 import {
   Select,
   Button,
@@ -26,7 +27,11 @@ export default function CreateProject() {
   const router = useRouter();
   const [users, setUsers] = useState([]);
   const [selected, setSelected] = useState(1);
-
+  const [locale, setLocale] = useState("en"); // idioma por defecto
+  const translations = useTranslation(locale);
+  const handleChangeLanguage = (lang) => {
+    setLocale(lang);
+  };
   const handleOptionChange = (option) => {
     setSelected(option);
   };
@@ -117,13 +122,20 @@ export default function CreateProject() {
       );
 
       if (response.status === 200) {
-        toast.success("Proyecto actualizado exitosamente", { duration: 3000 }); // Mostrar notificación de éxito
+        toast.success(
+          "{translations.createProject_projectUpdatedSuccessfully}",
+          { duration: 3000 }
+        ); // Mostrar notificación de éxito
       } else {
-        toast.success("Error al actualizar el proyecto", { duration: 3000 }); // Mostrar notificación de éxito
+        toast.success("{translations.createProject_errorUpdatingProject}", {
+          duration: 3000,
+        }); // Mostrar notificación de éxito
       }
     } catch (error) {
-      console.error("Error updating project:", error);
-      toast.success("Error al actualizar el proyecto", { duration: 3000 }); // Mostrar notificación de éxito
+      console.error("{translations.createProject_errorUpdatingContent}", error);
+      toast.success("{translations.createProject_errorUpdatingProject}", {
+        duration: 3000,
+      }); // Mostrar notificación de éxito
     }
   };
 
@@ -153,13 +165,20 @@ export default function CreateProject() {
       if (!response.ok) {
         throw new Error("Error al crear el proyecto");
       }
-      toast.success("Proyecto creado exitosamente", { duration: 3000 }); // Mostrar notificación de éxito
+      toast.success("{translations.createProject_projectCreatedSuccessfully}", {
+        duration: 3000,
+      }); // Mostrar notificación de éxito
       const data = await response.json();
-      console.log("Proyecto creado exitosamente:", data);
+      console.log(
+        "{translations.createProject_projectCreatedSuccessfully}:",
+        data
+      );
       setFormData(initialState); // Limpia los campos del formulario
     } catch (error) {
-      toast.error("Error al crear el Proyecto", { duration: 3000 }); // Mostrar notificación de error
-      console.error("Error:", error);
+      toast.error("{translations.createProject_errorCreatingProject}", {
+        duration: 3000,
+      }); // Mostrar notificación de error
+      console.error("{translations.createProject_errorLog}:", error);
     }
   };
 
@@ -170,7 +189,7 @@ export default function CreateProject() {
         setProjects(response.data);
         // console.log('Proyectos:', response.data)
       } catch (error) {
-        console.error("Error:", error);
+        console.error("{translations.createProject_errorLog}:", error);
       }
     };
 
@@ -242,10 +261,14 @@ export default function CreateProject() {
       );
 
       console.log("Respuesta:", response.data);
-      toast.success("Contenido creado exitosamente", { duration: 3000 }); // Mostrar notificación de éxito
+      toast.success("{translations.createProject_contentCreatedSuccessfully}", {
+        duration: 3000,
+      }); // Mostrar notificación de éxito
     } catch (error) {
-      console.error("Error:", error);
-      toast.error("Error al crear el contenido", { duration: 3000 }); // Mostrar notificación de error
+      console.error("{translations.createProject_errorLog}:", error);
+      toast.error("{translations.createProject_errorCreatingContent}", {
+        duration: 3000,
+      }); // Mostrar notificación de error
     }
   };
 
@@ -267,10 +290,14 @@ export default function CreateProject() {
           "Content-Type": "multipart/form-data",
         },
       });
-      toast.success("Contenido actualizado exitosamente", { duration: 3000 });
+      toast.success("{translations.createProject_contentUpdatedSuccessfully}", {
+        duration: 3000,
+      });
     } catch (error) {
-      console.error("Error:", error);
-      toast.error("Error al actualizar el contenido", { duration: 3000 });
+      console.error("{translations.createProject_errorLog}:", error);
+      toast.error("{translations.createProject_errorUpdatingContent}", {
+        duration: 3000,
+      });
     }
   };
 
@@ -287,7 +314,7 @@ export default function CreateProject() {
       console.log("Respuesta:", response.data);
       setData([]);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("{translations.createProject_errorLog}:", error);
     }
   };
 
@@ -313,7 +340,7 @@ export default function CreateProject() {
 
   async function deleteProject(id) {
     const confirmDelete = window.confirm(
-      "¿Estás seguro de que quieres eliminar este proyecto?"
+      "{translations.createProject_confirmDelete}"
     );
 
     if (confirmDelete) {
@@ -326,7 +353,7 @@ export default function CreateProject() {
 
         // Aquí puedes hacer algo después de que el proyecto se haya eliminado con éxito, como actualizar la lista de proyectos
       } catch (error) {
-        console.error("Error:", error);
+        console.error("{translations.createProject_errorLog}:", error);
       }
     }
   }
@@ -338,7 +365,9 @@ export default function CreateProject() {
           <div className="flex items-center justify-center text-4xl text-blue-400 border-8 border-gray-300 rounded-full w-28 h-28 animate-spin border-t-blue-400">
             <Image alt="loading" src="/logo.png" width={100} height={100} />
           </div>
-          <div className="mt-4 text-2xl text-white">Loading...</div>
+          <div className="mt-4 text-2xl text-white">
+            {translations.project_loading}
+          </div>
         </div>
       </div>
     );
@@ -359,29 +388,29 @@ export default function CreateProject() {
             className="mb-2 cursor-pointer text-white hover:bg-gray-100 hover:text-black px-4 py-2 rounded-xl"
             onClick={() => handleOptionChange(1)}
           >
-            Create Project
+            {translations.createProject_createProject}
           </li>
           <li
             className="mb-2 cursor-pointer text-white hover:bg-gray-100 hover:text-black px-4 py-2 rounded-xl"
             onClick={() => handleOptionChange(2)}
           >
-            Create Content
+            {translations.createProject_createContent}
           </li>
           <li
             className="mb-2 cursor-pointer text-white hover:bg-gray-100 hover:text-black px-4 py-2 rounded-xl"
             onClick={() => handleOptionChange(3)}
           >
-            Update Project
+            {translations.createProject_updateProject}
           </li>
           <li
             className="mb-2 cursor-pointer text-white hover:bg-gray-100 hover:text-black px-4 py-2 rounded-xl"
             onClick={() => handleOptionChange(4)}
           >
-            Update Content
+            {translations.createProject_updateContent}
           </li>
           <Link href="/dashboard">
             <li className="cursor-pointer text-white hover:bg-gray-100 hover:text-black px-4 py-2 rounded-xl">
-              Return to Dashboard
+              {translations.createProject_returnToDashboard}
             </li>
           </Link>
         </ul>
@@ -389,7 +418,9 @@ export default function CreateProject() {
       <div className="flex flex-col px-12 h-[1200px] bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900 text-white flex-grow">
         {selected === 1 && (
           <div className="w-[700px] mx-auto py-8">
-            <h1 className="py-4 text-2xl">Create Card Project</h1>
+            <h1 className="py-4 text-2xl">
+              {translations.createProject_createCardProject}
+            </h1>
             <form
               onSubmit={handleSubmit}
               className="flex flex-col w-full gap-4 md:flex-nowrap"
@@ -398,7 +429,7 @@ export default function CreateProject() {
                 <Input
                   className="text-black"
                   type="text"
-                  label="Title"
+                  label={translations.createProject_title} // Aquí se corrige
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
@@ -406,7 +437,7 @@ export default function CreateProject() {
                 <Input
                   className="text-black"
                   type="text"
-                  label="Content"
+                  label={translations.createProject_content}
                   name="content"
                   value={formData.content}
                   onChange={handleChange}
@@ -414,7 +445,7 @@ export default function CreateProject() {
                 <Input
                   className="text-black"
                   type="text"
-                  label="Project Name"
+                  label={translations.createProject_projectName}
                   name="project_name"
                   value={formData.project_name}
                   onChange={handleChange}
@@ -422,7 +453,7 @@ export default function CreateProject() {
               </div>
               <div className="flex flex-row justify-between gap-4">
                 <Select
-                  label="Select User"
+                  label={translations.createProject_selectUser}
                   className="max-w-md text-black"
                   value={formData.id_user}
                   onChange={(e) =>
@@ -440,7 +471,7 @@ export default function CreateProject() {
                   ))}
                 </Select>
                 <Select
-                  label="Select Percentage"
+                  label={translations.createProject_selectPercentage}
                   className="max-w-md text-black"
                   value={formData.percentage}
                   onChange={(e) =>
@@ -463,7 +494,7 @@ export default function CreateProject() {
                 className="px-12 hover:bg-blue-800"
                 type="submit"
               >
-                Create Project
+                {translations.createProject_createProject}
               </Button>
             </form>
             {/* <Toaster position="bottom-right" reverseOrder={false} /> */}
@@ -471,7 +502,9 @@ export default function CreateProject() {
         )}
         {selected === 2 && (
           <div className="w-[700px] mx-auto py-8">
-            <h1 className="py-4 text-2xl">Create Content</h1>
+            <h1 className="py-4 text-2xl">
+              {translations.createProject_createContent}
+            </h1>
             <form
               onSubmit={handleFormSubmit}
               encType="multipart/form-data"
@@ -481,7 +514,7 @@ export default function CreateProject() {
                 <Input
                   className="text-black"
                   type="text"
-                  label="Title"
+                  label={translations.createProject_title}
                   name="content_1"
                   value={formValues.content_1}
                   onChange={handleFormChange}
@@ -489,7 +522,7 @@ export default function CreateProject() {
                 <Input
                   className="text-black"
                   type="text"
-                  label="Descripcion"
+                  label={translations.createProject_description}
                   name="content_2"
                   value={formValues.content_2}
                   onChange={handleFormChange}
@@ -497,7 +530,7 @@ export default function CreateProject() {
                 <Input
                   className="text-black"
                   type="text"
-                  label="Content"
+                  label={translations.createProject_content}
                   name="content_3"
                   value={formValues.content_3}
                   onChange={handleFormChange}
@@ -505,7 +538,7 @@ export default function CreateProject() {
                 <Input
                   className="text-black"
                   type="text"
-                  label="Link Name"
+                  label={translations.createProject_linkName}
                   name="link"
                   value={formValues.link}
                   onChange={handleFormChange}
@@ -513,7 +546,7 @@ export default function CreateProject() {
                 <Input
                   className="text-black"
                   type="text"
-                  label="Href"
+                  label={translations.createProject_href}
                   name="href"
                   value={formValues.href}
                   onChange={handleFormChange}
@@ -526,7 +559,7 @@ export default function CreateProject() {
               </div>
               <div className="flex flex-row justify-between gap-4">
                 <Select
-                  label="Select Client"
+                  label={translations.createProject_selectClient}
                   className="max-w-md text-black"
                   value={formValues.id_user}
                   onChange={(e) =>
@@ -544,7 +577,7 @@ export default function CreateProject() {
                   ))}
                 </Select>
                 <Select
-                  label="Select Project"
+                  label={translations.createProject_selectProject}
                   className="max-w-md text-black"
                   value={formValues.project_id}
                   onChange={(e) =>
@@ -566,7 +599,7 @@ export default function CreateProject() {
                     ))}
                 </Select>
                 <Select
-                  label="Select Phase"
+                  label={translations.createProject_selectPhase}
                   className="max-w-md text-black"
                   value={formValues.table}
                   onChange={(e) =>
@@ -578,35 +611,35 @@ export default function CreateProject() {
                     key="business_and_client_objectives"
                     value="business_and_client_objectives"
                   >
-                    Name of BUSINESS and Client objectives
+                    {translations.project_nameOfBusinessAndClientObjectives}
                   </SelectItem>
                   <SelectItem
                     className="text-black"
                     key="onboarding_package"
                     value="onboarding_package"
                   >
-                    Onboarding Package
+                    {translations.project_onboardingPackage}
                   </SelectItem>
                   <SelectItem
                     className="text-black"
                     key="mvp_and_idea"
                     value="mvp_and_idea"
                   >
-                    MVP + IDEA
+                    {translations.project_mvpAndIdea}
                   </SelectItem>
                   <SelectItem
                     className="text-black"
                     key="strategy"
                     value="strategy"
                   >
-                    Strategy
+                    {translations.project_strategy}
                   </SelectItem>
                   <SelectItem
                     className="text-black"
                     key="growth_hacking"
                     value="growth_hacking"
                   >
-                    Growth Hacking
+                    {translations.project_growthHacking}
                   </SelectItem>
                 </Select>
               </div>
@@ -615,23 +648,33 @@ export default function CreateProject() {
                 className="px-12 hover:bg-blue-800"
                 type="submit"
               >
-                Create Content
+                {translations.createProject_createContent}
               </Button>
             </form>
           </div>
         )}
         {selected === 3 && (
           <div>
-            <h1 className="p-8 text-2xl text-center">Update Client Projects</h1>
+            <h1 className="p-8 text-2xl text-center">
+              {translations.createProject_updateClientProjects}
+            </h1>
             <Table
               className="text-black"
               aria-label="Example static collection table"
             >
               <TableHeader>
-                <TableColumn className="text-black">ID</TableColumn>
-                <TableColumn className="text-black">Title</TableColumn>
-                <TableColumn className="text-black">Action</TableColumn>
-                <TableColumn className="text-black">Delete</TableColumn>
+                <TableColumn className="text-black">
+                  {translations.createProject_id}
+                </TableColumn>
+                <TableColumn className="text-black">
+                  {translations.createProject_title}
+                </TableColumn>
+                <TableColumn className="text-black">
+                  {translations.createProject_action}
+                </TableColumn>
+                <TableColumn className="text-black">
+                  {translations.createProject_delte}
+                </TableColumn>
               </TableHeader>
               <TableBody>
                 {displayedProjects1.map((project) => (
@@ -689,7 +732,9 @@ export default function CreateProject() {
                       value={selectedProject.id}
                       readOnly
                     /> */}
-                      <label htmlFor="id_user">UserName:</label>
+                      <label htmlFor="id_user">
+                        {translations.panel_userName}:
+                      </label>
                       <select
                         className="p-4 text-black rounded-2xl"
                         id="id_user"
@@ -707,7 +752,9 @@ export default function CreateProject() {
                           </option>
                         ))}
                       </select>
-                      <label htmlFor="title">Title:</label>
+                      <label htmlFor="title">
+                        {translations.createProject_title}:
+                      </label>
                       <input
                         className="p-4 text-black rounded-2xl"
                         id="title"
@@ -720,7 +767,9 @@ export default function CreateProject() {
                           })
                         }
                       />
-                      <label htmlFor="project_name">Project Name:</label>
+                      <label htmlFor="project_name">
+                        {translations.createProject_projectName}:
+                      </label>
                       <input
                         className="p-4 text-black rounded-2xl"
                         id="project_name"
@@ -733,7 +782,9 @@ export default function CreateProject() {
                           })
                         }
                       />
-                      <label htmlFor="percentage">Percentage:</label>
+                      <label htmlFor="percentage">
+                        {translations.createProject_Percentage}:
+                      </label>
                       <input
                         className="p-4 text-black rounded-2xl"
                         id="percentage"
@@ -749,7 +800,9 @@ export default function CreateProject() {
                     </div>
 
                     <div className="flex flex-col items-center justify-center py-4 ">
-                      <label htmlFor="content">Content:</label>
+                      <label htmlFor="content">
+                        {translations.createProject_content}:
+                      </label>
                       <textarea
                         className="px-4 text-black rounded-2xl"
                         id="content"
@@ -771,7 +824,7 @@ export default function CreateProject() {
                       type="submit"
                       className="text-white bg-blue-500 hover:bg-blue-700"
                     >
-                      Update Project
+                      {translations.createProject_updateProject}
                     </Button>
                   </div>
                 </form>
@@ -782,27 +835,34 @@ export default function CreateProject() {
         {selected === 4 && (
           <div>
             {" "}
-            <h1 className="p-8 text-2xl text-center">Update Card Content</h1>
+            <h1 className="p-8 text-2xl text-center">
+              {translations.createProject_updateCardContent}
+            </h1>
             <Table
               className="text-black"
               aria-label="Example static collection table"
             >
               <TableHeader>
-                <TableColumn className="text-black">ID</TableColumn>
-                <TableColumn className="text-black">Title</TableColumn>
                 <TableColumn className="text-black">
-                  {" "}
-                  Business and Client Objectives
+                  {translations.createProject_id}
                 </TableColumn>
                 <TableColumn className="text-black">
-                  {" "}
-                  Onboarding Package
+                  {translations.createProject_title}
                 </TableColumn>
-                <TableColumn className="text-black"> MVP and Idea</TableColumn>
-                <TableColumn className="text-black"> Strategy</TableColumn>
                 <TableColumn className="text-black">
-                  {" "}
-                  Growth Hacking
+                  {translations.createProject_businessAndClientObjectives}
+                </TableColumn>
+                <TableColumn className="text-black">
+                  {translations.createProject_onboardingPackage}
+                </TableColumn>
+                <TableColumn className="text-black">
+                  {translations.createProject_mvpAndIdea}
+                </TableColumn>
+                <TableColumn className="text-black">
+                  {translations.createProject_strateg}
+                </TableColumn>
+                <TableColumn className="text-black">
+                  {translations.createProject_growthHacking}
                 </TableColumn>
               </TableHeader>
               <TableBody>
@@ -821,7 +881,7 @@ export default function CreateProject() {
                           })
                         }
                       >
-                        Business
+                        {translations.createProject_business}
                       </Button>
                     </TableCell>
                     <TableCell>
@@ -835,7 +895,7 @@ export default function CreateProject() {
                           })
                         }
                       >
-                        Onboarding
+                        {translations.createProject_onboarding}
                       </Button>
                     </TableCell>
                     <TableCell>
@@ -849,7 +909,7 @@ export default function CreateProject() {
                           })
                         }
                       >
-                        MVP
+                        {translations.createProject_mvp}
                       </Button>
                     </TableCell>
                     <TableCell>
@@ -863,7 +923,7 @@ export default function CreateProject() {
                           })
                         }
                       >
-                        Strategy
+                        {translations.createProject_strategy}
                       </Button>
                     </TableCell>
                     <TableCell>
@@ -877,7 +937,7 @@ export default function CreateProject() {
                           })
                         }
                       >
-                        Growth Hacking
+                        {translations.createProject_growthHacking}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -906,7 +966,7 @@ export default function CreateProject() {
                     <form key={index} onSubmit={handleSaveChanges}>
                       <div className="grid grid-cols-3 gap-4 py-8">
                         <Input
-                          label="Title"
+                          label={translations.createProject_title}
                           type="text"
                           className="text-black rounded-2xl"
                           value={content.content_1 || ""}
@@ -922,7 +982,7 @@ export default function CreateProject() {
                           }}
                         />
                         <Input
-                          label="Descripcion"
+                          label={translations.createProject_description}
                           type="text"
                           className="text-black rounded-2xl"
                           value={content.content_2 || ""}
@@ -938,7 +998,7 @@ export default function CreateProject() {
                           }}
                         />
                         <Input
-                          label="Content"
+                          label={translations.createProject_content}
                           type="text"
                           className="text-black rounded-2xl"
                           value={content.content_3 || ""}
@@ -954,7 +1014,7 @@ export default function CreateProject() {
                           }}
                         />
                         <Input
-                          label="Link"
+                          label={translations.createProject_href}
                           type="text"
                           className="text-black rounded-2xl"
                           value={content.href || ""}
@@ -970,7 +1030,7 @@ export default function CreateProject() {
                           }}
                         />
                         <Input
-                          label="Link Name"
+                          label={translations.createProject_linkName}
                           type="text"
                           className="text-black rounded-2xl"
                           value={content.link || ""}
@@ -1016,13 +1076,13 @@ export default function CreateProject() {
                           className="p-4 text-white bg-blue-500 rounded-2xl hover:bg-blue-700"
                           type="submit"
                         >
-                          Update content
+                          {translations.createProject_updateContent}
                         </button>
                         <button
                           className="p-4 text-white bg-red-500 rounded-2xl hover:bg-red-700"
                           onClick={handleDeleteClick}
                         >
-                          Delete content
+                          {translations.createProject_deleteContent}
                         </button>
                       </div>
                     </form>

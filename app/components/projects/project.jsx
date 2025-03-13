@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import { Button, Link, Avatar, Divider } from "@nextui-org/react";
 import { FaPowerOff, FaBars, FaWhatsapp, FaCalendar } from "react-icons/fa6";
 import Image from "next/image";
-import api_URL from "@/app/utils/api";
+import api_URL from "../../utils/api";
+import useTranslation from "../translation";
 
 function Dashboard() {
   let avatarURl;
@@ -61,13 +62,19 @@ function Dashboard() {
             res5.data
           );
         } catch (error) {
-          console.error("Error al obtener la información del proyecto:", error);
+          console.error("{translations.error_getProjectInfo}", error);
         }
       }
     };
 
     fetchProjectInformation();
   }, []);
+
+  const [locale, setLocale] = useState("en"); // idioma por defecto
+  const translations = useTranslation(locale);
+  const handleChangeLanguage = (lang) => {
+    setLocale(lang);
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -127,7 +134,9 @@ function Dashboard() {
           <div className="flex items-center justify-center text-4xl text-blue-400 border-8 border-gray-300 rounded-full w-28 h-28 animate-spin border-t-blue-400">
             <Image alt="loading" src="/logo.png" width={100} height={100} />
           </div>
-          <div className="mt-4 text-2xl text-white">Loading...</div>
+          <div className="mt-4 text-2xl text-white">
+            {translations.project_loading}
+          </div>
         </div>
       </div>
     );
@@ -166,7 +175,7 @@ function Dashboard() {
                   onClick={() => setSelectedItemDashbord(0)}
                 >
                   <FaBars />
-                  <span>ALL CONTENT</span>
+                  <span>{translations.project_allContent}</span>
                 </span>
                 <span
                   className={`flex items-center cursor-pointer  gap-4 ${
@@ -174,7 +183,10 @@ function Dashboard() {
                   }`}
                   onClick={() => setSelectedItemDashbord(1)}
                 >
-                  <FaBars /> <span>Name of BUSINESS and Client objectives</span>
+                  <FaBars />{" "}
+                  <span>
+                    {translations.project_nameOfBusinessAndClientObjectives}
+                  </span>
                 </span>
                 <span
                   className={`flex items-center cursor-pointer  gap-4 ${
@@ -183,7 +195,7 @@ function Dashboard() {
                   onClick={() => setSelectedItemDashbord(2)}
                 >
                   <FaBars />
-                  <span> Onboarding Package</span>
+                  <span>{translations.project_onboardingPackage}</span>
                 </span>
                 <span
                   className={`flex items-center cursor-pointer  gap-4 ${
@@ -192,7 +204,7 @@ function Dashboard() {
                   onClick={() => setSelectedItemDashbord(3)}
                 >
                   <FaBars />
-                  <span> MVP + IDEA</span>
+                  <span>{translations.project_mvpAndIdea}</span>
                 </span>
                 <span
                   className={`flex items-center cursor-pointer  gap-4 ${
@@ -201,7 +213,7 @@ function Dashboard() {
                   onClick={() => setSelectedItemDashbord(4)}
                 >
                   <FaBars />
-                  <span>Strategy</span>
+                  <span>{translations.project_strategy}</span>
                 </span>
                 <span
                   className={`flex items-center cursor-pointer  gap-4 ${
@@ -210,7 +222,7 @@ function Dashboard() {
                   onClick={() => setSelectedItemDashbord(5)}
                 >
                   <FaBars />
-                  <span>Growth Hacking</span>
+                  <span>{translations.project_growthHacking}</span>
                 </span>
                 {user &&
                   (user.email === "juanmanuel@e-commetrics.com" ||
@@ -228,7 +240,9 @@ function Dashboard() {
                       <Link href={`/dashboard/system`}>
                         <div className="flex gap-4 items-center">
                           <FaCalendar className="text-white" />
-                          <span className="text-white text-xl">Calendar</span>
+                          <span className="text-white text-xl">
+                            {translations.project_calendar}
+                          </span>
                         </div>
                       </Link>
                     </span>
@@ -248,7 +262,7 @@ function Dashboard() {
                         <div className="flex gap-4 items-center">
                           <FaCalendar className="text-white" />
                           <span className="text-white text-xl">
-                            Blogs System
+                            {translations.project_blogsSystem}
                           </span>
                         </div>
                       </Link>
@@ -260,7 +274,7 @@ function Dashboard() {
           <div className="flex justify-center gap-4">
             <Link href="/dashboard" className="text-white">
               <Button className="text-white bg-blue-500 text-center hover:bg-blue-700 uppercase">
-                Dashboard
+                {translations.project_dashboard}
               </Button>
             </Link>
             <Button
@@ -268,7 +282,7 @@ function Dashboard() {
               onClick={logout}
             >
               <FaPowerOff className="mr-2" />
-              LOG OUT
+              {translations.project_logOut}
             </Button>
           </div>
         </aside>
@@ -288,17 +302,17 @@ function Dashboard() {
               }
             >
               {selectedItemDashbord === 0
-                ? "All content"
+                ? translations.project_allContent
                 : selectedItemDashbord === 1
-                ? "Name of BUSINESS and Client objectives"
+                ? translations.project_nameOfBusinessAndClientObjectives
                 : selectedItemDashbord === 2
-                ? "Onboarding Package"
+                ? translations.project_onboardingPackage
                 : selectedItemDashbord === 3
-                ? "MVP + IDEA"
+                ? translations.project_mvpAndIdea
                 : selectedItemDashbord === 4
-                ? "Strategy"
+                ? translations.project_strategy
                 : selectedItemDashbord === 5
-                ? "Growth Hacking"
+                ? translations.project_growthHacking
                 : ""}
             </h1>{" "}
             {selectedItemDashbord === 0 ? (
@@ -961,7 +975,7 @@ function Dashboard() {
               </div>
             ) : timeout ? (
               <div className="flex items-center justify-center h-screen text-2xl">
-                No hay información por mostrar.
+                {translations.project_noInformationToShow}
               </div>
             ) : (
               <div className="flex items-center justify-center h-screen">
@@ -974,7 +988,9 @@ function Dashboard() {
                       alt="logo"
                     />
                   </div>
-                  <div className="mt-4 text-2xl text-white">Loading...</div>{" "}
+                  <div className="mt-4 text-2xl text-white">
+                    {translations.project_loading}
+                  </div>{" "}
                 </div>{" "}
               </div>
             )}
@@ -983,7 +999,7 @@ function Dashboard() {
                 className="block text-white bg-blue-500 sm:hidden hover:bg-blue-700 w-80"
                 onClick={logout}
               >
-                LOG OUT
+                {translations.project_logOut}
               </Button>
             </div>
           </div>
@@ -996,7 +1012,7 @@ function Dashboard() {
       </div>
       <footer>
         <div className="flex items-center justify-center py-4 text-white border-t bg-[#21233A]">
-          © 2023 All rights reserved
+          {translations.project_allRightsReserved}
         </div>
       </footer>
     </section>

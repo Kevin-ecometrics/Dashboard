@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
+import useTranslation from "../components/translation";
 import {
   FaCheck,
   FaXmark,
@@ -38,7 +38,11 @@ function Dashboard() {
   const handleButtonClick = (index) => {
     setCurrentIndex(index * 3);
   };
-
+  const [locale, setLocale] = useState("en"); // idioma por defecto
+  const translations = useTranslation(locale);
+  const handleChangeLanguage = (lang) => {
+    setLocale(lang);
+  };
   const [user, setUser] = useState(null);
   const router = useRouter();
   const [projects, setProjects] = useState([]);
@@ -80,7 +84,7 @@ function Dashboard() {
   const logout = async () => {
     try {
       await axios.post(
-        `${api_URL}/logout`,
+        `${api_URL}/{translations.dashboard_logout}`,
 
         {},
         { withCredentials: true }
@@ -111,7 +115,9 @@ function Dashboard() {
           <div className="flex items-center justify-center text-4xl text-blue-400 border-8 border-gray-300 rounded-full w-28 h-28 animate-spin border-t-blue-400">
             <Image alt="loading" src="/logo.png" width={100} height={100} />
           </div>
-          <div className="mt-4 text-2xl text-white">Loading...</div>
+          <div className="mt-4 text-2xl text-white">
+            {translations.dashboard_loading}
+          </div>
         </div>
       </div>
     );
@@ -150,6 +156,7 @@ function Dashboard() {
         >
           <div className="flex flex-col items-center gap-4">
             <Avatar src={avatarURl} className="h-24 w-24" />
+
             <button
               className="absolute top-0 right-0 p-4 md:block hidden"
               onClick={colapseMenu}
@@ -164,7 +171,11 @@ function Dashboard() {
                 key="1"
                 aria-label="Projects"
                 indicator={({ isOpen }) => (isOpen ? <FaXmark /> : <FaCheck />)}
-                title={<span style={{ color: "white" }}>Projects</span>}
+                title={
+                  <span style={{ color: "white" }}>
+                    {translations.dashboard_projects}
+                  </span>
+                }
               >
                 <ul>
                   {projects.map((project) => (
@@ -195,7 +206,7 @@ function Dashboard() {
                   }
                   title={
                     <span style={{ color: "white" }}>
-                      Update Client Project
+                      {translations.dashboard_updateClientProject}
                     </span>
                   }
                 >
@@ -208,7 +219,7 @@ function Dashboard() {
                         <div className="flex items-center gap-x-2">
                           <FaPlus />
                           <span className="text-white uppercase hover:underline">
-                            UPDATE CLIENT PROJECT
+                            {translations.dashboard_updateClientProjectAction}
                           </span>
                         </div>
                       </li>
@@ -221,7 +232,11 @@ function Dashboard() {
                   indicator={({ isOpen }) =>
                     isOpen ? <FaXmark /> : <FaCheck />
                   }
-                  title={<span style={{ color: "white" }}>Create Client</span>}
+                  title={
+                    <span style={{ color: "white" }}>
+                      {translations.dashboard_createClient}
+                    </span>
+                  }
                 >
                   <Link
                     href="/panel-control"
@@ -232,7 +247,7 @@ function Dashboard() {
                         <div className="flex items-center gap-x-2">
                           <FaUsers />
                           <span className="text-white uppercase hover:underline">
-                            CREATE CLIENT
+                            {translations.dashboard_createClientAction}
                           </span>
                         </div>
                       </li>
@@ -245,7 +260,11 @@ function Dashboard() {
                   indicator={({ isOpen }) =>
                     isOpen ? <FaXmark /> : <FaCheck />
                   }
-                  title={<span style={{ color: "white" }}>VCard</span>}
+                  title={
+                    <span style={{ color: "white" }}>
+                      {translations.dashboard_generateVCard}
+                    </span>
+                  }
                 >
                   <Link
                     href="/vcard"
@@ -256,7 +275,7 @@ function Dashboard() {
                         <div className="flex items-center gap-x-2">
                           <FaUsers />
                           <span className="text-white uppercase hover:underline">
-                            Generar VCard
+                            {translations.dashboard_generateVCardAction}
                           </span>
                         </div>
                       </li>
@@ -272,8 +291,20 @@ function Dashboard() {
               onClick={logout}
             >
               <FaPowerOff />
-              LOG OUT
+              {translations.dashboard_logout}
             </Button>
+            {/* <button
+              className="text-black"
+              onClick={() => handleChangeLanguage("en")}
+            >
+              English
+            </button>
+            <button
+              className="text-black"
+              onClick={() => handleChangeLanguage("es")}
+            >
+              Español
+            </button> */}
           </div>
         </aside>
         <div className="flex flex-col w-screen bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900">
@@ -281,9 +312,9 @@ function Dashboard() {
             <TypeAnimation
               sequence={[
                 // Same substring at the start will only be typed out once, initially
-                "Welcome to your dashboard",
+                translations.dashboard_welcome,
                 1000, // wait 1s before replacing "Mice" with "Hamsters"
-                "Ecommetrica",
+                translations.dashboard_ecommetrica,
                 1000,
               ]}
               wrapper="span"
@@ -346,7 +377,7 @@ function Dashboard() {
                           className="text-white"
                           href={`/dashboard/${project.project_name}`}
                         >
-                          Go to proyect
+                          {translations.dashboard_goToProject}
                         </Link>
                       </Button>
                     )}
@@ -377,7 +408,7 @@ function Dashboard() {
               className="block text-white bg-[#a32054] sm:hidden hover:bg-[#395788] w-80"
               onClick={logout}
             >
-              LOG OUT
+              {translations.dashboard_logout}
             </Button>
           </div>
           <div className="absolute top-0 right-0 p-8">

@@ -5,7 +5,7 @@ import axios from "axios";
 import Image from "next/image";
 import { QRCodeCanvas } from "qrcode.react";
 import { FaDownload, FaTrash } from "react-icons/fa6"; // Importación de iconos
-
+import useTranslation from "../components/translation";
 import {
   FaCheck,
   FaXmark,
@@ -42,7 +42,11 @@ function Page() {
   const qrRef = useRef(null);
   const [projects, setProjects] = useState([]);
   const numberOfButtons = Math.ceil(projects.length / 3);
-
+  const [locale, setLocale] = useState("en"); // idioma por defecto
+  const translations = useTranslation(locale);
+  const handleChangeLanguage = (lang) => {
+    setLocale(lang);
+  };
   let avatarURl;
 
   useEffect(() => {
@@ -98,11 +102,11 @@ function Page() {
   const validateForm = () => {
     const { name, lastname, email, phone, org, address, note } = formData;
     if (!name || !lastname || !email || !phone || !org || !address || !note) {
-      alert("Todos los campos son obligatorios.");
+      alert("{translations.vcard_requiredFields}");
       return false;
     }
     if (phone.length !== 10) {
-      alert("El número de teléfono debe tener exactamente 10 caracteres.");
+      alert("{translations.vcard_phoneLengthError}");
       return false;
     }
     return true;
@@ -132,8 +136,8 @@ function Page() {
       setShowQR(true);
       setShowButton(false);
     } catch (error) {
-      console.error("Error al guardar los datos:", error);
-      alert("Hubo un error al guardar los datos.");
+      console.error("{translations.error_savingData}", error);
+      alert("{translations.alert_errorSavingData}");
     }
   };
 
@@ -185,7 +189,9 @@ function Page() {
           <div className="flex items-center justify-center text-4xl text-blue-400 border-8 border-gray-300 rounded-full w-28 h-28 animate-spin border-t-blue-400">
             <Image alt="loading" src="/logo.png" width={100} height={100} />
           </div>
-          <div className="mt-4 text-2xl text-white">Loading...</div>
+          <div className="mt-4 text-2xl text-white">
+            {translations.dashboard_loading}
+          </div>
         </div>
       </div>
     );
@@ -221,7 +227,11 @@ function Page() {
                 key="1"
                 aria-label="Projects"
                 indicator={({ isOpen }) => (isOpen ? <FaXmark /> : <FaCheck />)}
-                title={<span style={{ color: "white" }}>Projects</span>}
+                title={
+                  <span style={{ color: "white" }}>
+                    {translations.dashboard_projects}
+                  </span>
+                }
               >
                 <ul>
                   {projects.map((project) => (
@@ -252,7 +262,7 @@ function Page() {
                   }
                   title={
                     <span style={{ color: "white" }}>
-                      Update Client Project
+                      {translations.dashboard_updateClientProject}
                     </span>
                   }
                 >
@@ -265,7 +275,7 @@ function Page() {
                         <div className="flex items-center gap-x-2">
                           <FaPlus />
                           <span className="text-white uppercase hover:underline">
-                            UPDATE CLIENT PROJECT
+                            {translations.dashboard_updateClientProject}
                           </span>
                         </div>
                       </li>
@@ -278,7 +288,11 @@ function Page() {
                   indicator={({ isOpen }) =>
                     isOpen ? <FaXmark /> : <FaCheck />
                   }
-                  title={<span style={{ color: "white" }}>Create Client</span>}
+                  title={
+                    <span style={{ color: "white" }}>
+                      {translations.dashboard_createClient}
+                    </span>
+                  }
                 >
                   <Link
                     href="/panel-control"
@@ -289,7 +303,7 @@ function Page() {
                         <div className="flex items-center gap-x-2">
                           <FaUsers />
                           <span className="text-white uppercase hover:underline">
-                            CREATE CLIENT
+                            {translations.dashboard_createClient}
                           </span>
                         </div>
                       </li>
@@ -313,7 +327,7 @@ function Page() {
                         <div className="flex items-center gap-x-2">
                           <FaUsers />
                           <span className="text-white uppercase hover:underline">
-                            Generar VCard
+                            {translations.dashboard_generateVCard}
                           </span>
                         </div>
                       </li>
@@ -330,8 +344,20 @@ function Page() {
               onClick={logout}
             >
               <FaPowerOff />
-              LOG OUT
+              {translations.dashboard_logout}
             </Button>
+            <button
+              className="text-black"
+              onClick={() => handleChangeLanguage("en")}
+            >
+              English
+            </button>
+            <button
+              className="text-black"
+              onClick={() => handleChangeLanguage("es")}
+            >
+              Español
+            </button>
           </div>
         </aside>
 
@@ -351,7 +377,9 @@ function Page() {
                 className="rounded-full"
               />
             </div>
-            <h1 className="text-2xl font-bold mb-6 text-center">VCF y QR</h1>
+            <h1 className="text-2xl font-bold mb-6 text-center">
+              {translations.vcard_title}
+            </h1>
 
             {/* Mostrar el QR arriba del formulario */}
             {showQR && (
@@ -379,22 +407,22 @@ function Page() {
                   onClick={downloadQRCode}
                   className="bg-white border border-[#a32054] text-black px-6 py-3 rounded-lg hover:bg-[#f5e1e8] transition-all w-full flex items-center justify-center gap-2"
                 >
-                  <FaDownload /> {/* Icono de descarga */}
-                  Descargar QR
+                  <FaDownload />
+                  {translations.vcard_downloadQR}
                 </button>
                 <button
                   onClick={generateVCard}
                   className="bg-white border border-[#a32054] text-black px-6 py-3 rounded-lg hover:bg-[#f5e1e8] transition-all w-full flex items-center justify-center gap-2"
                 >
-                  <FaDownload /> {/* Icono de descarga */}
-                  Descargar VCF
+                  <FaDownload />
+                  {translations.vcard_downloadVCF}
                 </button>
                 <button
                   onClick={handleReset}
                   className="bg-white border border-[#a32054] text-black px-6 py-3 rounded-lg hover:bg-[#f5e1e8] transition-all w-full flex items-center justify-center gap-2"
                 >
-                  <FaTrash /> {/* Icono de bote de basura */}
-                  Limpiar Formulario
+                  <FaTrash />
+                  {translations.vcard_resetForm}
                 </button>
               </motion.div>
             )}
@@ -409,7 +437,7 @@ function Page() {
               <input
                 type="text"
                 name="name"
-                placeholder="Nombre"
+                placeholder={translations.vcard_name}
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -419,7 +447,7 @@ function Page() {
               <input
                 type="text"
                 name="lastname"
-                placeholder="Apellido"
+                placeholder={translations.vcard_lastname}
                 value={formData.lastname}
                 onChange={(e) =>
                   setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -429,7 +457,7 @@ function Page() {
               <input
                 type="email"
                 name="email"
-                placeholder="Correo Electrónico"
+                placeholder={translations.vcard_email}
                 value={formData.email}
                 onChange={(e) =>
                   setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -439,7 +467,7 @@ function Page() {
               <input
                 type="tel"
                 name="phone"
-                placeholder="Teléfono"
+                placeholder={translations.vcard_phone}
                 value={formData.phone}
                 onChange={(e) =>
                   setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -450,7 +478,7 @@ function Page() {
               <input
                 type="text"
                 name="org"
-                placeholder="Empresa"
+                placeholder={translations.vcard_org}
                 value={formData.org}
                 onChange={(e) =>
                   setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -460,7 +488,7 @@ function Page() {
               <input
                 type="text"
                 name="address"
-                placeholder="Dirección"
+                placeholder={translations.vcard_address}
                 value={formData.address}
                 onChange={(e) =>
                   setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -470,7 +498,7 @@ function Page() {
               <input
                 type="text"
                 name="note"
-                placeholder="Nota"
+                placeholder={translations.vcard_note}
                 value={formData.note}
                 onChange={(e) =>
                   setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -487,7 +515,7 @@ function Page() {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                Mostrar Datos
+                {translations.vcard_showData}
               </motion.button>
             )}
           </motion.div>

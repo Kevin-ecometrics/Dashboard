@@ -20,6 +20,7 @@ import { Avatar } from "@nextui-org/react";
 import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
 import api_URL from "../utils/api";
+import useTranslation from "../components/translation";
 
 export default function Page() {
   const [selected, setSelected] = useState(1);
@@ -29,6 +30,11 @@ export default function Page() {
     setSelected(option);
   };
   const [additionalEmails, setAdditionalEmails] = useState("");
+  const [locale, setLocale] = useState("en"); // idioma por defecto
+  const translations = useTranslation(locale);
+  const handleChangeLanguage = (lang) => {
+    setLocale(lang);
+  };
 
   const [user, setUser] = useState(null);
   const [clientUser, setClientUser] = useState(null);
@@ -68,10 +74,12 @@ export default function Page() {
         formValues
       );
       console.log(res.data);
-      toast.success("Usuario actualizado exitosamente", { duration: 3000 });
+      toast.success("{translations.panel_userUpdatedSuccessfully}", {
+        duration: 3000,
+      });
     } catch (err) {
       console.error(err);
-      toast.error("Error al actualizar usuario", { duration: 3000 });
+      toast.error("{translations.panel_errorUpdatingUser}", { duration: 3000 });
     }
   };
 
@@ -87,10 +95,12 @@ export default function Page() {
     try {
       const res = await axios.put(`${api_URL}/updateUser`, formValues);
       console.log(res.data);
-      toast.success("Usuario actualizado exitosamente", { duration: 3000 });
+      toast.success("{translations.panel_userUpdatedSuccessfully}", {
+        duration: 3000,
+      });
     } catch (err) {
       console.error(err);
-      toast.error("Error al actualizar usuario", { duration: 3000 });
+      toast.error("{translations.panel_errorUpdatingUser}", { duration: 3000 });
     }
   };
 
@@ -164,11 +174,15 @@ export default function Page() {
     try {
       const res = await axios.put(`${api_URL}/updatePassword`, formValues);
       console.log(res.data);
-      toast.success("Contraseña actualizada exitosamente", { duration: 3000 });
+      toast.success("{translations.panel_passwordUpdatedSuccessfully}", {
+        duration: 3000,
+      });
       toggleDrawer();
     } catch (err) {
       console.error(err);
-      toast.error("Error al actualizar contraseña", { duration: 3000 });
+      toast.error("{translations.panel_errorUpdatingPassword}", {
+        duration: 3000,
+      });
     }
   };
 
@@ -189,7 +203,9 @@ export default function Page() {
           <div className="flex items-center justify-center text-4xl text-blue-400 border-8 border-gray-300 rounded-full w-28 h-28 animate-spin border-t-blue-400">
             <Image alt="loading" src="/logo.png" width={100} height={100} />
           </div>
-          <div className="mt-4 text-2xl text-white">Loading...</div>
+          <div className="mt-4 text-2xl text-white">
+            {translations.panel_loading}
+          </div>
         </div>
       </div>
     );
@@ -207,7 +223,9 @@ export default function Page() {
     );
 
     if (!isFormValid) {
-      toast.error("Por favor, complete todos los campos", { duration: 3000 });
+      toast.error("{translations.toast_pleaseFillAllFields}", {
+        duration: 3000,
+      });
       return;
     }
 
@@ -233,13 +251,17 @@ export default function Page() {
           withCredentials: true,
         }
       );
-      toast.success("usuario creado exitosamente", { duration: 3000 }); // Mostrar notificación de éxito
+      toast.success("{translations.panel_userCreatedSuccessfully}", {
+        duration: 3000,
+      }); // Mostrar notificación de éxito
       console.log(registerRes.data);
       event.target.reset();
       setAdditionalEmails(""); // Limpiar el campo de correos adicionales
     } catch (err) {
       console.error(err);
-      toast.error("Error al registrar usuario", { duration: 3000 }); // Mostrar notificación de error
+      toast.error("{translations.panel_errorCreatingUser}o", {
+        duration: 3000,
+      }); // Mostrar notificación de error
     }
   };
   return (
@@ -252,26 +274,44 @@ export default function Page() {
             className="mb-2 cursor-pointer text-white hover:bg-gray-100 hover:text-black px-4 py-2 rounded-xl"
             onClick={() => handleOptionChange(1)}
           >
-            Add Client
+            {translations.panel_addClient}
           </li>
           <li
             className="mb-2 cursor-pointer text-white hover:bg-gray-100 hover:text-black px-4 py-2 rounded-xl"
             onClick={() => handleOptionChange(2)}
           >
-            Update User
+            {translations.panel_updateUser}
           </li>
           <Link href="/dashboard">
             <li className="cursor-pointer text-sm hover:bg-gray-100 text-white hover:text-black px-4 py-2 rounded-xl">
-              Return to Dashboard
+              {translations.panel_returnToDashboard}
             </li>
           </Link>
         </ul>
+        {/*
+  <div className="flex justify-center space-x-4">
+    <button
+      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      onClick={() => handleChangeLanguage("en")}
+    >
+      English
+    </button>
+    <button
+      className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+      onClick={() => handleChangeLanguage("es")}
+    >
+      Español
+    </button>
+  </div>
+*/}
       </aside>
       <div className="flex flex-col px-12 h-[900px] bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900 text-white flex-grow">
         <Container title="Panel Administrativo" />
         {selected === 1 && (
           <div>
-            <h1 className="text-start font-bold text-2xl mb-8">Add client</h1>
+            <h1 className="text-start font-bold text-2xl mb-8">
+              {translations.panel_addClient}
+            </h1>
             <div className="p-8 text-black bg-white rounded-xl ">
               <form
                 onSubmit={handleSubmit}
@@ -279,10 +319,10 @@ export default function Page() {
               >
                 <div className="mb-4">
                   <label htmlFor="nombre" className="block">
-                    Nombre de usuario:
+                    {translations.panel_userName}:
                   </label>
                   <Input
-                    placeholder="Nombre de usuario"
+                    placeholder={translations.panel_userName}
                     type="text"
                     id="nombre"
                     className="px-4 py-2 border border-gray-300 rounded-md"
@@ -290,10 +330,10 @@ export default function Page() {
                 </div>
                 <div className="mb-4">
                   <label htmlFor="email" className="block">
-                    Correo electrónico:
+                    {translations.panel_email}:
                   </label>
                   <Input
-                    placeholder="Correo electrónico"
+                    placeholder={translations.panel_email}
                     type="email"
                     id="email"
                     className="px-4 py-2 border border-gray-300 rounded-md"
@@ -301,10 +341,10 @@ export default function Page() {
                 </div>
                 <div className="mb-4">
                   <label htmlFor="password" className="block">
-                    Password:
+                    {translations.panel_password}:
                   </label>
                   <Input
-                    placeholder="Password"
+                    placeholder={translations.panel_password}
                     type="password"
                     id="password"
                     className="px-4 py-2 border border-gray-300 rounded-md"
@@ -312,10 +352,10 @@ export default function Page() {
                 </div>
                 <div className="mb-4">
                   <label htmlFor="rol" className="block">
-                    Correos adicionales:
+                    {translations.panel_additionalEmails}
                   </label>
                   <Input
-                    label="Correos adicionales (separados por comas)"
+                    label={translations.panel_additionalEmails}
                     value={additionalEmails}
                     onChange={(e) => setAdditionalEmails(e.target.value)}
                     className="px-4 py-2 border border-gray-300 rounded-md"
@@ -323,15 +363,15 @@ export default function Page() {
                 </div>
                 <div className="mb-4">
                   <label htmlFor="rol" className="block">
-                    Rol:
+                    {translations.panel_role}:
                   </label>
                   <select
                     id="rol"
                     defaultValue="usuario"
                     className="px-4 py-4 border border-gray-300 rounded-md text-black"
                   >
-                    <option value="admin">Administrador</option>
-                    <option value="usuario">Usuario</option>
+                    <option value="admin">{translations.panel_admin}</option>
+                    <option value="usuario">{translations.panel_user}</option>
                   </select>
                 </div>
                 <div className="flex gap-4 mt-4">
@@ -339,7 +379,7 @@ export default function Page() {
                     type="submit"
                     className="w-48 h-12 text-white bg-blue-500 rounded-md hover:bg-blue-700"
                   >
-                    Registrar usuario
+                    {translations.panel_registerUser}
                   </button>
                 </div>{" "}
               </form>
@@ -350,17 +390,19 @@ export default function Page() {
 
         {selected === 2 && (
           <div>
-            <h1 className="text-start font-bold text-2xl mb-6">Update User</h1>
+            <h1 className="text-start font-bold text-2xl mb-6">
+              {translations.panel_updateUserButton}
+            </h1>
 
             <div className="p-8 text-black bg-white rounded-xl">
               <Table isCompact aria-label="Example static collection table">
                 <TableHeader>
-                  <TableColumn># ID</TableColumn>
-                  <TableColumn>Email</TableColumn>
-                  <TableColumn>Rol</TableColumn>
-                  <TableColumn>UserName</TableColumn>
-                  <TableColumn>Edit User</TableColumn>
-                  <TableColumn>Update Password</TableColumn>
+                  <TableColumn># {translations.panel_id}</TableColumn>
+                  <TableColumn>{translations.panel_email}</TableColumn>
+                  <TableColumn>{translations.panel_role}</TableColumn>
+                  <TableColumn>{translations.panel_user}</TableColumn>
+                  <TableColumn>{translations.panel_editUser}</TableColumn>
+                  <TableColumn>{translations.panel_updatePassword}</TableColumn>
                 </TableHeader>
                 <TableBody>
                   {clientUser?.map((user) => (
@@ -385,7 +427,7 @@ export default function Page() {
                           onClick={() => handleEditClickUserPassword(user)}
                           key={2}
                         >
-                          Update Password
+                          {translations.panel_updatePassword}
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -401,10 +443,10 @@ export default function Page() {
                 >
                   <div hidden>
                     <label htmlFor="id" className="block text-white">
-                      ID:
+                      {translations.panel_id}:
                     </label>
                     <Input
-                      placeholder="ID"
+                      placeholder={translations.panel_id}
                       type="text"
                       id="id"
                       value={selectedUserClient.id}
@@ -412,10 +454,10 @@ export default function Page() {
                   </div>
                   <div className="mb-4">
                     <label htmlFor="nombre" className="block text-white">
-                      Email:
+                      {translations.panel_email}:
                     </label>
                     <Input
-                      placeholder="Email"
+                      placeholder={translations.panel_email}
                       type="text"
                       id="email"
                       value={selectedUserClient.email}
@@ -430,7 +472,7 @@ export default function Page() {
                   </div>
                   <div className="mb-4">
                     <label htmlFor="rol" className="block text-white">
-                      Rol:
+                      {translations.panel_role}:
                     </label>
                     <select
                       id="rol"
@@ -443,16 +485,16 @@ export default function Page() {
                       }
                       className="px-4 py-2 border border-gray-300 rounded-md text-black"
                     >
-                      <option value="admin">Administrador</option>
-                      <option value="usuario">Usuario</option>
+                      <option value="admin">{translations.panel_admin}</option>
+                      <option value="usuario">{translations.panel_user}</option>
                     </select>
                   </div>
                   <div className="mb-4">
                     <label htmlFor="username" className="block text-white">
-                      UserName:
+                      {translations.panel_user}:
                     </label>
                     <Input
-                      placeholder="UserName"
+                      placeholder={translations.panel_user}
                       type="text"
                       id="username"
                       value={selectedUserClient.username}
@@ -470,7 +512,7 @@ export default function Page() {
                       type="submit"
                       className="w-full h-12 text-white bg-blue-500 rounded-md hover:bg-blue-700"
                     >
-                      Update User
+                      {translations.panel_updateUserButton}
                     </button>
                   </div>
                 </form>
@@ -488,7 +530,7 @@ export default function Page() {
                       onSubmit={handlePasswordChange}
                     >
                       <label>
-                        ID:
+                        {translations.panel_id}:
                         <input
                           type="text"
                           name="id"
@@ -498,7 +540,7 @@ export default function Page() {
                         />
                       </label>
                       <label>
-                        Username:
+                        {translations.panel_username}:
                         <input
                           type="text"
                           name="username"
@@ -510,7 +552,7 @@ export default function Page() {
                         />
                       </label>
                       <label className="block mt-2">
-                        New Password:
+                        {translations.panel_newPassword}:
                         <input
                           type="password"
                           name="password"
@@ -522,7 +564,7 @@ export default function Page() {
                         type="submit"
                         className="mt-4 bg-blue-500 text-white px-4 py-2 w-full rounded-md"
                       >
-                        Update Password
+                        {translations.panel_updatePassword}
                       </button>
                     </form>
                     <hr className="border border-gray-400 mb-4 mt-2" />
@@ -530,7 +572,7 @@ export default function Page() {
                       className="bg-blue-500 w-full text-white px-4 py-2 rounded-md"
                       onClick={() => setIsOpen(false)}
                     >
-                      Close
+                      {translations.panel_close}
                     </button>
                   </div>
                 </Drawer>

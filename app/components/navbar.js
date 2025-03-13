@@ -11,6 +11,7 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import { Link } from "react-scroll";
+import useTranslation from "./translation";
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -23,6 +24,12 @@ export default function App() {
     // { name: 'Success Stories', href: '#stories' },
     // { name: 'Collaboration', href: '#agile' },
   ];
+
+  const [locale, setLocale] = useState('en'); // idioma por defecto
+  const translations = useTranslation(locale);
+  const handleChangeLanguage = (lang) => {
+    setLocale(lang);
+  };
 
   const handleMenuItemClick = (href) => {
     const element = document.querySelector(href);
@@ -44,7 +51,7 @@ export default function App() {
     >
       <NavbarContent className="text-black sm:hidden" justify="start">
         <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          aria-label={isMenuOpen ? "{translations.navbar_menuToggleAriaLabel_close}" : "{translations.navbar_menuToggleAriaLabel_open}"}
         />
       </NavbarContent>
 
@@ -91,10 +98,12 @@ export default function App() {
           in%20create%20my%20page"
               target="_blank"
             >
-              <Button color="danger">CONTACT US</Button>
+              <Button color="danger">{translations.navbar_contactUs}
+              </Button>
             </Link>
             <Link href="/dashboard">
-              <Button color="primary">DASHBOARD</Button>
+              <Button color="primary">{translations.navbar_dashboard}
+              </Button>
             </Link>
           </div>
         </NavbarItem>

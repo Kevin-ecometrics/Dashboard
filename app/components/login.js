@@ -5,7 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Image from "next/image";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import { inter, league, poppins } from "@/app/fonts";
+import { inter, league, poppins } from "../fonts";
 import api_URL from "../utils/api";
 import useTranslation from "./translation";
 
@@ -41,11 +41,11 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
       if (response.data.success) {
         router.push("/dashboard");
       } else {
-        console.log("Login failed");
+        console.log(translations.login_failed);
       }
     } catch (error) {
       console.error("Error:", error);
-      notify("Error al iniciar sesión, revise sus datos e intente de nuevo");
+      notify(translations.login_error);
     }
   };
 
@@ -61,7 +61,7 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
         }
       } catch (error) {
         console.error(
-          "Error El Usuario no esta loggeado:",
+          translations.login_userNotLoggedIn,
           error.response.data
         );
       }
@@ -78,13 +78,28 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
       <section className=" col-span-1 bg-white">
         <div className={`${league.className} font-bold`}>
           <div className="px-2 gap-4  h-screen flex justify-center items-center flex-col">
-{/* 
-      <button className="text-black" onClick={() => handleChangeLanguage('en')}>English</button>
-      <button className="text-black" onClick={() => handleChangeLanguage('es')}>Español</button> */}
+          
+{/*
+  <div className="flex justify-center space-x-4">
+    <button
+      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      onClick={() => handleChangeLanguage("en")}
+    >
+      English
+    </button>
+    <button
+      className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+      onClick={() => handleChangeLanguage("es")}
+    >
+      Español
+    </button>
+  </div>
+*/}
+      
             <h1 className={`${poppins.className} text-[#33244c] text-[30px]`}>
-              ¡{translations.welcome}!
+              {translations.login_welcome}
             </h1>
-            <p className="text-[25px] text-black">Let´s Get Started.</p>
+            <p className="text-[25px] text-black">{translations.login_letsGetStarted}</p>
             <form
               onSubmit={handleSubmit}
               className={`${league.className} font-medium`}
@@ -94,7 +109,7 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
                   type="email"
                   id="email"
                   className="bg-gray-50 border text-gray-900 border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 p-2.5 dark:bg-gray-700 dark:border-gray-   dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder={emailPlaceholder}
+                  placeholder={translations.login_emailPlaceholder}
                   required
                 />
               </div>
@@ -103,7 +118,7 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
                   type={showPassword ? "text" : "password"}
                   id="password"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder={passwordPlaceholder}
+                  placeholder={translations.login_passwordPlaceholder}
                   required
                 />
                 <button
@@ -123,14 +138,14 @@ function Login({ emailPlaceholder, passwordPlaceholder }) {
                   type="submit"
                   className="text-black hover:bg-[#361F4C] hover:text-white border border-gray-300 text-sm font-medium rounded-lg py-2.5 w-full focus:ring-offset-2"
                 >
-                  Enter
+                  {translations.login_enter}
                 </button>
               </div>
               <Toaster />
             </form>
             <div className="fixed bottom-10 text-center hidden md:block text-[#969696]">
               <span className="text-sm">
-                © Ecommetrica {year} All rights reserved
+              {translations.login_allRightsReserved}{year}
               </span>
             </div>
           </div>

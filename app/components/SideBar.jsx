@@ -15,8 +15,14 @@ import {
   FaUsers,
   FaPowerOff,
 } from "react-icons/fa";
+import useTranslation from "./translation";
 
 function SideBar({ avatarURl, projects, user, logout }) {
+  const [locale, setLocale] = useState("en"); // idioma por defecto
+  const translations = useTranslation(locale);
+  const handleChangeLanguage = (lang) => {
+    setLocale(lang);
+  };
   return (
     <div className="">
       <aside className="hidden h-screen px-8 py-12 w-36 sm:block md:w-48">
@@ -30,7 +36,11 @@ function SideBar({ avatarURl, projects, user, logout }) {
               key="1"
               aria-label="Projects"
               indicator={({ isOpen }) => (isOpen ? <FaXmark /> : <FaCheck />)}
-              title={<span style={{ color: "white" }}>Projects</span>}
+              title={
+                <span style={{ color: "white" }}>
+                  {translations.sidebar_projects}
+                </span>
+              }
             >
               <ul>
                 {projects.map((project) => (
@@ -58,7 +68,9 @@ function SideBar({ avatarURl, projects, user, logout }) {
                 aria-label="Information"
                 indicator={({ isOpen }) => (isOpen ? <FaXmark /> : <FaCheck />)}
                 title={
-                  <span style={{ color: "white" }}>Update Client Project</span>
+                  <span style={{ color: "white" }}>
+                    {translations.sidebar_updateClientProject}
+                  </span>
                 }
               >
                 <Link
@@ -70,7 +82,7 @@ function SideBar({ avatarURl, projects, user, logout }) {
                       <div className="flex items-center gap-x-2">
                         <FaPlus />
                         <span className="text-white uppercase hover:underline">
-                          UPDATE CLIENT PROJECT
+                          {translations.sidebar_updateClientProject}
                         </span>
                       </div>
                     </li>
@@ -81,7 +93,11 @@ function SideBar({ avatarURl, projects, user, logout }) {
                 key="5"
                 aria-label="Information"
                 indicator={({ isOpen }) => (isOpen ? <FaXmark /> : <FaCheck />)}
-                title={<span style={{ color: "white" }}>Create Client</span>}
+                title={
+                  <span style={{ color: "white" }}>
+                    {translations.sidebar_createClient}
+                  </span>
+                }
               >
                 <Link
                   href="/panel-control"
@@ -92,7 +108,7 @@ function SideBar({ avatarURl, projects, user, logout }) {
                       <div className="flex items-center gap-x-2">
                         <FaUsers />
                         <span className="text-white uppercase hover:underline">
-                          CREATE CLIENT
+                          {translations.sidebar_createClient}
                         </span>
                       </div>
                     </li>
@@ -108,7 +124,7 @@ function SideBar({ avatarURl, projects, user, logout }) {
             onClick={logout}
           >
             <FaPowerOff />
-            LOG OUT
+            {translations.sidebar_logout}
           </Button>
         </div>
       </aside>

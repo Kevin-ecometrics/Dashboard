@@ -1,4 +1,4 @@
-import Projects from "@/app/components/projects/project";
+import Projects from "../../components/projects/project";
 
 export function generateStaticParams() {
   return [

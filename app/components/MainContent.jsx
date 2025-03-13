@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Divider,
   Progress,
@@ -9,7 +9,14 @@ import {
 } from "@nextui-org/react";
 import { motion } from "framer-motion";
 import { FaCheck, FaWhatsapp } from "react-icons/fa";
+import useTranslation from "./translation";
+
 function MainContent({ projects, currentIndex, numberOfButtons, logout }) {
+  const [locale, setLocale] = useState("en"); // idioma por defecto
+  const translations = useTranslation(locale);
+  const handleChangeLanguage = (lang) => {
+    setLocale(lang);
+  };
   return (
     <div>
       <div className="flex flex-col w-screen md:w-4/5 bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900">
@@ -17,9 +24,9 @@ function MainContent({ projects, currentIndex, numberOfButtons, logout }) {
           <TypeAnimation
             sequence={[
               // Same substring at the start will only be typed out once, initially
-              "Welcome to your dashboard",
+              "{translations.main_welcome}",
               1000, // wait 1s before replacing "Mice" with "Hamsters"
-              "Ecommetrica",
+              "{translations.main_ecommetrica}",
               1000,
             ]}
             wrapper="span"
@@ -72,8 +79,8 @@ function MainContent({ projects, currentIndex, numberOfButtons, logout }) {
                         color="primary"
                       >
                         {project.percentage === 100
-                          ? "Project completed"
-                          : "Project in progress"}
+                          ? "{translations.main_projectCompleted}"
+                          : "{translations.main_projectInProgress}"}
                       </Chip>
                     </Link>
                   ) : (
@@ -82,7 +89,7 @@ function MainContent({ projects, currentIndex, numberOfButtons, logout }) {
                         className="text-white"
                         href={`/dashboard/${project.project_name}`}
                       >
-                        Go to proyect
+                        {translations.main_goToProject}
                       </Link>
                     </Button>
                   )}
@@ -113,7 +120,7 @@ function MainContent({ projects, currentIndex, numberOfButtons, logout }) {
             className="block text-white bg-[#a32054] sm:hidden hover:bg-[#395788] w-80"
             onClick={logout}
           >
-            LOG OUT
+            {translations.main_logout}
           </Button>
         </div>
         <div className="absolute top-0 right-0 p-8">

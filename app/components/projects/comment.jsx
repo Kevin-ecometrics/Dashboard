@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Button, Link, Avatar, Divider } from "@nextui-org/react";
 import { FaBars } from "react-icons/fa6";
 import { Montserrat } from "next/font/google";
+import useTranslation from "./translation";
 
 const montserrat = Montserrat({
   display: "swap",
@@ -34,6 +35,12 @@ function comment({ user }) {
       } catch (error) {
         console.error(error);
       }
+    };
+
+    const [locale, setLocale] = useState("en"); // idioma por defecto
+    const translations = useTranslation(locale);
+    const handleChangeLanguage = (lang) => {
+      setLocale(lang);
     };
 
     const fetchComments = async () => {
@@ -78,7 +85,10 @@ function comment({ user }) {
 
   const handleConfirmAction = async () => {
     try {
-      const newStatus = modalAction === "approve" ? "aceptado" : "rechazado";
+      const newStatus =
+        modalAction === "approve"
+          ? "{translations.comment_aprobar}"
+          : "{translations.comment_rechazar}";
       await axios.put(
         `https://mongeortopedia.com/api/comments/${selectedComment.id}`,
         {
@@ -122,7 +132,7 @@ function comment({ user }) {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        Cargando...
+        {translations.comment_cargando}
       </div>
     );
   }
@@ -145,7 +155,7 @@ function comment({ user }) {
                 onClick={() => window.history.back()}
               >
                 <FaBars className="inline-block mr-2" />
-                ALL CONTENT
+                {translations.comment_allContent}
               </span>
             </li>
           </ul>
@@ -153,15 +163,18 @@ function comment({ user }) {
         <div className="flex justify-center gap-4 flex-col lg:flex-row">
           <Link href="/dashboard">
             <Button className="text-white bg-blue-500 text-center hover:bg-blue-700 uppercase">
-              Dashboard
+              {translations.comment_dashboard}
             </Button>
           </Link>
         </div>
         <div
           className={`bottom-10 absolute flex-col flex text-center text-[14px] ${montserrat.className}`}
         >
-          <span> &copy; {year} Ecommetrica.</span>
-          <span>Todos los derechos reservados.</span>
+          <span>
+            {" "}
+            &copy; {year} {translations.dashboard_ecommetrica}
+          </span>
+          <span> {translations.comment_todosLosDerechosReservados}</span>
         </div>
       </aside>
       <div className="bg-white text-black">
@@ -172,7 +185,9 @@ function comment({ user }) {
               "linear-gradient(0deg, #3A228B 0%, #847EFC 50%, #4C39A7 88%, #3A228B 100%)",
           }}
         >
-          <h1 className="text-white text-3xl">BlogsApp</h1>
+          <h1 className="text-white text-3xl">
+            {translations.comment_blogsApp}
+          </h1>
           <Image src="/logo_calendar.webp" alt="Logo" width={200} height={50} />
         </section>
         <div className="py-32">
@@ -183,37 +198,37 @@ function comment({ user }) {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Nombre
+                  {translations.comment_nombre}
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Correo
+                  {translations.comment_correo}
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Comentario
+                  {translations.comment_comentario}
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Estatus
+                  {translations.comment_estatus}
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Fecha de Creación
+                  {translations.comment_fechaDeCreacion}
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Acciones
+                  {translations.comment_acciones}
                 </th>
               </tr>
             </thead>
@@ -257,14 +272,14 @@ function comment({ user }) {
                         className="bg-red-500 text-white px-4 py-2 rounded-md"
                         onClick={() => handleRejectClick(comment)}
                       >
-                        Rechazar
+                        {translations.comment_rechazar}
                       </button>
                     ) : (
                       <button
                         className="bg-blue-500 text-white px-4 py-2 rounded-md"
                         onClick={() => handleApproveClick(comment)}
                       >
-                        Aprobar
+                        {translations.comment_aprobar}
                       </button>
                     )}
                   </td>
@@ -293,26 +308,31 @@ function comment({ user }) {
             <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
               <div className="bg-white p-6 rounded-md">
                 <h2 className="text-lg font-bold mb-4">
-                  Confirmar{" "}
-                  {modalAction === "approve" ? "Aprobación" : "Rechazo"}
+                  {translations.comment_confirmar}{" "}
+                  {modalAction === "approve"
+                    ? "{translations.comment_aprobar }"
+                    : "{translations.comment_rechazar}"}
                 </h2>
                 <p>
-                  ¿Estás seguro de que deseas{" "}
-                  {modalAction === "approve" ? "aprobar" : "rechazar"} este
-                  comentario?
+                  {translations.comment_estasSeguroDeAprobar.replace(
+                    "{action}",
+                    modalAction === "approve"
+                      ? "{translations.comment_aprobar}"
+                      : "{translations.comment_rechazar}"
+                  )}
                 </p>
                 <div className="mt-4">
                   <button
                     className="bg-green-500 text-white px-4 py-2 rounded-md mr-2"
                     onClick={handleConfirmAction}
                   >
-                    Confirmar
+                    {translations.comment_confirmar}
                   </button>
                   <button
                     className="bg-red-500 text-white px-4 py-2 rounded-md"
                     onClick={() => setShowModal(false)}
                   >
-                    Cancelar
+                    {translations.comment_cancelar}
                   </button>
                 </div>
               </div>
@@ -321,17 +341,20 @@ function comment({ user }) {
           {showCommentModal && (
             <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
               <div className="bg-white p-6 rounded-md">
-                <h2 className="text-lg font-bold mb-4">Comentario Completo</h2>
+                <h2 className="text-lg font-bold mb-4">
+                  {translations.comment_comentarioCompleto}
+                </h2>
                 <p>{selectedCommentText}</p>
                 <p className="mt-4">
-                  <strong>Blog:</strong> {selectedBlogName}
+                  <strong> {translations.comment_blog}:</strong>{" "}
+                  {selectedBlogName}
                 </p>
                 <div className="mt-4">
                   <button
                     className="bg-red-500 text-white px-4 py-2 rounded-md"
                     onClick={() => setShowCommentModal(false)}
                   >
-                    Cerrar
+                    {translations.comment_cerrar}
                   </button>
                 </div>
               </div>

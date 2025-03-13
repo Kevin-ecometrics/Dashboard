@@ -4,8 +4,15 @@ import axios from "axios";
 import Image from "next/image";
 import Navbar from "../components/navbar";
 import Animation from "../components/hero_animation";
+import useTranslation from "../components/translation";
+
 function Home() {
   const [user, setUser] = useState(null);
+  const [locale, setLocale] = useState("en"); // idioma por defecto
+  const translations = useTranslation(locale);
+  const handleChangeLanguage = (lang) => {
+    setLocale(lang);
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -29,7 +36,9 @@ function Home() {
           <div className="flex items-center justify-center text-4xl text-blue-400 border-8 border-gray-300 rounded-full w-28 h-28 animate-spin border-t-blue-400">
             <Image alt="loading" src="/logo.png" width={100} height={100} />
           </div>
-          <div className="mt-4 text-2xl text-white">Loading...</div>
+          <div className="mt-4 text-2xl text-white">
+            {translations.project_loading}
+          </div>
         </div>
       </div>
     );
