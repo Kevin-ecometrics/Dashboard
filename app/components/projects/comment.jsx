@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Button, Link, Avatar, Divider } from "@nextui-org/react";
 import { FaBars } from "react-icons/fa6";
 import { Montserrat } from "next/font/google";
-import useTranslation from "./translation";
+import useTranslation from "../translation";
 
 const montserrat = Montserrat({
   display: "swap",
