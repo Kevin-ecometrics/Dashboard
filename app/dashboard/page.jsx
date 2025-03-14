@@ -8,6 +8,8 @@ import {
   FaCheck,
   FaXmark,
   FaPowerOff,
+  FaArrowLeft,
+  FaArrowRight,
   FaHouse,
   FaPlus,
   FaUsers,
@@ -315,107 +317,127 @@ function Dashboard() {
             />
           </div>
           <Divider className="my-12 bg-white" />
-          <div className="flex items-center justify-center px-2 md:gap-12 md:flex-row relative">
-            {/* Flecha izquierda (30% más grande) */}
+          <div className="flex flex-col items-center justify-center w-full">
+            {/* Flecha izquierda (solo para escritorio) */}
             <button
               onClick={handlePrev}
-              className="absolute left-0 z-10 p-3 bg-[#a32054] rounded-full hover:bg-[#395788] transform -translate-x-1/2"
+              className="fixed left-12 z-10 p-4 bg-[#a32054] rounded-full hover:bg-[#395788] hidden md:block"
               style={{
                 top: "50%",
                 transform: "translateY(-50%)",
                 fontSize: "1.3em",
               }}
             >
-              {"<"}
+              <FaArrowLeft /> {/* Icono de flecha izquierda */}
             </button>
 
             {/* Contenedor de tarjetas */}
-            <div className="flex gap-4 overflow-hidden w-[900px]">
-              <AnimatePresence mode="popLayout" initial={false}>
-                {projects
-                  .slice(
-                    currentIndex,
-                    currentIndex + (window.innerWidth < 768 ? 1 : 3)
-                  ) // Cambio aquí
-                  .map((project, index) => (
-                    <motion.div
-                      key={project.id}
-                      className="flex [&>div]:text-white [&>h2]:text-white [&>p]:text-white flex-col w-[300px] h-full rounded-2xl shadow-2xl"
-                      style={{
-                        backgroundImage: `url('/bg-card.png')`,
-                        backgroundSize: "cover",
-                        backgroundRepeat: "no-repeat",
-                      }}
-                      initial={{ x: index === 0 ? -300 : 300, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      exit={{ x: index === 0 ? -300 : 300, opacity: 0 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <div className={`${titillium.className} font-semibold`}>
-                        <h2 className="py-6 px-2 text-center text-4xl">
-                          {project.title}
-                        </h2>
-                      </div>
-                      <div className={`${montse.className} font-light`}>
-                        <p className="px-4 py-4 text-center">
-                          {project.content}
-                        </p>
-                      </div>
-                      <div className="flex flex-col items-center justify-center gap-8 p-4">
-                        <Progress
-                          label="project progress"
-                          size="md"
-                          value={project.percentage}
-                          maxValue={100}
-                          color={getColor(project.percentage)}
-                          showValueLabel={true}
-                          className="max-w-md"
-                        />
-                        <div className="mt-auto">
-                          {user.rol === "admin" ? (
-                            <Link
-                              className="text-white"
-                              href={`/dashboard/${project.project_name}`}
-                            >
-                              <Chip
-                                startContent={<FaCheck size={18} />}
-                                variant="faded"
-                                color="primary"
-                              >
-                                {project.percentage === 100
-                                  ? "Project completed"
-                                  : "Project in progress"}
-                              </Chip>
-                            </Link>
-                          ) : (
-                            <Button className="bg-[#a32054] hover:bg-[#395788]">
+            <div className="flex justify-center w-full">
+              <div className="flex gap-4 overflow-hidden w-full md:w-[900px]">
+                <AnimatePresence mode="popLayout" initial={false}>
+                  {projects
+                    .slice(
+                      currentIndex,
+                      currentIndex + (window.innerWidth < 768 ? 1 : 3) // 1 tarjeta en móvil, 3 en escritorio
+                    )
+                    .map((project, index) => (
+                      <motion.div
+                        key={project.id}
+                        className="flex [&>div]:text-white [&>h2]:text-white [&>p]:text-white flex-col w-[300px] h-full rounded-2xl shadow-2xl mx-auto" // Centrado en móvil
+                        style={{
+                          backgroundImage: `url('/bg-card.png')`,
+                          backgroundSize: "cover",
+                          backgroundRepeat: "no-repeat",
+                        }}
+                        initial={{ x: index === 0 ? -300 : 300, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: index === 0 ? -300 : 300, opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <div className={`${titillium.className} font-semibold`}>
+                          <h2 className="py-6 px-2 text-center text-4xl">
+                            {project.title}
+                          </h2>
+                        </div>
+                        <div className={`${montse.className} font-light`}>
+                          <p className="px-4 py-4 text-center">
+                            {project.content}
+                          </p>
+                        </div>
+                        <div className="flex flex-col items-center justify-center gap-8 p-4">
+                          <Progress
+                            label="project progress"
+                            size="md"
+                            value={project.percentage}
+                            maxValue={100}
+                            color={getColor(project.percentage)}
+                            showValueLabel={true}
+                            className="max-w-md"
+                          />
+                          <div className="mt-auto">
+                            {user.rol === "admin" ? (
                               <Link
                                 className="text-white"
                                 href={`/dashboard/${project.project_name}`}
                               >
-                                {translations.dashboard_goToProject}
+                                <Chip
+                                  startContent={<FaCheck size={18} />}
+                                  variant="faded"
+                                  color="primary"
+                                >
+                                  {project.percentage === 100
+                                    ? "Project completed"
+                                    : "Project in progress"}
+                                </Chip>
                               </Link>
-                            </Button>
-                          )}
+                            ) : (
+                              <Button className="bg-[#a32054] hover:bg-[#395788]">
+                                <Link
+                                  className="text-white"
+                                  href={`/dashboard/${project.project_name}`}
+                                >
+                                  {translations.dashboard_goToProject}
+                                </Link>
+                              </Button>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </motion.div>
-                  ))}
-              </AnimatePresence>
+                      </motion.div>
+                    ))}
+                </AnimatePresence>
+              </div>
             </div>
 
-            {/* Flecha derecha (30% más grande) */}
+            {/* Flecha derecha (solo para escritorio) */}
             <button
               onClick={handleNext}
-              className="absolute right-0 z-10 p-3 bg-[#a32054] rounded-full hover:bg-[#395788] transform translate-x-1/2"
+              className="fixed right-12 z-10 p-4 bg-[#a32054] rounded-full hover:bg-[#395788] hidden md:block"
               style={{
                 top: "50%",
                 transform: "translateY(-50%)",
                 fontSize: "1.3em",
               }}
             >
-              {">"}
+              <FaArrowRight /> {/* Icono de flecha derecha */}
             </button>
+
+            {/* Flechas para móvil (debajo de la tarjeta) */}
+            <div className="flex justify-center gap-4 mt-8 md:hidden">
+              <button
+                onClick={handlePrev}
+                className="p-4 bg-[#a32054] rounded-full hover:bg-[#395788]"
+                style={{ fontSize: "1.3em" }}
+              >
+                <FaArrowLeft /> {/* Icono de flecha izquierda */}
+              </button>
+              <button
+                onClick={handleNext}
+                className="p-4 bg-[#a32054] rounded-full hover:bg-[#395788]"
+                style={{ fontSize: "1.3em" }}
+              >
+                <FaArrowRight /> {/* Icono de flecha derecha */}
+              </button>
+            </div>
           </div>
           <div className="flex items-center justify-center p-4 ">
             <Button
