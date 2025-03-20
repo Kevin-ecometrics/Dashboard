@@ -74,12 +74,12 @@ export default function Page() {
         formValues
       );
       console.log(res.data);
-      toast.success("{translations.panel_userUpdatedSuccessfully}", {
+      toast.success("Actualización de usuario exitosa", {
         duration: 3000,
       });
     } catch (err) {
       console.error(err);
-      toast.error("{translations.panel_errorUpdatingUser}", { duration: 3000 });
+      toast.error("Error al actualizar usuario", { duration: 3000 });
     }
   };
 
@@ -95,12 +95,12 @@ export default function Page() {
     try {
       const res = await axios.put(`${api_URL}/updateUser`, formValues);
       console.log(res.data);
-      toast.success("{translations.panel_userUpdatedSuccessfully}", {
+      toast.success("Actualización de usuario exitosa", {
         duration: 3000,
       });
     } catch (err) {
       console.error(err);
-      toast.error("{translations.panel_errorUpdatingUser}", { duration: 3000 });
+      toast.error("Error al actualizar usuario", { duration: 3000 });
     }
   };
 
@@ -174,13 +174,13 @@ export default function Page() {
     try {
       const res = await axios.put(`${api_URL}/updatePassword`, formValues);
       console.log(res.data);
-      toast.success("{translations.panel_passwordUpdatedSuccessfully}", {
+      toast.success("Contraseña actualizada exitosamente", {
         duration: 3000,
       });
       toggleDrawer();
     } catch (err) {
       console.error(err);
-      toast.error("{translations.panel_errorUpdatingPassword}", {
+      toast.error("Error al actualizar la contraseña", {
         duration: 3000,
       });
     }
@@ -223,7 +223,7 @@ export default function Page() {
     );
 
     if (!isFormValid) {
-      toast.error("{translations.toast_pleaseFillAllFields}", {
+      toast.error("Por favor, complete todos los campos", {
         duration: 3000,
       });
       return;
@@ -251,7 +251,7 @@ export default function Page() {
           withCredentials: true,
         }
       );
-      toast.success("{translations.panel_userCreatedSuccessfully}", {
+      toast.success("Usuario creado exitosamente", {
         duration: 3000,
       }); // Mostrar notificación de éxito
       console.log(registerRes.data);
@@ -259,7 +259,7 @@ export default function Page() {
       setAdditionalEmails(""); // Limpiar el campo de correos adicionales
     } catch (err) {
       console.error(err);
-      toast.error("{translations.panel_errorCreatingUser}o", {
+      toast.error("Error al crear usuario", {
         duration: 3000,
       }); // Mostrar notificación de error
     }

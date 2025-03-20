@@ -124,7 +124,7 @@ function SideBar({ avatarURl, projects, user, logout }) {
             onClick={logout}
           >
             <FaPowerOff />
-            {translations.sidebar_logout}
+            Log out
           </Button>
         </div>
       </aside>

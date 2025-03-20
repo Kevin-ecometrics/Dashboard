@@ -5,12 +5,13 @@ export function generateStaticParams() {
     { id: "bites_creadores_de_sonrisas" },
     { id: "doctora_pamela_perez" },
     { id: "reforma_dental" },
-    { id: "syl_talento" },
+    { id: "Dr_martin" },
     { id: "Wislin_Farm" },
     { id: "doctor_ricardo_monge" },
-    { id: "test" },
-    { id: "The_Condor_Vision" },
     { id: "gpe_consultores" },
+    { id: "chik" },
+    { id: "cesia_borjon" },
+    { id: "cocina_mx" },
   ];
 }
 

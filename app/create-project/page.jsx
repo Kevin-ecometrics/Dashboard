@@ -122,18 +122,15 @@ export default function CreateProject() {
       );
 
       if (response.status === 200) {
-        toast.success(
-          "{translations.createProject_projectUpdatedSuccessfully}",
-          { duration: 3000 }
-        ); // Mostrar notificación de éxito
+        toast.success("Proyecto actualizado exitosamente", { duration: 3000 }); // Mostrar notificación de éxito
       } else {
-        toast.success("{translations.createProject_errorUpdatingProject}", {
+        toast.success("Error al actualizar el proyecto", {
           duration: 3000,
         }); // Mostrar notificación de éxito
       }
     } catch (error) {
-      console.error("{translations.createProject_errorUpdatingContent}", error);
-      toast.success("{translations.createProject_errorUpdatingProject}", {
+      console.error("Error al actualizar el contenido", error);
+      toast.success("Error al actualizar el proyecto", {
         duration: 3000,
       }); // Mostrar notificación de éxito
     }
@@ -165,20 +162,17 @@ export default function CreateProject() {
       if (!response.ok) {
         throw new Error("Error al crear el proyecto");
       }
-      toast.success("{translations.createProject_projectCreatedSuccessfully}", {
+      toast.success("Proyecto creado exitosamente", {
         duration: 3000,
       }); // Mostrar notificación de éxito
       const data = await response.json();
-      console.log(
-        "{translations.createProject_projectCreatedSuccessfully}:",
-        data
-      );
+      console.log("Proyecto creado exitosamente", data);
       setFormData(initialState); // Limpia los campos del formulario
     } catch (error) {
-      toast.error("{translations.createProject_errorCreatingProject}", {
+      toast.error("Error al crear el proyect", {
         duration: 3000,
       }); // Mostrar notificación de error
-      console.error("{translations.createProject_errorLog}:", error);
+      console.error("Error en la creación del proyecto", error);
     }
   };
 
@@ -189,7 +183,7 @@ export default function CreateProject() {
         setProjects(response.data);
         // console.log('Proyectos:', response.data)
       } catch (error) {
-        console.error("{translations.createProject_errorLog}:", error);
+        console.error("Error en la creación del proyecto", error);
       }
     };
 
@@ -261,12 +255,12 @@ export default function CreateProject() {
       );
 
       console.log("Respuesta:", response.data);
-      toast.success("{translations.createProject_contentCreatedSuccessfully}", {
+      toast.success("Contenido creado exitosamente", {
         duration: 3000,
       }); // Mostrar notificación de éxito
     } catch (error) {
-      console.error("{translations.createProject_errorLog}:", error);
-      toast.error("{translations.createProject_errorCreatingContent}", {
+      console.error("Error en la creación del contenido", error);
+      toast.error("Error al crear el contenido", {
         duration: 3000,
       }); // Mostrar notificación de error
     }
@@ -290,12 +284,12 @@ export default function CreateProject() {
           "Content-Type": "multipart/form-data",
         },
       });
-      toast.success("{translations.createProject_contentUpdatedSuccessfully}", {
+      toast.success("Contenido actualizado exitosamente", {
         duration: 3000,
       });
     } catch (error) {
-      console.error("{translations.createProject_errorLog}:", error);
-      toast.error("{translations.createProject_errorUpdatingContent}", {
+      console.error("Error en la actualización del contenido", error);
+      toast.error("Error al actualizar el contenido", {
         duration: 3000,
       });
     }
@@ -314,7 +308,7 @@ export default function CreateProject() {
       console.log("Respuesta:", response.data);
       setData([]);
     } catch (error) {
-      console.error("{translations.createProject_errorLog}:", error);
+      console.error("Error en la creación del proyecto", error);
     }
   };
 
@@ -353,7 +347,7 @@ export default function CreateProject() {
 
         // Aquí puedes hacer algo después de que el proyecto se haya eliminado con éxito, como actualizar la lista de proyectos
       } catch (error) {
-        console.error("{translations.createProject_errorLog}:", error);
+        console.error("Error en la creación del proyecto", error);
       }
     }
   }
