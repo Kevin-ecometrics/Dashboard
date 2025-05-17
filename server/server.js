@@ -650,16 +650,20 @@ app.delete("/delete/:table/:id", (req, res) => {
 app.post("/vcard", (req, res) => {
   const { name, lastname, email, phone, org, address, note } = req.body;
 
-  const query = "INSERT INTO vcard (name, lastname, email, phone, org, address, note) VALUES (?, ?, ?, ?, ?, ?, ?)";
-  connection.query(query, [name, lastname, email, phone, org, address, note], (err, result) => {
-    if (err) {
-      console.error("Error al insertar los datos: ", err);
-      return res.status(500).send("Error al guardar los datos");
+  const query =
+    "INSERT INTO vcard (name, lastname, email, phone, org, address, note) VALUES (?, ?, ?, ?, ?, ?, ?)";
+  connection.query(
+    query,
+    [name, lastname, email, phone, org, address, note],
+    (err, result) => {
+      if (err) {
+        console.error("Error al insertar los datos: ", err);
+        return res.status(500).send("Error al guardar los datos");
+      }
+      return res.status(200).send("Datos guardados correctamente");
     }
-    return res.status(200).send("Datos guardados correctamente");
-  });
+  );
 });
-
 
 // Eliminamos un proyecto
 app.delete("/project/delete/:id", async (req, res) => {
@@ -794,6 +798,116 @@ app.post("/create/content/:table", upload.single("imageFile"), (req, res) => {
       res.status(201).json({ message: "Datos insertados exitosamente" });
     }
   );
+});
+
+// Endpoint para enviar el resumen del paquete por correo
+app.post("/send-package-email", (req, res) => {
+  const { locale, package: pkg, extras, total, email } = req.body;
+
+  // Traducciones para el correo
+  const translations = {
+    es: {
+      summaryTitle: "Resumen de paquete seleccionado",
+      includes: "Incluye:",
+      advantages: "Ventajas:",
+      extras: "Servicios Adicionales:",
+      total: "Total:",
+      subject: "Nuevo paquete seleccionado desde el sitio",
+      footer: "Gracias por confiar en nosotros.",
+    },
+    en: {
+      summaryTitle: "Selected Package Summary",
+      includes: "Includes:",
+      advantages: "Advantages:",
+      extras: "Additional Services:",
+      total: "Total:",
+      subject: "New package selected from website",
+      footer: "Thank you for trusting us.",
+    },
+  };
+  const t = translations[locale] || translations.es;
+
+  // Construye el HTML del correo
+  let html = `
+  <div style="background-color: #f4f4f4; padding: 30px;">
+    <div style="max-width: 600px; margin: auto; background: #fff; border: 2px solid #BD155C; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); padding: 30px; font-family: Arial, sans-serif; color: #333;">
+      <h2 style="color: #BD155C; border-bottom: 2px solid #BD155C; padding-bottom: 10px; margin-top: 0;">
+        ${t.summaryTitle}
+      </h2>
+
+      <p style="font-size: 16px; margin: 15px 0;">
+        <strong style="font-size: 18px;">${pkg.title}</strong> - 
+        <span style="color: #555;">${pkg.price}</span>
+      </p>
+
+      <p style="font-size: 16px; margin: 15px 0;">${t.includes}</p>
+      <ul style="padding-left: 20px; margin: 10px 0 20px;">
+        ${pkg.services
+          .map((s) => `<li style="margin-bottom: 6px;">${s.name}</li>`)
+          .join("")}
+      </ul>
+
+      <p style="font-size: 16px; margin: 15px 0;">${t.advantages}</p>
+      <ul style="padding-left: 20px; margin: 10px 0 20px;">
+        ${pkg.additionalDetails
+          .map((d) => `<li style="margin-bottom: 6px;">${d}</li>`)
+          .join("")}
+      </ul>
+
+      ${
+        extras && extras.length
+          ? `
+          <p style="font-size: 16px; margin: 15px 0;">${t.extras}</p>
+          <ul style="padding-left: 20px; margin: 10px 0 20px;">
+            ${extras
+              .map(
+                (e) =>
+                  `<li style="margin-bottom: 6px;">${e.name} <span style="color:#BD155C;">+$${e.price}</span></li>`
+              )
+              .join("")}
+          </ul>`
+          : ""
+      }
+
+      <p style="font-size: 18px; font-weight: bold; margin-top: 30px;">
+        ${t.total} <span style="color: #BD155C;">$${total}</span>
+      </p>
+
+      <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;" />
+
+      <footer style="text-align: center; font-size: 12px; color: #888;">
+        <p style="margin: 0;">${t.footer}</p>
+        <p style="margin: 5px 0 0;">&copy; ${new Date().getFullYear()} e-commetrics.com</p>
+      </footer>
+    </div>
+  </div>
+`;
+
+  let mailOptions = {
+    from: '"E-commetrics" <admin@e-commetrics.com>',
+    to: email,
+    cc: "admin@e-commetrics.com",
+    subject: t.subject,
+    html,
+  };
+
+  let transporter = nodemailer.createTransport({
+    host: "e-commetrics.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: "admin@e-commetrics.com",
+      pass: "Wain@Cushy26",
+    },
+  });
+
+  transporter.sendMail(mailOptions, (err, info) => {
+    if (err) {
+      console.error("Error al enviar el correo:", err);
+      return res.status(500).json({ error: "Error al enviar el correo" });
+    }
+    res.json({ success: true });
+  });
 });
 
 app.listen(3001, () => {

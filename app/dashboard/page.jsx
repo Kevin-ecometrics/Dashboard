@@ -91,11 +91,7 @@ function Dashboard() {
 
   const logout = async () => {
     try {
-      await axios.post(
-        `${api_URL}/{translations.dashboard_logout}`,
-        {},
-        { withCredentials: true }
-      );
+      await axios.post(`${api_URL}/logout`, {}, { withCredentials: true });
       setUser(null);
       router.push("/");
     } catch (err) {
