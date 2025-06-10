@@ -12,6 +12,7 @@ export function generateStaticParams() {
     { id: "chik" },
     { id: "cesia_borjon" },
     { id: "cocina_mx" },
+    { id: "syl_talento" },
   ];
 }
 

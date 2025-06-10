@@ -9,7 +9,6 @@ import { Button, Link, Avatar, Divider } from "@nextui-org/react";
 import { FaPowerOff, FaBars, FaWhatsapp, FaCalendar } from "react-icons/fa6";
 import { Pompiere, Poppins, Montserrat } from "next/font/google";
 import Image from "next/image";
-import useTranslation from "../translation";
 
 const pompiere = Pompiere({
   display: "swap",
@@ -57,68 +56,62 @@ function Page({ projects }) {
     return project.title;
   });
 
-  const [locale, setLocale] = useState("en"); // idioma por defecto
-  const translations = useTranslation(locale);
-  const handleChangeLanguage = (lang) => {
-    setLocale(lang);
-  };
-
   const daysOfWeek = [
-    "{translations.monday}",
-    "{translations.tuesday}",
-    "{translations.wednesday}",
-    "{translations.thursday}",
-    "{translations.friday}",
-    "{translations.saturday}",
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes",
+    "Sábado",
   ];
 
   const myCustomLocale = {
     // months list by order
     months: [
-      "{translations.january}",
-      "{translations.february}",
-      "{translations.march}",
-      "{translations.april}",
-      "{translations.may}",
-      "{translations.june}",
-      "{translations.july}",
-      "{translations.august}",
-      "{translations.september}",
-      "{translations.october}",
-      "{translations.november}",
-      "{translations.december}",
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
     ],
 
     // week days by order
     weekDays: [
       {
-        name: "{translations.sunday}", // used for accessibility
-        short: "{translations.sundayShort}", // displayed at the top of days' rows
+        name: "Domingo", // used for accessibility
+        short: "D", // displayed at the top of days' rows
         isWeekend: true, // is it a formal weekend or not?
       },
       {
-        name: "{translations.monday}",
-        short: "{translations.mondayShort}",
+        name: "Lunes",
+        short: "L",
       },
       {
-        name: "{translations.tuesday}",
-        short: "{translations.tuesdayShort}",
+        name: "Martes",
+        short: "M",
       },
       {
-        name: "{translations.wednesday}",
-        short: "{translations.wednesdayShort}",
+        name: "Miércoles",
+        short: "M",
       },
       {
-        name: "{translations.thursday}",
-        short: "{translations.thursdayShort}",
+        name: "Jueves",
+        short: "J",
       },
       {
-        name: "{translations.friday}",
-        short: "{translations.fridayShort}",
+        name: "Viernes",
+        short: "V",
       },
       {
-        name: "{translations.saturday}",
-        short: "{translations.saturdayShort}",
+        name: "Sábado",
+        short: "S",
         isWeekend: false,
       },
     ],
@@ -147,13 +140,13 @@ function Page({ projects }) {
     },
 
     // texts in the date picker
-    nextMonth: "{translations.nextMonth}",
-    previousMonth: "{translations.previousMonth}",
-    openMonthSelector: "{translations.openMonthSelector}",
-    openYearSelector: "{translations.openYearSelector}",
-    closeMonthSelector: "{translations.closeMonthSelector}",
-    closeYearSelector: "{translations.closeYearSelector}",
-    defaultPlaceholder: "{translations.defaultPlaceholder}",
+    nextMonth: "Next Month",
+    previousMonth: "Previous Month",
+    openMonthSelector: "Open Month Selector",
+    openYearSelector: "Open Year Selector",
+    closeMonthSelector: "Close Month Selector",
+    closeYearSelector: "Close Year Selector",
+    defaultPlaceholder: "Select...",
 
     // for input range value
     from: "from",
@@ -247,7 +240,7 @@ function Page({ projects }) {
   }, [selectedDays, bookedHours]);
 
   if (isLoading) {
-    return <div>{translations.project_loading}</div>;
+    return <div>Loading...</div>;
   }
 
   const handleClick = (direction) => {
@@ -293,7 +286,7 @@ function Page({ projects }) {
     }
 
     if (!startTime || !duration) {
-      toast.error("{translations.availability_selectTimeAndDuration}");
+      toast.error("Por favor, selecciona una hora y su duracion.");
       return;
     }
 
@@ -304,7 +297,7 @@ function Page({ projects }) {
         { dates }
       );
     } catch (error) {
-      console.error("{translations.form_submitError}", error);
+      console.error("Error al enviar el formulario:", error);
       return;
     }
 
@@ -313,18 +306,17 @@ function Page({ projects }) {
         "https://bitescreadoresdesonrisas.com/api/citas/agendadas"
       );
       setBookedHours(response.data);
-      toast.success("{translations.availability_sentSuccess}");
+      toast.success("Disponibilidad enviada correctamente.");
       setDuration("");
     } catch (error) {
-      console.error("{translations.bookedHours_updateError}", error);
+      console.error("Error al actualizar bookedHours:", error);
     }
   };
 
   const handleDelete = async () => {
     const confirmation = window.confirm(
-      "{translations.appointment_deleteConfirmation}"
+      "¿Estás seguro de que quieres eliminar esta cita?"
     );
-
     if (!confirmation) {
       return;
     }
@@ -333,10 +325,10 @@ function Page({ projects }) {
         `https://bitescreadoresdesonrisas.com/api/citas/delete/${selectedItem.id}`
       );
       setBookedHours(bookedHours.filter((hour) => hour.id !== selectedItem.id));
-      toast.success("{translations.appointment_deleteSuccess}");
+      toast.success("Cita eliminada correctamente.");
       setIsDrawerOpen(false);
     } catch (error) {
-      console.error("{translations.appointment_deleteError}", error);
+      console.error("Error al eliminar la cita:", error);
     }
   };
 
@@ -356,12 +348,12 @@ function Page({ projects }) {
             date: dateTime,
           }
         );
-        toast.success("{translations.appointment_updateSuccess}");
+        toast.success("Cita actualizada correctamente.");
         setIsDrawerOpen(false);
         setIsEditing(false);
       } catch (error) {
-        console.error("{translations.appointment_updateLogError}:", error);
-        toast.error("{translations.appointment_updateError}");
+        console.error("Error al actualizar la cita:", error);
+        toast.error("Error al actualizar la cita.");
       }
     }
 
@@ -408,7 +400,7 @@ function Page({ projects }) {
                 onClick={() => window.history.back()}
               >
                 <FaBars className="inline-block mr-2" />
-                {translations.project_allContent}
+                ALL CONTENT
               </span>
             </li>
           </ul>
@@ -416,7 +408,7 @@ function Page({ projects }) {
         <div className="flex justify-center gap-4 flex-col lg:flex-row">
           <Link href="/dashboard">
             <Button className="text-white bg-blue-500 text-center hover:bg-blue-700 uppercase">
-              {translations.project_dashboard}
+              Dashboard
             </Button>
           </Link>
           {/* <Button className="text-white bg-blue-500 text-center hover:bg-blue-700 uppercase">
@@ -426,7 +418,8 @@ function Page({ projects }) {
         <div
           className={`bottom-10 absolute flex-col flex text-center text-[14px] ${montserrat.className}`}
         >
-          <span> ©2023 {translations.login_allRightsReserved}.</span>
+          <span> ©2023 Ecommetrica.</span>
+          <span>Todos los derechos reservados.</span>
         </div>
       </aside>
       <div className="bg-white text-black">
@@ -437,9 +430,7 @@ function Page({ projects }) {
               "linear-gradient(0deg, #3A228B 0%, #847EFC 50%, #4C39A7 88%, #3A228B 100%)",
           }}
         >
-          <h1 className="text-white text-3xl">
-            {translations.calendar_CalendarApp}
-          </h1>
+          <h1 className="text-white text-3xl">CalendarApp</h1>
           <Image src="/logo_calendar.webp" alt="Logo" width={200} height={50} />
         </section>
         <h1
@@ -450,7 +441,7 @@ function Page({ projects }) {
             <h1
               className={`text-[40px] text-[#504774] mb-4 ${pompiere.className}`}
             >
-              {translations.calendar_agendaDeCitas}:
+              Agenda de citas:
             </h1>
             <div className="flex gap-8 bg-[#FFE3F1] rounded-tr-2xl rounded-tl-2xl border-4 border-[#E0E2E5]">
               <button
@@ -541,7 +532,7 @@ function Page({ projects }) {
                                   hour.phone === "" ? (
                                     <div>
                                       <p>
-                                        {translations.calendar_horaBloqueada}:{" "}
+                                        Hora bloqueada:{" "}
                                         {new Date(hour.date).toLocaleDateString(
                                           "es-ES",
                                           {
@@ -573,28 +564,19 @@ function Page({ projects }) {
                                           }
                                         >
                                           {" "}
-                                          {translations.calendar_actualizarCita}
+                                          Actualizar cita
                                         </button>
                                       </div>
                                     </div>
                                   ) : (
                                     <>
                                       <span className="font-bold text-neutral-700 italic">
-                                        {translations.calendar_nombre}:
-                                        {hour.name}
+                                        Nombre: {hour.name}
                                       </span>
+                                      <p>Correo: {hour.email}</p>
+                                      <p>Telefono:{hour.phone}</p>
                                       <p>
-                                        {translations.calendar_correo}:
-                                        {hour.email}
-                                      </p>
-                                      <p>
-                                        {translations.calendar_telefono}:
-                                        {hour.phone}
-                                      </p>
-                                      <p>
-                                        {
-                                          translations.calendar_sinCitasAsignadas
-                                        }
+                                        Cita asignada:{" "}
                                         {new Date(hour.date).toLocaleDateString(
                                           "es-ES",
                                           {
@@ -625,7 +607,8 @@ function Page({ projects }) {
                                             handleButtonClick(hour)
                                           }
                                         >
-                                          {translations.calendar_actualizarCita}
+                                          {" "}
+                                          Actualizar cita
                                         </button>
                                       </div>
                                     </>
@@ -634,7 +617,7 @@ function Page({ projects }) {
                               </div>
                             ))
                         ) : (
-                          <p>{translations.calendar_sinCitasAsignadas}</p>
+                          <p>Sin citas asignadas</p>
                         )}
                       </div>
                     )}
@@ -647,7 +630,7 @@ function Page({ projects }) {
             <h1
               className={`text-[40px] text-[#504774] mb-4 ${pompiere.className}`}
             >
-              {translations.calendar_panelDeBloqueo}:
+              Panel de bloqueo:
             </h1>
             <div className="border-5 border-[#E0E2E5] rounded-2xl py-4">
               <Calendar
@@ -673,8 +656,8 @@ function Page({ projects }) {
                         {[...Array(9).keys()].every((i) =>
                           disabledHours.includes(i + 9)
                         )
-                          ? "{translations.calendar_noHayHorariosDisponibles}"
-                          : "{translations.calendar_seleccionaUnaHoraDeInicio}"}
+                          ? "No hay horarios disponibles"
+                          : "Selecciona una hora de inicio"}
                       </option>
                       {[...Array(9).keys()].map(
                         (_, i) =>
@@ -690,9 +673,7 @@ function Page({ projects }) {
                       value={duration}
                       onChange={(e) => setDuration(e.target.value)}
                     >
-                      <option value="">
-                        {translations.calendar_seleccionaLaDuracion}
-                      </option>
+                      <option value="">Selecciona la duración</option>
                       {[...Array(10).keys()] // Genera un array de 10 elementos (desde 0 hasta 9)
                         .filter((i) => {
                           const endHour = i + 1 + parseInt(startTime);
@@ -717,7 +698,7 @@ function Page({ projects }) {
                       type="submit"
                       className="w-full font-bold px-4 py-2 bg-[#FFA5D0] text-white border rounded-xl hover:bg-pink-400 hover:text-white"
                     >
-                      {translations.calendar_enviar}
+                      Enviar
                     </button>
                   </form>
                   <Toaster position="top-right" />
@@ -730,27 +711,15 @@ function Page({ projects }) {
             <div className="fixed top-0 right-0 w-72 h-full bg-white shadow-lg p-5 overflow-y-auto z-50 transform translate-x-0 transition-transform flex flex-col">
               {selectedItem && (
                 <>
-                  <h1 className="uppercase">
-                    {translations.calendar_gestionDeCitas}
-                  </h1>
+                  <h1 className="uppercase">Gestion de citas</h1>
                   <hr className="border-black mb-2" />
                   {selectedItem.name ? (
-                    <p>
-                      {translations.calendar_nombre}: {selectedItem.name}
-                    </p>
+                    <p>Nombre: {selectedItem.name}</p>
                   ) : (
-                    <p>{translations.calendar_horaBloqueada}</p>
+                    <p>Hora bloqueada</p>
                   )}
-                  {selectedItem.email && (
-                    <p>
-                      {translations.calendar_correo}: {selectedItem.email}
-                    </p>
-                  )}
-                  {selectedItem.phone && (
-                    <p>
-                      {translations.calendar_telefono}: {selectedItem.phone}
-                    </p>
-                  )}
+                  {selectedItem.email && <p>Correo: {selectedItem.email}</p>}
+                  {selectedItem.phone && <p>Telefono: {selectedItem.phone}</p>}
                   <p>
                     Fecha:{" "}
                     {new Date(selectedItem.date).toLocaleDateString("es-ES", {
@@ -786,20 +755,20 @@ function Page({ projects }) {
                       className="w-full bg-pink-400 hover:bg-pink-500 rounded-lg py-2 text-white"
                       onClick={() => setIsEditing(true)}
                     >
-                      {translations.calendar_editarCita}
+                      Editar Cita
                     </button>
                   )}
                 <button
                   onClick={handleDelete}
                   className="w-full bg-pink-400 hover:bg-pink-500 rounded-lg py-2 text-white"
                 >
-                  {translations.calendar_eliminarCita}
+                  Eliminar Cita
                 </button>
               </div>
               {isEditing ? (
                 <form onSubmit={handleUpdate}>
                   <label>
-                    {translations.calendar_nombre}:
+                    Nombre:
                     <input
                       className="border-black border rounded-lg px-2 py-2"
                       type="text"
@@ -809,7 +778,7 @@ function Page({ projects }) {
                     />
                   </label>
                   <label>
-                    {translations.calendar_correo}:
+                    Correo:
                     <input
                       className="border-black border rounded-lg px-2 py-2"
                       type="text"
@@ -819,7 +788,7 @@ function Page({ projects }) {
                     />
                   </label>
                   <label>
-                    {translations.calendar_telefono}:
+                    Telefono:
                     <input
                       className="border-black border rounded-lg px-2 py-2"
                       type="text"
@@ -829,7 +798,7 @@ function Page({ projects }) {
                     />
                   </label>
                   <label>
-                    {translations.calendar_fecha}:
+                    Fecha:
                     <input
                       className="border-black border rounded-lg px-4 w-full py-2"
                       type="date"
@@ -838,7 +807,9 @@ function Page({ projects }) {
                         const selectedDate = new Date(e.target.value);
                         if (selectedDate.getDay() === 6) {
                           // 0 es domingo
-                          alert("{calendar_losDomingosNoEstanDisponibles}");
+                          alert(
+                            "Los domingos no están disponibles. Por favor, selecciona otro día."
+                          );
                           return;
                         }
                         setDate(e.target.value);
@@ -847,16 +818,14 @@ function Page({ projects }) {
                     />
                   </label>
                   <label>
-                    {translations.calendar_hora}:
+                    Hora:
                     <select
                       className="border-black border rounded-lg px-2 py-2 w-full"
                       value={time}
                       onChange={(e) => setTime(e.target.value)}
                       required
                     >
-                      <option value="">
-                        {translations.calendar_seleccionaUnaHoraDeInicio}
-                      </option>
+                      <option value="">Selecciona una hora</option>
                       <option value="09:00">09:00</option>
                       <option value="10:00">10:00</option>
                       <option value="11:00">11:00</option>
@@ -873,14 +842,14 @@ function Page({ projects }) {
                       className="bg-pink-400 hover:bg-pink-500 text-white rounded-lg py-2 px-2"
                       type="submit"
                     >
-                      {translations.calendar_guardarCambios}
+                      Guardar cambios
                     </button>
                     <button
                       className="bg-pink-400 hover:bg-pink-500 text-white rounded-lg py-2 px-2"
                       type="button"
                       onClick={() => setIsEditing(false)}
                     >
-                      {translations.calendar_cancelar}
+                      Cancelar
                     </button>
                   </div>
                 </form>
@@ -890,7 +859,7 @@ function Page({ projects }) {
                 onClick={handleDrawerClose}
                 className="mt-2 mb-5 w-full bg-pink-400 hover:bg-pink-600 text-white p-2 rounded"
               >
-                {translations.calendar_cerrar}
+                Cerrar
               </button>
             </div>
           ) : (

@@ -1,3 +1,3 @@
-const api_URL = "http://localhost:3001";
+const api_URL = "https://e-commetrics.com";
 
 export default api_URL;

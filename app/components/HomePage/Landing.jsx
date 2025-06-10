@@ -657,6 +657,7 @@ const Consulting = ({ locale }) => {
           : "Páginas Web, rápida y segura.",
       image: "https://ecommetrica.com/programacion.webp",
       icon: "https://ecommetrica.com/MarketingIcon.svg",
+      hoverColor: "bg-gradient-to-br from-blue-500/80 to-purple-600/10",
     },
     {
       id: 2,
@@ -667,6 +668,7 @@ const Consulting = ({ locale }) => {
           : "Tenemos el mejor S.S.L. con NameCheap.",
       image: "https://ecommetrica.com/marketing.webp",
       icon: "https://ecommetrica.com/MarketingIcon.svg",
+      hoverColor: "bg-gradient-to-br from-purple-600/80 to-black/10",
     },
     {
       id: 3,
@@ -677,6 +679,7 @@ const Consulting = ({ locale }) => {
           : "Tu sitio estará mejor estructurado para Google©.",
       image: "https://ecommetrica.com/SEO.webp",
       icon: "https://ecommetrica.com/SeoIcon.svg",
+      hoverColor: "bg-gradient-to-br from-violet-700/80 to-purple-900/10",
     },
     {
       id: 4,
@@ -687,6 +690,7 @@ const Consulting = ({ locale }) => {
           : "Hospedaje rápido, seguro y confiable.",
       image: "https://ecommetrica.com/webMaster.webp",
       icon: "https://ecommetrica.com/WebMasterIcon.svg",
+      hoverColor: "bg-gradient-to-br from-pink-500/80 to-rose-600/10",
     },
   ];
 
@@ -713,7 +717,13 @@ const Consulting = ({ locale }) => {
             className="p-6 shadow rounded-3xl relative h-96 w-80 group bg-cover bg-no-repeat bg-center overflow-hidden flex items-end justify-start"
             style={{ backgroundImage: `url('${item.image}')` }}
           >
-            <div className="absolute inset-0 bg-black/60 z-0" />
+            {/* Overlay base */}
+            <div className="absolute inset-0 bg-black/60 z-0 group-hover:opacity-0 transition-opacity duration-300" />
+
+            {/* Overlay de color en hover */}
+            <div
+              className={`absolute inset-0 ${item.hoverColor} opacity-0 group-hover:opacity-100 transition-all duration-300 z-0`}
+            />
 
             <div className="relative z-10">
               <Image
@@ -728,7 +738,7 @@ const Consulting = ({ locale }) => {
               <h3 className="text-3xl font-semibold mb-2 text-white">
                 {item.title}
               </h3>
-              <p className="text-white mt-2  text-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+              <p className="text-white mt-2 text-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                 {item.desc}
               </p>
             </div>
@@ -738,7 +748,6 @@ const Consulting = ({ locale }) => {
     </div>
   );
 };
-
 const Footer = ({ locale, goToLogin }) => (
   <motion.footer
     initial={{ opacity: 0 }}
