@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import Navbar from "../components/navbar";
-import Animation from "../components/hero_animation";
 import useTranslation from "../components/translation";
 
 function Home() {
@@ -46,8 +44,8 @@ function Home() {
   return (
     <div className="bg-white h-screen">
       <section className="[&>h1]:text-black [&>p]:text-black">
-        <Navbar />
-        <Animation />
+        {/* <Navbar />
+        <Animation /> */}
       </section>
     </div>
   );

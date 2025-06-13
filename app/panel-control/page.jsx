@@ -1,5 +1,5 @@
 "use client";
-import Container from "../components/container";
+
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -306,7 +306,6 @@ export default function Page() {
 */}
       </aside>
       <div className="flex flex-col px-12 h-[900px] bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900 text-white flex-grow">
-        <Container title="Panel Administrativo" />
         {selected === 1 && (
           <div>
             <h1 className="text-start font-bold text-2xl mb-8">
