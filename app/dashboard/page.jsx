@@ -260,6 +260,24 @@ function Dashboard() {
                       </div>
                     </Link>
                   </AccordionItem>
+
+                  <AccordionItem
+                    title={translations.dashboard_QR}
+                    indicator={({ isOpen }) =>
+                      isOpen ? <FaXmark /> : <FaCheck />
+                    }
+                  >
+                    {" "}
+                    <Link href="/qr" className="text-white hover:text-gray-300">
+                      {" "}
+                      <div className="flex items-center gap-x-2">
+                        <FaUsers />
+                        <span className="text-white uppercase hover:underline">
+                          {translations.dashboard_QRAction}
+                        </span>
+                      </div>
+                    </Link>
+                  </AccordionItem>
                 </Accordion>
               </div>
             )}

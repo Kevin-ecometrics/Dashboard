@@ -6,6 +6,8 @@
   "dashboard_updateClientProject": "Actualizar Proyecto del Cliente",
   "dashboard_createClient": "Crear Cliente",
   "dashboard_generateVCard": "Generar VCard",
+    "dashboard_QR": "Generar QR",
+
   "dashboard_projectProgress": "Progreso del proyecto",
   "dashboard_projectCompleted": "Proyecto completado",
   "dashboard_projectInProgress": "Proyecto en progreso",
@@ -15,6 +17,7 @@
   "dashboard_updateClientProjectAction": "ACTUALIZAR PROYECTO DEL CLIENTE",
   "dashboard_createClientAction": "CREAR CLIENTE",
   "dashboard_generateVCardAction": "GENERAR VCARD",
+  "dashboard_QRAction": "GENERAR QR",
   "createProject_welcome": "Bienvenido a Crear Proyecto",
   "createProject_createCardProject": "Crear Tarjeta de Proyecto",
   "createProject_title": "Título",
